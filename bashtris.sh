@@ -1,139 +1,721 @@
 #!/bin/bash
+# =MAKE:npp_workspace - : notepad++ project file
+# =MAKE:README        - : readme
+# =MAKE:MAKE.sh       - : build system
+# =MAKE:BREAK.s       - UNbuild system
+# =MAKE:ID.sh         - machine ID command
+# =MAKE:ansi.s        - ansi sequences (colour, etc)
+# =MAKE:prng.s        - PRNG (for piece selection)
+# =MAKE:kbd.s         - keyboard driver
+# =MAKE:time.s        - timer system
+# =MAKE:status.s      - status line
+# =MAKE:sys.s         - system functions
+# =MAKE:debug.s       - debug API & debug monitor
+# =MAKE:cs.s          - cyborg systems fancy shit
+# =MAKE:quit.s        - quit screen
+# =MAKE:cli.s         - cli parser
+# =MAKE:lang.s        - translation file
+# =MAKE:help.s        - help screens
+# =MAKE:gameover.dat  - gameover sprites
+# =MAKE:gameover.s    - gameover process
+# =MAKE:hiscore.s     - high score system
+# =MAKE:start.s       - start menu
+# =MAKE:pause.s       - pause screen
+# =MAKE:rig.dat       - rig-game setups
+# =MAKE:rig.s         - rig-game menu & system
+# =MAKE:sound.s       - event sounds
+# =MAKE:g_gfx.s       - game graphics
+# =MAKE:g_logic.s     - game logic
+# =MAKE:pf.s          - playfield maintenance
+# =MAKE:main.s        - start here
+# =MAKE:tris.sh       - : makefile
+# =MAKE:hiscore.dat   - hiscores - last (for consistency)
+: << 'EOF-npp_workspace'
+# +MAKE:npp_workspace - : notepad++ project file
+<NotepadPlus>
+    <Project name="BAShTris_v1">
+        <File name="README" />
+        <Folder name="Tools">
+            <File name="ID.sh" />
+        </Folder>
+        <Folder name="Build">
+            <File name="MAKE.sh" />
+            <File name="BREAK.s" />
+            <File name="tris.sh" />
+        </Folder>
+        <Folder name="Core">
+            <File name="ansi.s" />
+            <File name="debug.s" />
+            <File name="kbd.s" />
+            <File name="prng.s" />
+            <File name="status.s" />
+            <File name="time.s" />
+        </Folder>
+        <Folder name="Main">
+            <File name="sys.s" />
+            <File name="cli.s" />
+            <File name="lang.s" />
+            <File name="main.s" />
+        </Folder>
+        <Folder name="Screens">
+            <File name="cs.s" />
+            <File name="help.s" />
+            <File name="hiscore.dat" />
+            <File name="hiscore.s" />
+            <File name="gameover.dat" />
+            <File name="gameover.s" />
+            <File name="rig.dat" />
+            <File name="rig.s" />
+            <File name="pause.s" />
+            <File name="quit.s" />
+        </Folder>
+        <Folder name="Game">
+            <File name="sound.s" />
+            <File name="g_gfx.s" />
+            <File name="g_logic.s" />
+            <File name="pf.s" />
+            <File name="start.s" />
+        </Folder>
+    </Project>
+</NotepadPlus>
+# -MAKE:npp_workspace
+EOF-npp_workspace
+: << 'EOF-README'
+# +MAKE:README - : readme
+#!/bin/bash
 
-################################################################################
-# MIT License
-# 
-# Copyright (c) 2020 BlueChip
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-################################################################################
+: << 'EOT'
+~~README-BEGIN
+   ,-------.
+==(  Index  )==================================================================
+   `-------'
+	# BAShTris
+	# LICENCE
+	# BIBLIOGRAPHY
+	# ROADMAP
+	# COMMAND LINE OPTIONS
+		# Standard
+		# Debug
+	# CONSOLE SETTINGS
+		# Required terminal settings    <----- 0_o
+		# Play with PuTTY over SSH
+		# Kali terminal window
+		# Windows Subsytem Linux (WSL)
+	# GAME MODES
+		# Drop Rate
+		# Normal (aka Marathon or A-Type)
+		# Invisible [Marathon]
+		# Challenge (aka B-Type)
+	# STUFF TO TRY
+		# CS Logo
+		# Controller Screen
+		# Start Screen
+		# During Gameplay    <---------------- 0_o
+		# End of Game
+		# Repeating a Game    <--------------- 0_o
+	# HIGH SCORES
+		# Review
+		# Export
+		# Import
+		# Merge   
+		# Upgrading     <--------------------- 0_o
+	# DEBUG MODE
+		# Command line options
+		# Debug Console
+		# Extra keys during play
+	# DEVELOPER MODE
 
-# https://www.utf8-chartable.de/unicode-utf8-table.pl?start=00&names=-&utf8=string-literal
-# https://www.utf8-chartable.de/unicode-utf8-table.pl?start=00&number=256&utf8=oct
-#nbsp="$(echo -e '\u00a0')"     # Nope - Mac's come with BASh v3
-#nbsp="$(echo -e '\xc2\xa0')"   # Nope - Mac's come with BASh v3
-nbsp="$(echo -e '\0302\0240')"
+   ,----------.
+==(  BAShTris  )===============================================================
+   `----------'
 
-AZEN="ABCDEFGHIJKLMNOPQRSTUVWXYZ☺☻♣♦♥♠♂♀♪☼0123456789-.${nbsp}"
-AZRU="АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ☺☻♣♦♥♠♂♀♪☼0123456789-.${nbsp}"
+Autumn 2020. Boredom has set in. Never written a Tetris clone before. BASh
+skillz could do with a work-out. Enjoy!
 
-maskC=$((0x0F))
+   ,---------.
+==(  LICENCE  )================================================================
+   `---------'
 
-maskB=$((0x00))
-maskL=$((0x08))
-maskD=$((0x04))
-maskU=$((0x02))
-maskR=$((0x01))
-maskLD=$(($maskL |$maskD))
-maskLU=$(($maskL |$maskU))
-maskLR=$(($maskL |$maskR))
-maskDU=$(($maskD |$maskU))
-maskDR=$(($maskD |$maskR))
-maskUR=$(($maskU |$maskR))
+MIT License
 
-maskLRU=$(($maskL |$maskR |$maskU))
-maskLRD=$(($maskL |$maskR |$maskD))
-maskUDL=$(($maskU |$maskD |$maskL))
-maskUDR=$(($maskU |$maskD |$maskR))
+Copyright (c) 2020 BlueChip
 
-maskLDUR=$(($maskL |$maskD |$maskU |$maskR))
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-maskT=$((0xF0))
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-tetiO=$((0x10))
-tetiI=$((0x20))
-tetiT=$((0x30))
-tetiL=$((0x40))
-tetiJ=$((0x50))
-tetiS=$((0x60))
-tetiZ=$((0x70))
-tetiB=$((0x80)) # empty space
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-tetiV=$((0x90))
-tetiG=$((0xA0))
+   ,--------------.
+==(  BIBLIOGRAPHY  )===========================================================
+   `--------------'
 
-tetiVV=$((0xB0))
-tetiGG=$((0xC0))
+This probably isn't complete, but it's a list of handy references:
+  * https://en.wikipedia.org/wiki/Code_page_437
+  * http://ascii-table.com/ansi-escape-sequences.php
+  * https://www.linuxquestions.org/questions/programming-9/bash-case-with-arrow-keys-and-del-backspace-etc-523441/
+  * http://asciiqr.com/
+  * https://www.utf8-chartable.de/unicode-utf8-table.pl?start=00&utf8=oct
+  * https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+  * https://docs.google.com/spreadsheets/d/17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM/edit#gid=296134756
 
-tetiW=$((0xF0))  # pit wall
+   ,---------.
+==(  ROADMAP  )================================================================
+   `---------'
 
-gridP=$((0xF0))
-gridPl=$(($gridP |$maskL))
-gridPbl=$(($gridP |$maskD | $maskL))
-gridPb=$(($gridP |$maskD))
-gridPbr=$(($gridP |$maskD |$maskR))
-gridPr=$(($gridP |$maskR))
+	# Wall kick (option)
 
-#****************************************************************************** ****************************************
-#                                ,----------.
-#                               (  FOREWORD  )
-#                                `----------'
-#****************************************************************************** ****************************************
-#
-# So. It dawned on me, I've never written a Тетрис clone
-# and my BASh scripting could probably do with a work-out
-#
-# This whole thing grew organically, it is:
-#   * An utter mess
-#   * Lacking in any coding standard/consistency
-#   * In need of beautification
-#   * A fully working Tetris clone
-#
-# So don't bother critiquing the style - I know, I was learning as I went along,
-#   and I did not go back and clean up old code when I learned a better method.
-#   So don't be surprised when you see the same thing done four different ways!
-# If you see a thing I could do better (which I haven't already done somewhere 
-#   else), let me know - *ALL* feedback is appreciated. 
-#   Yep, even trolls - after years on IRC, I think it's /fun/ to feed them - lol
-#
-# Who knows, one day I might actually clean up the code; it's not like I don't
-#   have a hundred ideas on what I could add ...In the mean time: 
-#   * Steal ideas (eg. multi-threaded graphics, function pointers, 
-#                      self-modifying code, etc.)
-#   * Steal chunks of code (eg. the PRNG)
-#     ...Crediting me is appreciated, but not required.
-#     ...All this code is MIT licenced
-#   * Improve it and make pull requests
-#   * Offer ideas about how it could be improved
-#   * Report bugs
-#   * etc.
-#
-# But above all:
-#   * Enjoy the game
-#
+	# Network play
 
-#****************************************************************************** ****************************************
-#                              ,--------------.
-#                             (  BIBLIOGRAPHY  )
-#                              `--------------'
-#****************************************************************************** ****************************************
-#
-# This probably isn't complete, but it's a list of handy references:
-#   * https://en.wikipedia.org/wiki/Code_page_437
-#   * http://ascii-table.com/ansi-escape-sequences.php
-#   * https://www.linuxquestions.org/questions/programming-9/bash-case-with-arrow-keys-and-del-backspace-etc-523441/
-#   * http://asciiqr.com/
-#   * https://www.utf8-chartable.de/unicode-utf8-table.pl?start=00&utf8=oct
-#
-# Comments:  #-  data
-#            =+  function
-#            #!! todo
+	# OSX support (BASh v3 - no sub-second timer!)
+
+   ,----------------------.
+==(  COMMAND LINE OPTIONS  )===================================================
+   `----------------------'
+
+Standard Options
+================
+	-h  --help    : this info
+	-H  --man     : full documentation
+	-v  --version : show version number
+
+	-k1 --kbdv1   : force v1 keyboard driver (supports WSL)
+	-k2 --kbdv2   : force v2 keyboard driver (improved driver)
+		--id      : generate id.out for this linux install [debug/porting]
+
+	-r  --records : show hi score records
+	-x  --rexport : eXport hi score records  [filename]  <-- optional
+	-i  --rimport : Import hi score records  <filename>  <-- required
+	-m  --rmerge  : merGe hi score records   <filename>  <-- required
+	+N            : seed(N) - repeat a specific game
+
+Debug Options
+=============
+	-d  --debug   : debug mode (extra keys - see controller help screen)
+	-s  --skip    : skip intro sequence
+	-f  --fast    : fast startup
+	-c  --ctrlc   : Enable [do not disable] ^C
+	-n  --monitor : monitor debug messages
+	-b  --break   : break code in to components - use MAKE.sh to rebuild
+	-B  --brkovr  : break code in to components - overwrite existing files
+
+   ,------------------.
+==(  CONSOLE SETTINGS  )=======================================================
+   `------------------'
+
+Required terminal settings
+==========================
+	# Terminal size: {80 x 25} (24 + 1 status line)
+
+	Choice of Font & Colour Scheme are outside my control, and can be the 
+	difference between "nice job" and "pass the bucket".
+
+	If the graphics are misaligned, try a slightly bigger or smaller font size.
+
+	Make sure you have UTF8 support enabled!
+
+Play with PuTTY over SSH
+========================
+	# Font         : Courier New
+	  PuTTY -> Settings -> Window -> Appearance -> Font -> Change = Courier New
+
+	# Character Set: UTF-8
+	  PuTTY -> Settings -> Window -> Translation -> Remote Charset = UTF-8
+
+Kali terminal window looks good with
+====================================
+	[File->Preferences]
+	# Font         : Bitstream Vera Sans Mono
+	# Colour Scheme: Linux
+
+Windows Subsytem Linux (WSL)
+============================
+	# Font         : Courier New
+	# Command line : $0 -k1          <-- this should auto-detect now!
+
+   ,------------.
+==(  GAME MODES  )=============================================================
+   `------------'
+
+Drop Rate
+=========
+In all modes, the drop rate is:
+	Drop Rate = (1000 - (Level *46)) milliseconds
+		,--------------------------.
+		| Level | Rate | drops/sec |
+		|=======|======|===========|
+		|    0  | 1000 |    1      |  Yawn
+		|   ..  |  ... |           |  ...
+		|    5  |  770 |    1.3    |  Playable
+		|   ..  |  ... |           |  ...
+		|   10  |  540 |    1.85   |  Game on
+		|   11  |  496 |    2      |  ..
+		|   ..  |  ... |           |  ...
+		|   15  |  310 |    3.2    |  Stay focussed
+		|   ..  |  ... |           |  ...
+		|   20  |   80 |   12.5    |  Faster than I can play!
+		`--------------------------'
+
+By comparison, these are the speeds for the Gameboy:
+	https://harddrop.com/wiki/Tetris_(Game_Boy)
+		,-----------------------------------------.
+		|       | ___BAShTris___ | ___Gameboy____ |
+		| Level | Rate | drops/S | Rate | drops/S |
+		|=======|======|=========|======|=========|
+		|    0  | 1000 |   1.00  |  887 |   1.13  |  
+		|    1  |  954 |   1.05  |  820 |   1.22  |  
+		|    2  |  908 |   1.10  |  753 |   1.33  |  
+		|    3  |  862 |   1.16  |  686 |   1.46  |  
+		|    4  |  816 |   1.23  |  619 |   1.62  |  
+		|       |      |         |      |         |  
+		|    5  |  770 |   1.30  |  552 |   1.81  |  
+		|    6  |  724 |   1.38  |  469 |   2.13  |  
+		|    7  |  678 |   1.47  |  368 |   2.72  |  
+		|    8  |  632 |   1.58  |  285 |   3.51  |  
+		|    9  |  586 |   1.71  |  184 |   5.43  |  
+		|       |      |         |      |         |  
+		|   10  |  540 |   1.85  |  167 |   5.99  |  
+		|   11  |  494 |   2.02  |  151 |   6.62  |  
+		|   12  |  448 |   2.23  |  134 |   7.46  |  
+		|   13  |  402 |   2.49  |  117 |   8.55  |  
+		|   14  |  356 |   2.81  |  100 |  10.00  |  
+		|       |      |         |      |         |  
+		|   15  |  310 |   3.23  |  100 |  10.00  |  
+		|   16  |  264 |   3.79  |   84 |  11.90  |  
+		|   17  |  218 |   4.59  |   84 |  11.90  |  
+		|   18  |  172 |   5.81  |   67 |  14.93  |  
+		|   19  |  126 |   7.94  |   67 |  14.93  |  
+		|       |      |         |      |         |  
+		|   20  |   80 |  12.50  |   50 |  20.00  |  
+		`-----------------------------------------'
+
+NORM : Normal (aka Marathon or A-Type)
+======================================
+	It's tetris with "N64: New Tetris" combo blocks
+	You start on the selected Level.
+	The start speed is the same as the Level
+	The speed will 'Level Up' every 10 lines (~25 pieces)
+
+NVIS : Invisible [Marathon]
+===========================
+	As per normal gameplay, but pieces become invisible when they are placed.
+	Additionally, on higher levels, Basket Pieces are hidden:
+		 0.. 9 -> 0 hidden
+		10..14 -> 1 hidden
+		15..20 -> 2 hidden
+
+CHAL : Challenge (aka B-Type)
+=============================
+	You will start with some "junk" (aka "garbage") in the "pit"
+	You must survive until all the pieces have been placed.
+	Any pieces left at the end of the game will be deducted from your score.
+		...with a nice animation
+
+	Based on the user-selected [Game] 'Level'
+		SpeedLevel = ((Level /5) +3) +(Level % 5) +((Level /20) *3)
+		JunkLines  = ((Level /5) *2) +4
+		DropPieces = 100 +JunkLines +SpeedLevel +Level +((Level /5) *10)
+
+	The start speed is defined as SpeedLevel (above)
+	The speed will 'Level Up' every 6 lines (~15 pieces)
+
+	This table shows all game parameters
+		The "max" values are theoretical, and may/will vary during gameplay.
+		EG. At Level=20, you will need to survive ABOUT 32 pieces at speed 20
+		,-------------------------------------------.
+		|       |      | ___Speed___ | ___Pieces___ |
+		| Level | Junk | Start | Max | Total | @Max |
+		|=======|======|=======|=====|=======|======|
+		|    0  |   4  |    3  |  10 |  107  |   2  |
+		|    1  |   4  |    4  |  11 |  109  |   4  |
+		|    2  |   4  |    5  |  12 |  111  |   6  |
+		|    3  |   4  |    6  |  13 |  113  |   8  |
+		|    4  |   4  |    7  |  14 |  115  |  10  |
+		|       |      |       |     |       |      |
+		|    5  |   6  |    4  |  12 |  125  |   5  |
+		|    6  |   6  |    5  |  13 |  127  |   7  |
+		|    7  |   6  |    6  |  14 |  129  |   9  |
+		|    8  |   6  |    7  |  15 |  131  |  11  |
+		|    9  |   6  |    8  |  16 |  133  |  13  |
+		|       |      |       |     |       |      |
+		|   10  |   8  |    5  |  14 |  143  |   8  |
+		|   11  |   8  |    6  |  15 |  145  |  10  |
+		|   12  |   8  |    7  |  16 |  147  |  12  |
+		|   13  |   8  |    8  |  17 |  149  |  14  |
+		|   14  |   8  |    9  |  19 |  151  |   1  |
+		|       |      |       |     |       |      |
+		|   15  |  10  |    6  |  16 |  161  |  11  |
+		|   16  |  10  |    7  |  17 |  163  |  13  |
+		|   17  |  10  |    8  |  19 |  165  |   0  |
+		|   18  |  10  |    9  |  20 |  167  |   2  |
+		|   19  |  10  |   10  |  20 |  169  |  19  |
+		|       |      |       |     |       |      |
+		|   20  |  12  |   10  |  20 |  182  |  32  |
+		`-------------------------------------------'
+
+   ,--------------.
+==(  STUFF TO TRY  )===========================================================
+   `--------------'
+
+CS Logo
+=======
+	Animations that run in threads, so can be concurrent
+
+Controller Screen
+=================
+	No easter eggs here (or are there?)
+
+Start Screen
+============
+	F1  - Review controller keys
+	F2  - Show combo block table
+	F4  - System details (multiple 'pages')
+	F10 - Review high-score statistics
+
+	Select "Sound" and press Rotate-Left: Audio test
+
+	Select Russian [qv lang.s]
+
+During Gameplay
+===============
+	If the screen becomes corrupt:
+		1. Press "`" / "backtick" / "grave accent" to redraw the screen
+		2. If it's a bug - report it!
+
+	Play on level 0, 1, or 2 to see the piece 'introduction' animation
+
+	F1 or F2 for the help screens
+
+	P to Pause the game
+		...with random animations & 'easter egg' messages
+	Random graphical events do NOT effect the piece distribution!
+
+	Complete a challenge for an animation run
+
+	Clear the pit for a "PERFECT" bonus and +100 points
+
+	Work out a strategy for maximising the score multiplier
+
+	Try and create all 11 GOLD and 106 SILVER combinations
+		...I hope to add "Achievements" to a future version
+
+End of Game
+===========
+	Watch out for easter-egg messages
+
+	Get your name/initials on the High Score Table
+
+	Use <shoulder> to change the input language
+
+	In any game mode, on any Level 10-or-above:
+		Play three games and enter your initials for all three wins
+		On the fouth play, get position #1 on the table
+			...for a surprise
+
+Repeating a Game
+================
+	Use `bashtris +N` to force the seed to N, where 0 <= N <= 65535
+		...This will be the same for every game until BAShTris is restarted
+
+	This allows you to challenge a friend on a specific game :)
+		...Work out how to get the same pieces on a different level!
+
+   ,-------------.
+==(  HIGH SCORES  )============================================================
+   `-------------'
+
+Review
+======
+	You can view the in-game hjigh score records table
+		by pressing F10 on the in-game menu page. Or...
+
+	Review any set of high score records with:
+		`bashtris -r [filename]`
+	...A filename of a [friend's] exported table MAY be specified
+	...If NO filename is given, the internal records will be shown
+
+	**************************************************************
+	**  The following features do NOT work in 'developer' mode  **
+	**************************************************************
+	  In 'developer' mode, the high score table is:  hiscore.dat
+	   and it does NOT contain the markers required for sharing
+
+Export
+======
+	Export your high scores with:
+		`bashtris -x [filename]`
+	...will use stdout if no filename is supplied
+
+	Save your scores before upgrading
+	Or send them to a friend for challenges
+
+Import
+======
+	Import a complete set of high scores with:
+		`bashtris -i <filename>`
+
+	You can run `bashtris -r` to confirm the records have imported 
+
+Merge
+=====
+	Merge a [friend's] high score table in to your game with:
+		`bashtris -m <filename>`
+	...Basic statistics will be given about what was imported
+
+	You can run `bashtris -r` to view the newly merged records
+
+Upgrade
+=======
+	If you upgrade to a new version of BAShTris, you will (probably) want
+	to keep your high score records.
+
+	I was going to automate this, but "automatically download and install 
+	unsigned scripts off github" just seems like an unreasonable security risk.
+	...Maybe I will consider signed updates at some point in the future :/
+
+	1.	Run `bashtris -x records.dat` to save your records as 'records.dat'
+	2.	Download the new version
+	wget https://raw.githubusercontent.com/csBlueChip/BAShTris/main/bashtris.sh
+	3. 	Move the current 'bashtris.sh' to your trashcan
+	4.	Replace it with the new 'bashtris.sh' file you just downloaded
+	5.	Run `bashtris -i records.dat` to re-import your exported records
+
+   ,------------.
+==(  DEBUG MODE  )=============================================================
+   `------------'
+
+Command line options
+====================
+	-d to enable debug mode
+	-s to skip the intros
+	-f to skip the board draw
+	-c allow ^C to exit the program
+
+Debug Console
+=============
+	Open another session and run `bashtris -n` for a debug monitor console
+
+	The main code can use DBG and DBGF to send debug console messages.
+
+Extra keys during play
+======================
+	0 : Disable auto-drop - aka Realtime Pause
+		Pressing UP in this mode will cause a piece to lock immediately
+
+	F5 : Toggle invisible mode on/off
+		Useful for debugging invivisble mode!
+
+	F6 : Draw tetrominoes normally
+		Debug mode usually show the piece geometry during play
+		Enabling "NormalDRAW" has an easter-egg side-effect!
+
+	F12 : Rig the game
+		A number of test pits exist for exercising certain features
+		To create another: See the instructions in rig.dat
+
+	PgUp : Level up
+		Add enough lines to push you up 1 level
+
+	6 ^ : Move up!
+		Piece dropped too far? ...Move it back up the screen!
+
+	Ins : Place piece
+		Lock the active tetromino in to place where it is now
+
+	End : Ditch piece
+		Discard the active tetromino
+		...and get the next one out of the basket, as normal
+
+   ,----------------.
+==(  DEVELOPER MODE  )=========================================================
+   `----------------'
+
+	Run `bashtris -b` to break the code in to manageable components
+		...including a notepad++ workspace
+	You can use `bashtris -B` [capital B] to force file-overwrite
+
+	Run `MAKE.sh` to re-"compile" it in to a single file
+
+	Once "broken" the game may be run with `tris.sh`
+
+	Run `bashtris --id` to create an `id.out` file to identify this distro
+	When broken out, `ID.sh` is the standalone version of `bashtris --id`
+
+	Some of this information can be seen by pressing F4 on the start menu
+	The various outputs will rotate with each press of F4
+
+                                   ==[EOF]==
+~~README-END
+EOT
+# -MAKE:README
+EOF-README
+: << 'EOF-MAKE.sh'
+# +MAKE:MAKE.sh - : build system
+#!/bin/bash
+
+out=bashtris.sh
+in=tris.sh
+lin=()
+
+echo "# Processing..."
+# load input file
+while IFS= read -r  l || [ -n "$l" ] ; do
+	lin+=("$l")
+#	lin+=("${l#"${l%%[![:space:]]*}"}")         # ltrim
+done < $in
+
+file=()
+cmnt=()
+hs=
+hsc=
+err=0
+for l in "${lin[@]}" ; do
+	a=($l)
+	if [[ "${a[0]}" == "." ]]; then
+		if [[ -f "${a[1]}" ]]; then
+			c="${l#*#}"                           # grab comment
+			if [[ "${a[1]}" == "hiscore.dat" ]]; then  # put scores at the end
+				hs="${a[1]}"
+				hsc=("${c#"${c%%[![:space:]]*}"}")  # ltrim
+			else
+#				echo "+ |${a[1]}| - |${c#"${c%%[![:space:]]*}"}|"
+				file+=("${a[1]}")                     # grab filename
+				cmnt+=("${c#"${c%%[![:space:]]*}"}")  # ltrim
+			fi
+		else
+			>&2  echo "! File not found: |${a[1]}|"
+			((err++))
+		fi
+	fi
+done
+
+((err))  &&  exit $((100 +err))
+
+# append the "makefile"
+inc=": makefile"
+#echo "+ |$in| - |$inc|"
+file+=("$in")
+cmnt+=("$inc")
+
+# hiscores come last
+[[ ! -z "$hs" ]] && {
+#	echo "+ |$hs| - |$hsc|"
+	file+=("$hs")
+	cmnt+=("$hsc")
+}
+
+echo "#   Header"
+>$out  echo "#!/bin/bash"
+
+echo "#   List"
+len=0
+for ((i = 0;  i < ${#file[@]};  i++)); do
+	((${#file[$i]} > len)) && len=${#file[$i]}
+done
+for ((i = 0;  i < ${#file[@]};  i++)); do
+	printf -v c "# =MAKE:%s%*s - %s" "${file[$i]}" $((len -${#file[$i]})) "" "${cmnt[$i]}"
+	>>$out  echo "$c"
+done
+
+echo "#   Includes"
+for ((i = 0;  i < ${#file[@]};  i++)); do
+	printf "#     %s%*s - %s\n" "${file[$i]}" $((len -${#file[$i]})) "" "${cmnt[$i]}"
+	[[ "${cmnt[$i]:0:1}" == ":" ]]  &&  >>$out  echo ": << 'EOF-${file[$i]}'"
+	>>$out  echo "# +MAKE:${file[$i]} - ${cmnt[$i]}"
+	>>$out  cat ${file[$i]}
+	>>$out  echo "# -MAKE:${file[$i]}"
+	[[ "${cmnt[$i]:0:1}" == ":" ]]  &&  >>$out  echo "EOF-${file[$i]}"
+done
+
+echo "# Privs"
+chmod +x $out
+
+echo "* Success |$out|"
+# -MAKE:MAKE.sh
+EOF-MAKE.sh
+# +MAKE:BREAK.s - UNbuild system
+#!/bin/bash
+
+# MAKE-COOKIE  <--- This let's the system know if it is running in Make or Break mode
+
+#+============================================================================= ========================================
+unmake() {
+	local re  l  fn
+	local arr=()
+
+	IFS=$'\n' read -r -d '' -a arr < <(grep '^# =MAKE' ${CMD} && printf "\0")
+	for ((i = 0;  i < ${#arr[@]};  i++)); do
+		l="$(echo "${arr[$i]}" | sed 's/[^:]*:\(.*\)/\1/')"
+		fn="$(echo "$l" | sed 's/\([^[:space:]]*\).*/\1/')"
+
+		if [[ -e $fn ]]; then
+			if [[ "$1" != "force" ]]; then
+				echo "! File already exists: |$fn|"
+				continue
+			else
+				echo "# Overwrite: |$fn|"
+			fi
+		else
+			echo "# Create: $l"
+		fi
+
+		re='/^# +MAKE:'$fn'/,/^# -MAKE:'$fn'/'
+		sed -n "${re}p" ${CMD}  |  sed -e '1d' -e '$d' >$fn
+	done
+
+	echo "# Set privs"
+	chmod +x  MAKE.sh  ID.sh  tris.sh
+
+	echo "* Success"
+}
+# -MAKE:BREAK.s
+# +MAKE:ID.sh - machine ID command
+#!/bin/bash
+
+#+=============================================================================
+idDoit () {
+	echo \$ $@
+	eval $@
+	echo ""
+}
+
+#+=============================================================================
+idMake() {
+	{
+		2>&1 idDoit uname -a
+		2>&1 idDoit uname -s
+		2>&1 idDoit uname -n
+		2>&1 idDoit uname -r
+		2>&1 idDoit uname -v
+		2>&1 idDoit uname -m
+		2>&1 idDoit uname -p
+		2>&1 idDoit uname -i
+		2>&1 idDoit uname -o
+		2>&1 idDoit uname -z # test error redirect
+		2>&1 idDoit uname --version
+		2>&1 idDoit bash --version
+	} >$1
+	echo '* Created: |id.out|'
+
+	echo "* Feel free to redact your machine name [$(uname -n)] in the file before sharing"
+}
+
+[[ "${0##*/}" == "ID.sh" ]]  &&  idMake id.out
+# -MAKE:ID.sh
+# +MAKE:ansi.s - ansi sequences (colour, etc)
+#!/bin/bash
 
 #------------------------------------------------------------------------------ ----------------------------------------
 # ANSI Colour definitions
@@ -142,65 +724,100 @@ gridPr=$(($gridP |$maskR))
 # EG. : ${atPFX}${atBLD};{$fgYEL};${bgRED}${atSFX}
 #       ${atPFX}{$fgBLU};${bgBLK}${atSFX}
 #
-atPFX="\033[0;"  # Mac's come with BASh v3 - so no "\e" or "\x1b"
+atPFX="\033[0;"  # OSX comes with BASh v3, so no "\e" or "\x1b"
 atSFX=m
 
-fgBLK=30
-fgRED=31
-fgGRN=32
-fgYEL=33
-fgBLU=34
-fgMAG=35
-fgCYN=36
-fgWHT=37
-
-bgBLK=$((fgBLK +10))
-bgRED=$((fgRED +10))
-bgGRN=$((fgGRN +10))
-bgYEL=$((fgYEL +10))
-bgBLU=$((fgBLU +10))
-bgMAG=$((fgMAG +10))
-bgCYN=$((fgCYN +10))
-bgWHT=$((fgWHT +10))
-
+# Foreground attributes
+atOFF=0  # attibutes off
 atBLD=1  # bold/bright
 atUSC=4  # underscore
 atBLN=5  # blink
 atREV=7  # reverse
 atCON=8  # conceal
 
-#atOFF="${atPFX}0${atSFX}"  # off
-atOFF="${atPFX}0;${fgWHT};${bgBLK}${atSFX}"  # for weirdos with "light skin" terminals!
+fgBLK="0;30"
+fgGRY="1;30"
 
+fgRED="0;31"
+fgBRED="1;31"
+
+fgGRN="0;32"
+fgBGRN="1;32"
+
+fgBRN="0;33"
+fgYEL="1;33"
+
+fgBLU="0;34"
+fgBBLU="1;34"
+
+fgMAG="0;35"
+fgBMAG="1;35"
+
+fgCYN="0;36"
+fgBCYN="1;36"
+
+fgWHT="0;37"
+fgBWHT="1;37"
+
+bgBLK=40
+bgRED=41
+bgGRN=42
+bgYEL=43
+bgBLU=44
+bgMAG=45
+bgCYN=46
+bgWHT=47
+
+
+#------------------------------------------------------------------------------ ----------------------------------------
 # Text colours
-MAG="${atPFX}${atBLD};${fgMAG};${bgBLK}${atSFX}"
-RED="${atPFX}${atBLD};${fgRED};${bgBLK}${atSFX}"
-GRN="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"
-YEL="${atPFX}${atBLD};${fgYEL};${bgBLK}${atSFX}"
-BLU="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"
-CYN="${atPFX}${atBLD};${fgCYN};${bgBLK}${atSFX}"
-WHT="${atPFX};${fgWHT};${bgBLK}${atSFX}"
+#
+clrTxtFg="${fgGRN}"
+clrTxtBg="${bgBLK}"
 
-BBLK="${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-BWHT="${atPFX}${atBLD};${fgWHT};${bgBLK}${atSFX}"
+atOFF="${atPFX}${clrTxtFg};${clrTxtBg}${atSFX}"  # override terminal skin
+
+BLK="${atPFX}${fgBLK};${clrTxtBg}${atSFX}"
+RED="${atPFX}${fgRED};${clrTxtBg}${atSFX}"
+GRN="${atPFX}${fgGRN};${clrTxtBg}${atSFX}"
+BRN="${atPFX}${fgBRN};${clrTxtBg}${atSFX}"
+BLU="${atPFX}${fgBLU};${clrTxtBg}${atSFX}"
+MAG="${atPFX}${fgMAG};${clrTxtBg}${atSFX}"
+CYN="${atPFX}${fgCYN};${clrTxtBg}${atSFX}"
+WHT="${atPFX}${fgWHT};${clrTxtBg}${atSFX}"
+
+GRY="${atPFX}${fgGRY};${clrTxtBg}${atSFX}"
+BRED="${atPFX}${fgBRED};${clrTxtBg}${atSFX}"
+BGRN="${atPFX}${fgBGRN};${clrTxtBg}${atSFX}"
+YEL="${atPFX}${fgYEL};${clrTxtBg}${atSFX}"
+BBLU="${atPFX}${fgBBLU};${clrTxtBg}${atSFX}"
+BMAG="${atPFX}${fgBMAG};${clrTxtBg}${atSFX}"
+BCYN="${atPFX}${fgBCYN};${clrTxtBg}${atSFX}"
+BWHT="${atPFX}${fgBWHT};${clrTxtBg}${atSFX}"
+
+#+============================================================================= ========================================
+# PrintAT(y, x, s) - TL={1,1}
+#
+PAT() {  # (y, x, $s)
+	echo -en "\033[$1;$2H$3"
+}
+
+#+=============================================================================
+# CLS
+#
+CLS() {
+	echo -en "\033[2J\033[1;1;H"  # cls ; tab(1,1)
+}
+# -MAKE:ansi.s
+# +MAKE:prng.s - PRNG (for piece selection)
+#!/bin/bash
 
 #****************************************************************************** ****************************************
-#                              ,--------------.
-#                             (  PROGRAM INFO  )
-#                              `--------------'
+#                                 ,------.
+#                                (  PRNG  )
+#                                 `------'
 #****************************************************************************** ****************************************
-NAME="BAShTris"
-VER=0.7
 
-AUTHOR="${BBLK}cs${GRN}ßlúè${BLU}Çhîp${atOFF}"
-GROUP="${CYN}Çybôrg Sÿstem$"
-
-DBGpipe=$NAME.debug
-
-#****************************************************************************** ****************************************
-#                                  ,------.
-#                                 (  PRNG  )
-#                                  `------'
 #****************************************************************************** ****************************************
 # "Linear Congruency" Pseudo Random Number Generator [PRNG]
 # Full docs here: https://github.com/csBlueChip/simplePRNG
@@ -210,12 +827,12 @@ DBGpipe=$NAME.debug
 # Constansts
 #
 RNDm=$((0x100000000 -1))               # m: >2^30, precise ^2 allows for boolean optimisation
-RNDa=$((0x5D635DBA & 0xFFFFFFF0 | 5))  # a: no binary pattern, as M is a ^2 A%8==5
+RNDa=$((0x5D635DBA & 0xFFFFFFF0 | 5))  # a: no binary pattern ... as M is a ^2, A%8==5
 RNDc=1                                 # c: no factor in common with m
 
 # The wider (in bits) your result is, the less entropy will appear in the LSb's
 RNDw=3                                 # w= width of result
-RNDb=$((RNDr = 1 <<$RNDw, --RNDr))     # b= bitmask (variable (p)reuse)
+RNDb=$(((1 <<$RNDw) -1))               # b= bitmask
 RNDr=$((32 -$RNDw))                    # r= right shift amount
 
 #------------------------------------------------------------------------------ ----------------------------------------
@@ -230,17 +847,692 @@ RNDn=$(($RNDx & $RNDm))                # n= most recent PRN
 
 #+============================================================================= ========================================
 RND() {  # ([seed, n])
-	[[ $1 == seed ]] && {
+	[[ "$1" == "seed" ]] && {
 		RNDs=$2
 		RNDx=$RNDs
 		return
 	}
 
-	RNDx=$((RNDn = $RNDa *$RNDx +$RNDc, RNDn %$RNDm))  # x <- (ax+c)%m  (reuse RNDn as tmp)
-	RNDn=$(($RNDx >>$RNDr))                            # upper bits have greater entropy
+#	RNDx=$((($RNDa*$RNDx +$RNDc) %$RNDm))  # x <- (ax+c)%m
+	RNDx=$((($RNDa*$RNDx +$RNDc) &$RNDm))  # x <- (ax+c)%m
+	RNDn=$(($RNDx >>$RNDr))                # upper bits have greater entropy
 
-	return $RNDn
+	return $RNDn  # this return method, limits us to 8-bit values
 }
+
+#+============================================================================= ========================================
+#  RNDtest 1000000  # I suggest *at least* 1,000,000
+#
+#>	RNDtest() {
+#>		RND seed $RANDOM
+#>
+#>		sz=$1  # size of sample set
+#>
+#>		W=()       # weighting array
+#>		for ((i = $sz;  i > 0;  i--)); do
+#>			RND  # get a fresh random number to $RNDn
+#>
+#>	#		echo $RNDn  # echo to the tty
+#>
+#>			# tally the weight
+#>			if [[ ${W[$RNDn]} == "" ]]; then
+#>				W[$RNDn]=1
+#>			else
+#>				W[$RNDn]=$((${W[$RNDn]} +1))
+#>			fi
+#>
+#>			# countdown timer
+#>			[[ $(($i % 10000)) -eq 0 ]] && echo -en "\r$i " >&2
+#>		done
+#>		echo -e "\rdone    " >&2
+#>
+#>		echo "RNDm=$RNDm"
+#>		echo "RNDa=$RNDa"
+#>		echo "RNDc=$RNDc"
+#>	#	echo ""
+#>		echo "RNDw=$RNDw"
+#>		echo "RNDb=$RNDb"
+#>		echo "RNDr=$RNDr"
+#>	#	echo ""
+#>		echo "RNDs=$RNDs"
+#>	#	echo "RNDx=$RNDx"
+#>	#	echo ""
+#>	#	echo "RNDn=$RNDn"
+#>	#	echo ""
+#>
+#>		echo -e "\nStats\n-----"
+#>		tot=0               # total numbers counted
+#>		hi=$((1 << $RNDw))  # max number of values available
+#>		mt=0                # number of empty values
+#>		avg=$(($sz /$hi))   # average expected count
+#>		for ((i = 0;  i < $hi;  i++)); do
+#>			# only consider values which were generated at least once
+#>			if [[ ${W[$i]} != "" ]]; then
+#>				echo $i: ${W[$i]}   $((${W[$i]} -$avg))  # value, count, deviation from average
+#>				((tot+=${W[$i]}))                        # tally the count
+#>			# otherwise just count is as an "empty" value
+#>			else
+#>				((mt++))
+#>			fi
+#>		done
+#>		echo "tot:$tot"
+#>		echo "empty: $mt"
+#>
+#>		min=$sz  # smallest count
+#>		max=0    # biggest count
+#>		for ((i = 0;  i < $hi;  i++)); do
+#>			[[ ${W[$i]} -lt $min ]] && min=${W[$i]}
+#>			[[ ${W[$i]} -gt $max ]] && max=${W[$i]}
+#>		done
+#>
+#>		dn=$(($avg -$min))  # biggest deviation down
+#>		up=$(($max -$avg))  # biggest deviation up
+#>		pk=$up              # peak deviation
+#>		[[ $dn -gt $pk ]] && pk=$dn
+#>		pc=$(echo "($pk / $hi) / 100.0" | bc -l | head -c 6)  # worst % deviation
+#>		echo "range: $min <= $avg <= $max .. peak-dev: $pk = $pc%"
+#>	}
+# -MAKE:prng.s
+# +MAKE:kbd.s - keyboard driver
+#!/bin/bash
+
+#******************************************************************************
+#                         ,-----------------.
+#                        (  KEYBOARD DRIVER  )
+#                         `-----------------'
+#******************************************************************************
+
+#+=============================================================================
+# returns:
+#   0 - OK
+#   1 - driver not running
+#
+keyStop() {
+	[[ (! -z $KeyRun) && ($KeyRun -ne 1) ]]  &&  return 1
+
+	# Restore terminal settings - known to fail sometimes !?
+#	stty sane            # Set terminal to "sane" settings
+	[[ ! -z "$KeyStty" ]]  &&  stty ${KeyStty}
+
+	tput cnorm           # Make the cursor visible
+
+	KEY=
+	KeyQ=
+	KeyEOK=
+	KeyStty=
+
+	KeyRun=0
+
+	return 0
+}
+
+#+=============================================================================
+# optional:
+#   KEYDRV=v2  -  use keyboard driver v2 (preferred, not supported by WSL)
+#
+keyStart() {
+	# weirdly, this "\e" seems to work with OSX
+	# why no O ???  <- answer: see Kali!
+	KeyEOK=[a-zA-NP-Z~^\$@\e]
+
+	KEY=
+	KeyQ=
+
+	KeyStty=$(stty -g)   # Save our current terminal settings
+
+	ATEXIT+=("keyStop")
+
+	tput civis           # Hide the cursor
+
+	# change terminal settings
+	# -echo  : do not echo typed characters to the screen
+	# -icanon: do not wait for a CR
+	# min    : minimum number of characters per 'read'
+	# time   : time-out if no new characters received within N/10 seconds
+
+	if [[ "$KEYDRV" == "v2" ]] ; then
+		stty -echo -icanon min 0 time 0  # Change our terminal settings
+		# ...you may want to disassociate ^Q, ^S, ^C, ^Z, etc. - see `stty -a`
+		#	stty intr  ^-  quit  ^-  erase  ^-  kill  ^-  eof     ^- \
+		#	     eol   ^-  eol2  ^-  swtch  ^-  start ^-  stop    ^- \
+		#		 susp  ^-  rprnt ^-  werase ^-  lnext ^-  discard ^-
+		# ...good luck killing the program ;)
+	else # v1
+		stty -echo
+	fi
+
+	KeyRun=1
+}
+
+#+=============================================================================
+# private function
+#
+keyXlat() {
+	local k
+	printf -v k "%02X" "'$KEY"
+	case $k in
+		# we never see either of these values‽ :(
+		0A )  KEY=LF ;;
+		0D )  KEY=CR ;;
+		# couple of special cases
+		7F )  KEY=BKSP ;;
+		1B )  KEY=ESC ;;
+		09 )  KEY=TAB ;;
+		*  )
+			printf -v k "%d" "'$KEY"                   # get ASCII value
+			if [[ ($k -ge 0) && ($k -le 31) ]]; then   # ctrl key?
+				# If you need {^Q, ^S, ^C, ^Z, ^D, etc.},
+				#   you will need to unbind them with stty [see keyStart()]
+
+				printf -v k "%02X" $((k|=64))          # set bit6 for printable
+				KEY=$(echo -en "^\x${k}")              # create "^C" style KEY
+
+				[[ "$KEY" == "^H" ]]  &&  KEY=BKSP     # Kali
+			fi ;;
+	esac
+}
+
+#+=============================================================================
+# private function
+#
+keyXlatEsc() {
+	case $KEY in
+		$'\033'[A   )  KEY=UP    ;;
+		$'\033'[B   )  KEY=DOWN  ;;
+		$'\033'[C   )  KEY=RIGHT ;;
+		$'\033'[D   )  KEY=LEFT  ;;
+
+		$'\033'[11~ )  KEY=F1    ;;
+		$'\033'[12~ )  KEY=F2    ;;
+		$'\033'[13~ )  KEY=F3    ;;
+		$'\033'[14~ )  KEY=F4    ;;
+
+		$'\033'[OP  )  KEY=F1    ;;  # kali
+		$'\033'[OQ  )  KEY=F2    ;;  # kali
+		$'\033'[OR  )  KEY=F3    ;;  # kali
+		$'\033'[OS  )  KEY=F4    ;;  # kali
+
+		$'\033'[15~ )  KEY=F5    ;;
+		$'\033'[17~ )  KEY=F6    ;;
+		$'\033'[18~ )  KEY=F7    ;;
+		$'\033'[19~ )  KEY=F8    ;;
+		$'\033'[20~ )  KEY=F9    ;;
+		$'\033'[21~ )  KEY=F10   ;;
+		$'\033'[23~ )  KEY=F11   ;;
+		$'\033'[24~ )  KEY=F12   ;;
+
+		$'\033'[1~  )  KEY=HOME  ;;
+		$'\033'[H   )  KEY=HOME  ;;  # kali
+
+		$'\033'[4~  )  KEY=END   ;;
+		$'\033'[F   )  KEY=END   ;;  # kali
+
+		$'\033'[5~  )  KEY=PGUP  ;;
+		$'\033'[6~  )  KEY=PGDN  ;;
+		$'\033'[2~  )  KEY=INS   ;;
+
+		$'\033'[3~  )  KEY=DEL   ;;
+		$'\033'[3   )  KEY=DEL   ;; # NO idea why this has started happening!?
+
+		## Add more keys here
+
+		*) ;;
+	esac
+}
+
+#+=============================================================================
+# optional:
+#   KEYDRV=v2  -  use keyboard driver v2 (preferred, not supported by WSL)
+#
+# returns:
+#   0 - OK
+#   1 - driver not running
+#
+keyFlush() {
+	[[ -z $KeyRun  ||  $KeyRun -eq 0 ]]  &&  return 1
+
+	if [[ "$KEYDRV" == "v2" ]] ; then
+		IFS= read -r
+	else # v1
+		IFS= read -r -d '' -t0.01
+	fi
+
+	KEY=
+	KeyQ=
+
+	return 0
+}
+
+#+=============================================================================
+# optional:
+#   KEYDRV=v2  -  use keyboard driver v2 (preferred, not supported by WSL)
+#
+# returns:
+#   0 - OK, keystroke in $KEY
+#   1 - driver not running
+#   2 - no keys ready
+#   3 - partial escape code ready
+#
+keyGet() {
+	[[ (-z $KeyRun) || ($KeyRun -eq 0) ]]  &&  return 1
+
+	KEY=
+
+	if [[ "$KEYDRV" == "v2" ]] ; then
+		IFS= read -r
+		KeyQ="${KeyQ}${REPLY}"
+	else # v1
+		local esc=0
+		while true ; do
+			# -s doesn't seem to work - stackoverflow suggests this is common
+			IFS= read -r -s -n1 -d '' -t0.05
+			[[ $? -ne 0 ]]  &&  break
+			KeyQ="${KeyQ}${REPLY}"
+			if [[ $esc -eq 0 ]]; then
+				[[ ${REPLY} == $'\033' ]]  &&  esc=1  ||  break
+			else  # esc=1
+				case ${REPLY} in
+					${KeyEOK} )  break  ;;  # the while loop
+				esac
+			fi
+		done
+	fi
+
+	local buflen=${#KeyQ}
+
+	case ${buflen} in
+		0)	return 2  ;;  # error: no keys found
+		1)	KEY="${KeyQ}"
+			KeyQ=
+			keyXlat
+			return 0  ;;  # error: 0K
+	esac
+
+	if [[ ${KeyQ:0:1} == $'\033' ]]; then
+		local i
+		for ((i = 1;  i < ${buflen};  i++)); do
+			case ${KeyQ:$i:1} in
+				${KeyEOK} )  break  ;;  # break 'for' loop
+			esac
+		done
+		[[ $i == ${buflen} ]]  &&  return 3  # error: unterminated escape sequence
+
+		KEY=${KeyQ:0:$((++i))}
+		KeyQ=${KeyQ:$i}
+		keyXlatEsc
+	else
+		KEY="${KeyQ:0:1}"
+		KeyQ="${KeyQ:1}"
+		keyXlat
+	fi
+
+	return 0
+}
+# -MAKE:kbd.s
+# +MAKE:time.s - timer system
+#!/bin/bash
+
+#------------------------------------------------------------------------------ ----------------------------------------
+clrTIME="${BGRN}"              # Time
+
+#+============================================================================= ========================================
+timeGet() {  # (resultvar)
+	case "$BASHVER" in
+		"bash5" )  eval printf -v $1 "%s" "\$((\${EPOCHREALTIME/.} / 1000))"  ;;
+		"bash4" )  eval $1=$(date +%s%3N)  ;;  # external - slow
+		"bash3" )
+			echo "BASh v3 (MacOS) lacks sub-second timing precision"
+			exit -1
+	esac
+}
+
+#+=============================================================================
+# Start stopwatch
+#
+timeStart() {
+	timePause=0
+	timeGet timeStart
+}
+
+#+=============================================================================
+# Update stopwatch
+#
+timeShow() {
+	local now
+	timeGet now
+	timeTotal=$((now -timeStart -timePause))
+	PAT $TMy $((TMx +1)) "${clrTIME}$(date -u -d @$((timeTotal /1000)) +"%T")"
+}
+# -MAKE:time.s
+# +MAKE:status.s - status line
+#!/bin/bash
+
+#------------------------------------------------------------------------------ ----------------------------------------
+clrStatus="${GRN}"                           # status text
+
+statNorm=4200  # most messages
+statSlow=6000  # long messages
+statLen=71     # max length of status message
+
+#+=============================================================================
+statusClear() {  # (msg)
+	printf "\033[25;1H${atOFF}%*s" $statLen  # clear
+	StatMsg=0
+}
+
+#+=============================================================================
+statusStart() {  # (delay)
+	StatTime=$1  # How long to display a message in mS
+	statusClear
+}
+
+#+=============================================================================
+statusSet() {  # (msg)
+	local s  now
+
+	statusClear
+	s="$@"
+#	PAT 25 3 "${clrStatus}${s::$statLen}" # embedded colours will break this :(
+	PAT 25 3 "${clrStatus}${s}" # embedded colours will break this :(
+	StatMsg=1
+
+	timeGet now
+	((StatClear = now +StatTime))
+}
+
+#+=============================================================================
+statusUpdate() {
+	if (($StatMsg)); then
+		local now
+		timeGet now
+		[[ $now -gt $StatClear ]]  &&  statusClear
+	fi
+}
+# -MAKE:status.s
+# +MAKE:sys.s - system functions
+#!/bin/bash
+
+#****************************************************************************** ****************************************
+#                              ,--------------.
+#                             (  PROGRAM INFO  )
+#                              `--------------'
+#****************************************************************************** ****************************************
+NAME="BAShTris"
+VER=1.0
+
+AUTHOR="${BBLK}cs${BGRN}ßlúè${BBLU}Çhîp${atOFF}"
+GROUP="${BCYN}Çybôrg Sÿstem$"
+
+DBGpipe=$NAME.debug
+
+ERR_OK=0
+ERR_NODEP=1
+ERR_TOOBIG=2
+
+# https://www.utf8-chartable.de/unicode-utf8-table.pl?start=00&number=256&utf8=oct
+#nbsp="$(echo -e '\u00a0')"     # Nope - Mac's come with BASh v3
+#nbsp="$(echo -e '\xc2\xa0')"   # Nope - Mac's come with BASh v3
+nbsp="$(echo -e '\0302\0240')"
+
+clrCsMini="${RED}"                                     # backdrop logo
+clrCsSlogan="${atPFX}${fgYEL};${bgRED}${atSFX}"        # CS slogans
+
+clrKeyDbg="${atPFX}${fgYEL};${bgMAG}${atSFX}"          # keycap debug
+clrKeycap="${atPFX}${fgYEL};${bgBLU}${atSFX}"          # keycap normal
+keyL="${atPFX}${fgBLU};${bgBLK}${atSFX}▐${clrKeycap}"  # left of normal keycap
+keyR="${atPFX}${fgBLU};${bgBLK}${atSFX}▌${atOFF}"      # right of normal keycap
+
+clrVal="${atPFX}${fgBLK};${bgWHT}${atSFX}"             # values and inputs
+clrLang1="${atPFX}${fgBLK};${bgCYN}${atSFX}"           # active language
+clrLang2="${GRY}"                                      # next language
+
+#+============================================================================= ========================================
+sysChkUtil() {
+	local err reqd r
+
+	err=$ERR_OK
+
+	reqd=(which sed grep date tput stty wc chmod uname less)         # <--- 0_o
+	for r in ${reqd[@]} ; do
+		$(which $r >/dev/null 2>&1)  ||  {
+			>&2 echo "! Missing dependency: $r"
+			err=$ERR_NODEP
+		}
+	done
+
+	((err != ERR_OK))  &&  exit $err
+	return $err
+}
+
+#+============================================================================= ========================================
+sysChkTerm() {
+	local sz=($(stty size))
+	SCRH=${sz[0]}
+	SCRW=${sz[1]}
+
+	if [[ $SCRW -lt 80 || $SCRH -lt 25 ]]; then
+		echo "! Terminal too small: {$SCRW x $SCRH}"
+		echo ""
+		helpRequired
+		exit 92
+
+	elif [[ $SCRW -gt 80 || $SCRH -gt 25 ]]; then
+		echo "? Oversized window: {$SCRW x $SCRH}"
+		echo ""
+		helpRequired
+		echo ""
+		echo "$NAME will run in the top-left of this window,"
+		echo "Do NOT report bugs found in this mode!"
+		echo 'Press ` to redraw the playfield during play'
+		echo ""
+		echo "Press <return> to play or ^C to abort"
+
+		read
+		return $ERR_TOOBIG
+	fi
+
+	return $ERR_OK
+}
+
+#+============================================================================= ========================================
+sysGetArch() {
+	local tmp=$(uname -v)
+
+	if   [[ "$tmp" =~ "Darwin"    ]]; then  DISTRO="OSX"
+	elif [[ "$tmp" =~ "Microsoft" ]]; then  DISTRO="WSL"
+	elif [[ "$tmp" =~ "kali"      ]]; then  DISTRO="Kali"  # before "Debian"
+	elif [[ "$tmp" =~ "Debian"    ]]; then  DISTRO="Debian"
+	else                                    DISTRO="???"
+	fi
+
+	BASHVER=$(bash --version | grep bash | sed 's/[^0-9]*\(.\).*/bash\1/')
+}
+
+#+============================================================================= ========================================
+sysSetup() {
+	ATEXIT=()
+
+	# Get our own truename, for {high scores, sprites, etc.}
+	CMD=$(which $0)
+	if grep '^# MAKE-COOKIE' ${CMD} 2>&1 >/dev/null ; then
+		CMDhs="${CMD}"
+		CMDrig="${CMD}"
+		CMDgo="${CMD}"
+	else
+		CMDhs="${CMD%/*}/hiscore.dat"
+		CMDrig="${CMD%/*}/rig.dat"
+		CMDgo="${CMD%/*}/gameover.dat"
+	fi
+
+	# Check we have all the required utils {sed, grep, etc.}
+	sysChkUtil  ||  return $?
+
+	# System Architecture
+	sysGetArch
+
+	[[ "$1" == "quick" ]]  &&  return
+
+	# Check as much as we can about the terminal
+	sysChkTerm
+
+	# Make sure we clean up on the way out
+	trap sysAtexit EXIT
+
+	# Unsupported OS will error & `exit -1` here
+	local x
+	timeGet x
+
+	# Start the keyboard driver (requires cleanup to be configured)
+	if [[ -z "$KEYDRV" ]]; then
+		case "{$DISTRO^^}" in
+			"OSX" | "KALI" | "DEBIAN" )  KEYDRV="v2" ;;
+			"WSL"                     )  KEYDRV="v1" ;;
+			*                         )  KEYDRV="v2" ;;  # might as well try!
+		esac
+	fi
+	keyStart
+
+	# trap ^C ...unnecessary now we're trapping EXIT, but still pretty :)
+	((CTRLC))  &&  trap ctrlC_pressBksp INT
+
+	# trap ^Z
+
+	statusStart $statNorm
+
+	langInit EN
+
+	(($DEBUG))  &&  dbgStart "${NAME}"
+
+	boredCnt=0
+}
+
+#+============================================================================= ========================================
+sysAtexit() {
+	for c in ${ATEXIT[@]} ; do
+		DBG "ATEXIT: $c"
+		$c
+	done
+
+	# don't leave zombies
+	local list="$(jobs -p)"
+	if [[ ! -z "$list" ]]; then
+		local pipe="/dev/null"
+		[[ $DEBUG -eq 1  &&  -p $DbgPipe ]]  &&  pipe="$DbgPipe"
+		DBG "ATEXIT: kill -13 {$list}"
+		kill -13  $list 1>$pipe 2>&1
+	fi
+
+	((DEBUG))  &&  PAT 24 1 ""
+}
+
+#+============================================================================= ========================================
+ctrlC_pressBksp() {
+	statusSet "Press${keyL}◄▬▬${keyR}to quit"
+	return
+}
+
+#+============================================================================= ========================================
+WipeOut() {
+	local  y  x
+
+	# wipe-out
+	for ((x = 1;  x <= 40;  x++)); do
+		for ((y = 1;  y <= 25;  y++)); do
+			PAT $y $x "${WHT}│"
+			PAT $y $((81 -x)) "${WHT}│"
+		done
+		if [[ $x -gt 0 ]]; then
+			for ((y = 1; y <= 25;  y++)); do
+				PAT $y $((x  -1)) " "
+				PAT $y $((81 -x)) " "
+			done
+		fi
+		sleep 0.01
+	done
+}
+
+#+============================================================================= ========================================
+Intro() {
+	((CTRLC))  &&  trap "" INT
+	CLS
+	csDraw
+	helpCtrl
+	WipeOut
+	((CTRLC))  &&  trap ctrlC_pressBksp INT
+}
+
+#+============================================================================= ========================================
+countdown() {
+	local sz  s  cnt  st  now  next  clr
+	local cset=("${YEL}" "${BRN}" "${RED}")
+	local bps=12
+
+	((sz = $1 *bps))
+	printf -v s "%*s" $sz
+	s="${s// /•}"
+
+	cnt=0
+	timeGet st
+	((now = st))
+	while ((cnt <= sz)); do
+		clr=$((RANDOM %3))
+		clr=${cset[$clr]}
+		statusSet "${GRN}${s::-$cnt}${clr}☼"
+		((next = st +((cnt *1000) /$bps) ))
+		while ((now < next)); do timeGet now ; done
+		keyGet
+		[[ "${KEY^^}" == "P" ]]  &&  break
+		((cnt++))
+	done
+	statusSet ""
+}
+# -MAKE:sys.s
+# +MAKE:debug.s - debug API & debug monitor
+#!/bin/bash
+
+#+=============================================================================
+dbgStart() {  # (pipename)
+	DbgPipe="~$1.debug"
+}
+
+#+=============================================================================
+DBG() {
+	[[ $DEBUG -eq 1 && -p $DbgPipe ]]  &&  echo "$@" >$DbgPipe
+}
+
+#+=============================================================================
+DBGF() {
+	[[ $DEBUG -eq 1 && -p $DbgPipe ]]  &&  printf $@  >$DbgPipe
+}
+
+#+=============================================================================
+dbgEnd() {
+	echo -e "\nExiting cleanly"
+	rm -f ${DbgPipe}
+	exit 0
+}
+
+#+=============================================================================
+dbgMonitor() {
+	dbgStart "${NAME}"
+
+	[[ ! -e $DbgPipe ]]  &&  mknod $DbgPipe p
+
+	if [[ -p $DbgPipe ]]; then
+		local d=$(date +%Y/%m/%d_%T)
+		echo -en "${GRN}$NAME debug monitor ${atOFF}... ${MAG}$DbgPipe ${atOFF}... "
+		echo -e "${YEL}$d ${atOFF}... ${RED}^C to exit.${atOFF}"
+		((CTRLC))  &&  trap dbgEnd  INT  # trap ^C
+		tail -f $DbgPipe
+	else
+		echo "! Error: $DbgPipe exists, and is not a named pipe"
+		exit 1
+	fi
+	exit 2  # should never reach here
+}
+# -MAKE:debug.s
+# +MAKE:cs.s - cyborg systems fancy shit
+#!/bin/bash
 
 #****************************************************************************** ****************************************
 #                          ,-------------------------.
@@ -249,13 +1541,12 @@ RND() {  # ([seed, n])
 #****************************************************************************** ****************************************
 
 CSmini=()
-CSmini+=("╓────╖")
-CSmini+=("║ °╓─╖")
-CSmini+=("║${nbsp}${nbsp}╙─╖")
-CSmini+=("╙─╜╙─╜")
-CSminiW=6
-CSminiH=4
-CSminiClr="${atPFX}${fgRED};${bgBLK}${atSFX}"
+	CSmini+=("╓────╖")
+	CSmini+=("║ °╓─╖")
+	CSmini+=("║  ╙─╖")
+	CSmini+=("╙─╜╙─╜")
+CSminiW=${#CSmini[0]}
+CSminiH=${#CSmini[@]}
 
 CS=()
 #        0         1         2         3         4         5        6          7         8
@@ -266,7 +1557,7 @@ CS=()
    CS+=(" █▓█             █▒█ █▒█ ░ █▒█ █▓█ ░ █▒█ █▓█ ░ █▓█ █▓█ ░ █▒█ █▓█ ░ █▒█           ") # 3
    CS+=(" █▓█             █░█ █░█ ░ █░█ █▒█ ░ █░█ █▒█ ░ █▒█ █▒█ ░ █░█ █▒█ ░ █░█           ") # 4
    CS+=(" █▒█             ▀▀▀ █ █ ░ █ █ █░█ ░ █ █ █░█ ░ █░█ █░█ ░ █ █ █░█ ░ ▀▀▀   _▄▄▄_   ") # 5
-   CS+=(" █▒█                 █ █   █ █ █ █▄▄▄█▀▀ █ █ ▲ █ █ █ █▄▄▄██▀ █ █         ―█▒█―   ") # 6  chip legs are 
+   CS+=(" █▒█                 █ █   █ █ █ █▄▄▄█▀▀ █ █ ▲ █ █ █ █▄▄▄██▀ █ █         ―█▒█―   ") # 6  chip legs are
    CS+=(" █░█                 ▀███▀███▀ █ █▀▀▀█▄▄ █ █ ▼ █ █ █ █  █ █  █ █ ▀▀███   ―█▒█―   ") # 7  \u2015 'cos Kali
    CS+=(" █░█                    █ █    █░█ ░ █ █ █░█ ░ █░█ █░█  █ █  █░█ ░ █ █    ▀▀▀    ") # 8
    CS+=(" █░█                    █░█    █▒█ ░ █░█ █▒█ ░ █▒█ █▒█  █░█  █▒█ ░ █░█           ") # 9
@@ -288,285 +1579,331 @@ CS=()
    CS+=("                             #-#ENTERTAINING#YOU#-#                             ")  #25
 #        01234567890123456789012345678901234567890123456789012345678901234567890123456789
 #        0          1        2         3         4         5        6          7         8
+CSlogoW=${#CS[0]}
+CSlogoH=${#CS[@]}
 
 #+============================================================================= ========================================
-CSdrawBackdrop() {
-	echo -en "$CSminiClr"
+# Fill the main screen with the CSmini logo
+#
+csDrawBackdrop() {
+	local  y  h  yy  x
+
 	for ((y = 1;  y <= 25; y += $CSminiH)); do
-		for ((h = 0;  h < $CSminiH;  h++)); do
+		for ((h = 0;  h < ${CSminiH};  h++)); do
 			((yy = $y +$h))
-			[ $(($yy)) -gt 24 ] && break
-			for ((x = 2;  x < 80; x += $CSminiW)); do
-				GOTO $yy $x
-				echo -en "${CSmini[$h]}"
+			[[ $yy -gt 24 ]]  &&  break
+			for ((x = 2;  x < 80; x += ${CSminiW})); do
+				PAT $yy $x "${clrCsMini}${CSmini[$h]}"
 			done
 		done
 	done
+
+	pfDrawDebug
+}
+
+#+============================================================================= ========================================
+csDrawBackdropReveal() {
+	local x  s
+
+	local CSbd=()
+	CSbd+=("")
+	for ((y = 0;  y < 6;  y++)); do
+		CSbd+=(${nbsp})
+		CSbd+=(${nbsp})
+		CSbd+=(${nbsp})
+		CSbd+=(${nbsp})
+		for ((x = 1;  x <= 13;  x++)); do
+			for ((i = 0;  i < 4;  i++)); do
+				CSbd[$(($y*4 +1 +$i))]="${CSbd[$(($y*4 +1 +$i))]}${CSmini[$i]}"
+			done
+		done
+	done
+
+	local cnt=${#CSbd[@]}
+	for ((i = 0;  i < cnt;  i++)); do
+		CSbd[i]="${CSbd[i]}${nbsp}"
+	done
+	CSbd+=("$(printf "%*s" 80 "")")
+#	printf -v s "%*s" 80 ""
+#	Csbd+=("$s")
+
+	for ((x = 40;  x >= 0;  x--)); do
+		if [[ $x -gt 0 ]]; then
+			for ((y = 1;  y <= 25;  y++)); do
+				PAT $y $x "${WHT}│"
+				PAT $y $((81 -$x)) "${WHT}│"
+			done
+		fi
+		if [[ $x -lt 40 ]]; then
+			for ((y = 1; y <= 25;  y++)); do
+				PAT $y $((x +1)) "${clrCsMini}${CSbd[$y]:$(($x +1 -1)):1}"
+				PAT $y $((80 -$x)) "${clrCsMini}${CSbd[$y]:$((80 -$x -1)):1}"
+			done
+		fi
+		[[ -z $1 ]] && sleep 0.01
+	done
+
+	pfDrawDebug
 }
 
 #+============================================================================= ========================================
 # Plot a single character on the screen
-# Colour according to position & character
+# Colour according to position & character type
 #
-CSdrawPlot() {  # (x, y, chr)
-	[ $1 -eq 99 ] && goto= || goto="\033[$1;$2H"
-#	if [ $1 -ge 6 ] && [ $1 -le 9 ] && [ $2 -ge 9 ] && [ $2 -le 14 ]; then  # BC
-	if [[ ($1 -ge 5) && ($1 -le 8) && ($2 -ge 73) && ($2 -le 78) ]]; then  # BC
+csDrawPlot() {  # (y, x, chr)
+	local clrCsBc="${atPFX}${fgBLU};${clrTxtBg}${atSFX}"
+	local clrCsBcLegs="${atPFX}${atUSC};${fgYEL};${clrTxtBg}${atSFX}"
+
+	if [[ ($1 -ge 5) && ($1 -le 8) && ($2 -ge 73) && ($2 -le 78) ]]; then  # bluechip
 		case $3 in
-			"_" )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLK}${atSFX}$3"  ;;
-			"―" )  echo -en "${goto}${atPFX}${atBLD};${atUSC};${fgYEL};${bgBLK}${atSFX}$3"  ;;
-			*   )  echo -en "${goto}${atPFX}${fgBLU};${bgBLK}${atSFX}$3" ;;
+			"_" )  PAT $1 $2 "${clrCsBcLegs} "   ;;
+			"―" )  PAT $1 $2 "${clrCsBcLegs}$3"  ;;  # chip legs are \u2015 'cos Kali
+			*   )  PAT $1 $2 "${clrCsBc}$3"      ;;
 		esac
 
 	else  # CS
 		case $3 in
-			"▀"     )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # up
-			"█"     )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # full
-			"▄"     )  echo -en "${goto}${atPFX}${atBLD};${fgCYN};${bgBLK}${atSFX}$3"  ;;  # down
+			"▀"     )  PAT $1 $2 "${CYN}$3"   ;;  # up
+			"█"     )  PAT $1 $2 "${CYN}$3"   ;;  # full
+			"▄"     )  PAT $1 $2 "${BCYN}$3"  ;;  # down
 
-			"░"     )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # dark
-			"▒"     )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # med
-			"▓"     )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # light
-			[▲▼]    )  echo -en "${goto}${atPFX}${fgCYN};${bgBLK}${atSFX}$3"  ;;  # light
+			"░"     )  PAT $1 $2 "${CYN}$3"  ;;  # dark
+			"▒"     )  PAT $1 $2 "${CYN}$3"  ;;  # med
+			"▓"     )  PAT $1 $2 "${CYN}$3"  ;;  # light
+			[▲▼]    )  PAT $1 $2 "${CYN}$3"  ;;
 
-			[0-9]   )  echo -en "${goto}${atPFX}${fgBLU};${bgBLK}${atSFX}$3"  ;;
+			[0-9]   )  PAT $1 $2 "${BLU}$3"  ;;  # year
 
-			[A-Z\-] )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgRED}${atSFX}$3"  ;;
-			[#]     )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgRED}${atSFX} "   ;;
+			[A-Z\-] )  PAT $1 $2 "${clrCsSlogan}$3"  ;;  # Slogan
+			[#]     )  PAT $1 $2 "${clrCsSlogan} "   ;;  # ...
 
-			" "     )  echo -en "${goto}${atOFF}$3" ;;
-			*       )  echo -en "${goto}${atOFF}" ;;
+			" "     )  PAT $1 $2 "${atOFF}$3" ;;
+			*       )  PAT $1 $2 "${atOFF}" ;;
 		esac
 	fi
 }
 
 #+============================================================================= ========================================
-# Draw an full ANSI letter
+# Draw a full ANSI letter
 #
-CSdrawChar() {  # (y, x, speed)
-	local bry=$(($1 +12))
-	local brx=$(($2 + 9))
+csDrawChar() {  # (y, x, speed)
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local tly=$1
+	local tlx=$2
+
+	local bry=$(($1 +11))
+	local brx=$(($2 + 8))
 	local spd=$3
 
-	local x=
-	local y=
-	for ((y = $1;  y < $bry;  y++)); do
-		for ((x = $2;  x < $brx;  x++)); do
-			CSdrawPlot $y $x ${CS[$y]:$x:1}
+	for ((y = $tly;  y <= $bry;  y++)); do
+		for ((x = $tlx;  x <= $brx;  x++)); do
+			csDrawPlot $y $x "${CS[$y]:$x:1}"
 			sleep $spd
 		done
 	done
 }
 
 #+============================================================================= ========================================
-# Draw a tetromino at the given coords (full screen)
-#
-#	CSdrawTet() {  # (y, x, tet$, colour)
-#		local ty=$1
-#		local tx=$2
-#		local tet=$3
-#		local clr=$4
-#	
-#		for ((h = 0;  h < $tetH;  h++)); do
-#			local y=$(($ty +$h))
-#			for ((w = 0;  w < $tetW;  w++)); do
-#				local x=$(($tx + $w*2))
-#				local z=$(($h*$tetW +$w))
-#				[ ${tet:$z:1} == "#" ]  &&  echo -en ${clr}"\033[${y};${x}H"${tetGR}
-#			done
-#		done
-#	}
-
-#+============================================================================= ========================================
-# Un-Draw a tetromino at the given coords (restore logo)
-#
-#	CSundrawTet() {  # (y, x, tet$)
-#		for ((h = 0;  h < $tetH;  h++)); do
-#			local y=$(($1 +$h))
-#			for ((w = 0;  w < $tetW;  w++)); do
-#				local z=$(($h*$tetW +$w))
-#				local tet=$3
-#				[ ${tet:$z:1} == "#" ]  &&  {
-#					((x = $2 + $w*2))
-#					CSdrawPlot $y $x "${CS[$y]:$x:1}"  # undraw
-#					((x++))
-#					CSdrawPlot $y $x "${CS[$y]:$x:1}"  # undraw
-#				}
-#			done
-#		done
-#	}
-
-#+============================================================================= ========================================
 # Draw the big C, downwards
 #
-CSdrawCdown() {  # (spd)
+csDrawCdown() {  # (spd)
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local  y  x
+
 	local spd=$1
+
 	for ((y = 5;  y >=  2;  y--)); do
-		for ((x = 17;  x <= 19;  x++)); do     CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 17;  x <= 19;  x++)); do     csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
-	y=1   ; for ((x = 18;  x >= 2;  x--)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
+	y=1   ; for ((x = 18;  x >= 2;  x--)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
 	for ((y = 2;  y <=  23;  y++)); do
-		for ((x = 1;  x <=  3;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 1;  x <=  3;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
-	y=24 ; for ((x =  1;  x <=  8;  x++)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-	x=9  ; for ((y = 24;  y >= 21;  y--)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
+	y=24 ; for ((x =  1;  x <=  8;  x++)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+	x=9  ; for ((y = 24;  y >= 21;  y--)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
 }
 
 #+=============================================================================
-# Draw the first C, upwards
+# Draw the big C, upwards
 #
-#	CSdrawCup() {  # (spd)
-#		local spd=$1
-#		x=9  ; for ((y = 21;  y <= 24;  y++)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-#		y=24 ; for ((x =  8;  x >=  1;  x--)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-#		for ((y = 23;  y >=  2;  y--)); do
-#			for ((x = 1;  x <=  3;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#		y=1  ; for ((x =  2;  x <= 18;  x++)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-#		for ((y = 2;  y <=  5;  y++)); do
-#			for ((x = 17;  x <= 19;  x++)); do     CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#	}
+#>	csDrawCup() {  # (spd)
+#>		local  y  x
+#>
+#>		local spd=$1
+#>
+#>		x=9  ; for ((y = 21;  y <= 24;  y++)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+#>		y=24 ; for ((x =  8;  x >=  1;  x--)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+#>		for ((y = 23;  y >=  2;  y--)); do
+#>			for ((x = 1;  x <=  3;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>		y=1  ; for ((x =  2;  x <= 18;  x++)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+#>		for ((y = 2;  y <=  5;  y++)); do
+#>			for ((x = 17;  x <= 19;  x++)); do     csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>	}
 
 #+============================================================================= ========================================
 # Draw the first S, downwards
 #
-CSdrawSdown() {  # (spd)
+csDrawSdown() {  # (spd)
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local  y  x
+
 	local spd=$1
+
 	for ((y = 17;  y >= 14;  y--)); do
-		for ((x = 17;  x <= 19;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 17;  x <= 19;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
-	y=13 ; for ((x = 18;  x >=  12;  x--)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
+	y=13 ; for ((x = 18;  x >=  12;  x--)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
 	for ((y = 14;  y <= 18;  y++)); do
-		for ((x = 11;  x <= 13;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 11;  x <= 13;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
 	for ((x = 13;  x <= 19;  x++)); do
-		for ((y = 18;  y <= 19;  y++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((y = 18;  y <= 19;  y++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
 	for ((y = 19;  y <= 23;  y++)); do
-		for ((x = 17;  x <= 19;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 17;  x <= 19;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
-	y=24 ; for ((x = 18;  x >=  12;  x--)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
+	y=24 ; for ((x = 18;  x >=  12;  x--)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
 	for ((y = 23;  y >= 20;  y--)); do
-		for ((x = 11;  x <= 13;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
+		for ((x = 11;  x <= 13;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
 	done
 }
 
 #+=============================================================================
 # Draw the first S, upwards
 #
-#	CSdrawSup() {  # (spd)
-#		local spd=$1
-#		for ((y = 20;  y <= 23;  y++)); do
-#			for ((x = 11;  x <= 13;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#		y=24 ; for ((x = 12;  x <=  18;  x++)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-#		for ((y = 23;  y >= 19;  y--)); do
-#			for ((x = 17;  x <= 19;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#		for ((x = 19;  x >= 13;  x--)); do
-#			for ((y = 19;  y >= 18;  y--)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#		for ((y = 18;  y >= 14;  y--)); do
-#			for ((x = 11;  x <= 13;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#		y=13 ; for ((x = 12;  x <=  18;  x++)); do  CSdrawPlot $y $x ${CS[$y]:$x:1} ; sleep $spd ; done
-#		for ((y = 14;  y <= 17;  y++)); do
-#			for ((x = 17;  x <= 19;  x++)); do      CSdrawPlot $y $x ${CS[$y]:$x:1} ; done ; sleep $spd
-#		done
-#	}
+#>	csDrawSup() {  # (spd)
+#>		local  y  x
+#>
+#>		local spd=$1
+#>
+#>		for ((y = 20;  y <= 23;  y++)); do
+#>			for ((x = 11;  x <= 13;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>		y=24 ; for ((x = 12;  x <=  18;  x++)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+#>		for ((y = 23;  y >= 19;  y--)); do
+#>			for ((x = 17;  x <= 19;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>		for ((x = 19;  x >= 13;  x--)); do
+#>			for ((y = 19;  y >= 18;  y--)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>		for ((y = 18;  y >= 14;  y--)); do
+#>			for ((x = 11;  x <= 13;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>		y=13 ; for ((x = 12;  x <=  18;  x++)); do  csDrawPlot $y $x "${CS[$y]:$x:1}" ; sleep $spd ; done
+#>		for ((y = 14;  y <= 17;  y++)); do
+#>			for ((x = 17;  x <= 19;  x++)); do      csDrawPlot $y $x "${CS[$y]:$x:1}" ; done ; sleep $spd
+#>		done
+#>	}
 
 #+============================================================================= ========================================
 # EFFECT: Lightning effect on the shading characters
 #
-CSfxFlash() {
+csFxFlash() {
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local  i  y  x
+
 	for ((i = 1;  i <= 6;  i++)); do
-		(($i & 1)) && fg="${atBLD};${fgCYN}" || fg="${fgBLU}"
-		(($i & 1)) && fgn="${atBLD};${fgWHT}" || fgn="${fgBLU}"
+		(($i & 1))  &&  fg="${fgBCYN}" || fg="${fgBBLU}"
+		(($i & 1))  &&  fgn="${fgWHT}" || fgn="${fgBBLU}"
+
 		for ((y = 2;  y <= 22;  y++)); do
 			for ((x = 2;  x <= 78;  x++)); do
-				local chr=${CS[$y]:$x:1}
+				local chr="${CS[$y]:$x:1}"
 				case $chr in
 					"░"|"▒"|"▓"|"▲"|"▼" )
-						echo -en "\033[${y};${x}H${atPFX}${fg};${bgBLK}${atSFX}$chr"
+						PAT $y $x "${atPFX}${fg};${bgBLK}${atSFX}$chr"
 						;;
 					[0-9] )
-						echo -en "\033[${y};${x}H${atPFX}${fgn};${bgBLK}${atSFX}$chr"
+						PAT $y $x "${atPFX}${fgn};${bgBLK}${atSFX}$chr"
 						;;
 				esac;
 			done
 		done
-		[ $i -eq  2 ] && sleep 0.5
+		[[ $i -eq  2 ]]  &&  sleep 0.5
 	done
 }
 
 #+============================================================================= ========================================
 # EFFECT: Interlace effect on the whole logo
 #
-CSfxIlace() {
+csFxIlace() {
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local  i  y  yy  x
+
 	for ((i = 1;  i <= 3;  i++)); do
 		for ((y = 1;  y <= $((24 -$i));  y += 3)); do
-
 			yy=$(($y +$i -1))
-			for ((x = 1;  x <= 79;  x++)); do  CSdrawPlot $yy $x "${CS[$yy]:$x:1}" ; done
-			echo -en "\033[${yy};${x}H "
+			for ((x = 1;  x <= 80;  x++)); do  csDrawPlot $yy $x "${CS[$yy]:$x:1}" ; done
 
 			yy=$(($y +$i))
-			echo -en "\033[${yy};1H "
-			for ((x = 1;  x <= 79;  x++)); do  CSdrawPlot $yy $(($x +1)) "${CS[$yy]:$x:1}" ; done
+			PAT $yy 1 "${atOFF} "
+			for ((x = 1;  x <= 79;  x++)); do  csDrawPlot $yy $(($x +1)) "${CS[$yy]:$x:1}" ; done
 		done
 	done
 
 	for ((yy = $i;  yy <= 23;  yy += 3)); do
-		for ((x = 1;  x <= 80;  x++)); do      CSdrawPlot $yy $x "${CS[$yy]:$x:1}" ; done
-		echo -en "\033[${yy};${x}H "
+		for ((x = 1;  x <= 80;  x++)); do      csDrawPlot $yy $x "${CS[$yy]:$x:1}" ; done
 	done
-	for ((x = 1;  x <= 80;  x++)); do          CSdrawPlot 24 $x "${CS[24]:$x:1}" ; done
-	CSdrawPlot 23 1 "${CS[23]:1:1}" # WHY?!
+	for ((x = 1;  x <= 80;  x++)); do          csDrawPlot 24 $x "${CS[24]:$x:1}" ; done
 }
 
 #+============================================================================= ========================================
 # EFFECT: WIPE - erase
 #
-CSwipeUnplot() {  # (y, x)
-	[ $1 -lt  1 ] || [ $1 -gt 25 ] || [ $2 -lt  1 ] || [ $2 -gt 80 ] && return
-	[ $2 -lt 79 ] && ch="   " || ch="  "
-	echo -en "${atOFF}\033[${1};${2}H${ch}"
+csWipeUnplot() {  # (y, x)
+	[[ $1 -lt  1 || $1 -gt 25 || $2 -lt  1 || $2 -gt 80 ]]  &&  return
+	[[ $2 -lt 79 ]]  &&  ch="   "  ||  ch="  "
+	PAT $1 $2 "${atOFF}${ch}"
 }
 
 #+=============================================================================
 # EFFECT: WIPE - redraw
 #
-CSwipeReplot() {  # (y, x)
-	[ $1 -lt  1 ] || [ $1 -gt 25 ] || [ $2 -lt  1 ] || [ $2 -gt 80 ] && return
-	[ $2 -lt 79 ] && c=3 || c=2
+csWipeReplot() {  # (y, x)
+	local  i
+
+	[[ $1 -lt  1 || $1 -gt 25 || $2 -lt  1 || $2 -gt 80 ]]  &&  return
+	[[ $2 -lt 79 ]]  &&  c=3  ||  c=2
 	for ((i = 0;  i < $c;  i++)); do
 		local x=$(($2 +$i))
-		CSdrawPlot $1 $x "${CS[$1]:$x:1}"
+		csDrawPlot $1 $x "${CS[$1]:$x:1}"
 	done
 }
 
 #+=============================================================================
 # EFFECT: WIPE - redraw with CONTROLLER screen
 #
-CTRLwipeReplot() {  # (y, x)
-	[ $1 -lt  1 ] || [ $1 -gt 25 ] || [ $2 -lt  1 ] || [ $2 -gt 80 ] && return
-	[ $2 -lt 79 ] && c=3 || c=2
-	for ((i = 0;  i < $c;  i++)); do
-		local x=$(($2 +$i))
-		CTRLplot $1 $x "${CTRL[$1]:$x:1}"
-	done
-}
+#>	CTRLwipeReplot() {  # (y, x)
+#>		local  i
+#>
+#>		[[ $1 -lt  1 || $1 -gt 25 || $2 -lt  1 || $2 -gt 80 ]]  &&  return
+#>		[[ $2 -lt 79 ]]  &&  c=3 || c=2
+#>		for ((i = 0;  i < $c;  i++)); do
+#>			local x=$(($2 +$i))
+#>			CTRLplot $1 $x "${CTRL[$1]:$x:1}"
+#>		done
+#>	}
 
 #+=============================================================================
 # EFFECT: WIPE - expanding box
 #
-CSfxWipe() {  # (unplot|replot, spd)
+csFxWipe() {  # (unplot|replot, spd)
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local  l  d  u  r
+
 	local w=3
 	local y=13  # start seed point
 	local x=37  # (N *w) +1
 	local sz=1
-	while [ $sz -le $((80/$w + 1)) ]; do
+	while [[ $sz -le $((80/$w + 1)) ]]; do
 		$1 $y $x # seed
 		for ((u = 0;  u < $sz;  u++)); do  $1 $((y -= 1)) $x           ; done
 		for ((r = 0;  r < $sz;  r++)); do  $1 $y          $((x += $w)) ; done
@@ -580,53 +1917,28 @@ CSfxWipe() {  # (unplot|replot, spd)
 }
 
 #+============================================================================= ========================================
-# test harness
-#
-#	CSdrawTEST() {
-#		# draw logo
-#		CLS
-#		for ((y = 1;  y <= 25;  y++)); do
-#			GOTO $y 1
-#			echo -en "${CS[$y]:1}"
-#		done
-#	
-#		# overlay tetromino - demo
-#		for ((i=1; i<=5; i++)); do
-#			CSdrawTet 6 43 ${tetL[0]} ${tetL[4]}
-#			sleep 0.5
-#			CSundrawTet 6 43 ${tetL[0]}
-#			sleep 0.5
-#		done
-#	
-#		# wait key
-#		while ! keyGet ; do : ; done
-#		[ "$KEY" == "BKSP" ] && Quit 0
-#	}
-
-#+============================================================================= ========================================
 # This is it!!
 #
-CSdraw() {
-	local y=.
-	local x=.
+csDraw() {
+	local  y  x
 
 	CLS
 
 	# CS
-	CSdrawCdown 0.02 &
-	CSdrawSdown 0.03
+	csDrawCdown 0.02 &
+	csDrawSdown 0.03 &
 	wait
 
 	# YBORG
 	for ((x = 21;  x < 62;  x += 10)); do
-		CSdrawChar 1 $x 0.0001 &
+		csDrawChar 1 $x 0.0001 &
 		sleep 0.1
 	done
 	wait
 
 	# YSTEMS
 	for ((x = 21;  x < 72;  x += 10)); do
-		CSdrawChar 13 $x 0.0001 &
+		csDrawChar 13 $x 0.0001 &
 		sleep 0.1
 	done
 	wait
@@ -634,62 +1946,592 @@ CSdraw() {
 	# Chip
 	for ((y = 5;  y <= 8;  y++)); do
 		for ((x = 73;  x <= 77;  x++)); do
-			CSdrawPlot $y $x "${CS[$y]:$x:1}"
+			csDrawPlot $y $x "${CS[$y]:$x:1}"
 		done
 	done
 	sleep 0.2
 
 	# slogan
-	GOTO 25 29
-	echo -en "${atPFX}${atBLD};${fgYEL};${bgRED}${atSFX}"
-	echo -en "                      "
+	PAT 25 29 "${clrCsSlogan}                      "
 	for ((x = 29;  x <= 50;  x++)); do
-		CSdrawPlot 25 $x "${CS[25]:$x:1}"
+		csDrawPlot 25 $x "${CS[25]:$x:1}"
 		sleep 0.02
 	done
 
 	# anykey
 	keyFlush
-	local anykey=1
 	local i=0
-	while (($anykey)); do
-		[ $i -eq  0 ] && echo -en "\033[24;80H${atPFX}${fgWHT};${bgBLK}${atSFX}■"
-		[ $i -eq 10 ] && echo -en "\033[24;80H${atPFX}${fgWHT};${bgBLK}${atSFX}${nbsp}"
+	while true ; do
+		[[ $i -eq  0 ]]  &&  PAT 24 80 "${WHT}■"
+		[[ $i -eq 10 ]]  &&  PAT 24 80 "${WHT} "  #${nbsp}"
 		sleep 0.05
-		((i++))
-		[ $i -ge 14 ] && i=0
 
-		keyGet && break
+		[[ $((++i)) -ge 14 ]]  &&  i=0
+
+		keyGet  &&  break
 
 		# maybe do an animation
-		if [ $(($RANDOM & 31)) -eq 0 ]; then
+		if [[ $(($RANDOM % 70)) -eq 0 ]]; then
 			case $(($RANDOM %4)) in
-				[0]  )
-					CSfxIlace &
-					;;
-				[12] )
-					CSfxFlash &
-					;;
-				[3]  )
-					CSfxWipe CSwipeUnplot 0.01 &
-					CSfxWipe CSwipeReplot 0.01 &
-					;;
+				[0]  )  csFxIlace &  ;;
+				[12] )  csFxFlash &  ;;
+				[3]  )  csFxWipe csWipeUnplot 0.01 &
+				        sleep 0.03
+				        csFxWipe csWipeReplot 0.01 &  ;;
 			esac
 		fi
 	done
-	echo -en "\033[24;80H${atPFX}${fgWHT};${bgBLK}${atSFX}√"
+	PAT 24 80 "${WHT}√"
 	wait
-	echo -en "\033[25;79H${atPFX}${fgWHT};${bgBLK}${atSFX}${nbsp}"
+	PAT 24 80 "${WHT} "
 
-	[ "$KEY" == "BKSP" ] && Quit 0
+	[[ "$KEY" == "BKSP" ]]  &&  quit 0
 }
+
+#+============================================================================= ========================================
+# Draw a tetromino at the given coords (full screen)
+#
+#>	csDrawTet() {  # (y, x, tet$, colour)
+#>		local ty=$1
+#>		local tx=$2
+#>		local tet=$3
+#>		local clr=$4
+#>
+#>		for ((h = 0;  h < $tetH;  h++)); do
+#>			local y=$(($ty +$h))
+#>			for ((w = 0;  w < $tetW;  w++)); do
+#>				local x=$(($tx + $w*2))
+#>				local z=$(($h*$tetW +$w))
+#>				[ ${tet:$z:1} == "#" ]  &&  echo -en ${clr}"\033[${y};${x}H"${tetGR}
+#>			done
+#>		done
+#>	}
+
+#+============================================================================= ========================================
+# Un-Draw a tetromino at the given coords (restore logo)
+#
+#>	csUndrawTet() {  # (y, x, tet$)
+#>		for ((h = 0;  h < $tetH;  h++)); do
+#>			local y=$(($1 +$h))
+#>			for ((w = 0;  w < $tetW;  w++)); do
+#>				local z=$(($h*$tetW +$w))
+#>				local tet=$3
+#>				[ ${tet:$z:1} == "#" ]  &&  {
+#>					((x = $2 + $w*2))
+#>					csDrawPlot $y $x "${CS[$y]:$x:1}"  # undraw
+#>					((x++))
+#>					csDrawPlot $y $x "${CS[$y]:$x:1}"  # undraw
+#>				}
+#>			done
+#>		done
+#>	}
+
+#+============================================================================= ========================================
+# test harness
+#
+#>	csDrawTEST() {
+#>		# draw logo
+#>		CLS
+#>		for ((y = 1;  y <= 25;  y++)); do
+#>			PAT $y 1 "${CS[$y]:1}"
+#>		done
+#>
+#>		# overlay tetromino - demo
+#>		for ((i=1; i<=5; i++)); do
+#>			csDrawTet 6 43 ${tetL[0]} ${tetL[4]}
+#>			sleep 0.5
+#>			csUndrawTet 6 43 ${tetL[0]}
+#>			sleep 0.5
+#>		done
+#>
+#>		# wait key
+#>		while ! keyGet ; do : ; done
+#>		[ "$KEY" == "BKSP" ] && Quit 0
+#>	}
+
+# -MAKE:cs.s
+# +MAKE:quit.s - quit screen
+#!/bin/bash
+
+#+============================================================================= ========================================
+# Exit cleanly
+#
+quit() {  # (errorlevel)
+
+#        0         1         2         3         4         5        6          7         8
+#        012345678901234567890123456789012345678901234567890123456789012345678901234567890
+QMSG=()
+ QMSG+=(" │○¦ Thanks for playing BAShTrish                  Спасибо за игру в Башотрис ¦○│") # 0
+ QMSG+=(" │ ¦                                                                          ¦ │") # 1
+ QMSG+=(" │○¦ All feedback welcome at: www.github.com/csBlueChip/BAShTris/issues       ¦○│") # 2
+ QMSG+=(" │ ¦                                                                          ¦ │") # 3
+ QMSG+=(" │○¦        ╓────╖╥ ╥╓─╖╓─╖╓─╖╓─╖             ▄▄▄▄▄▄▄   ▄ ▄▄▄▄ ▄▄▄▄ ▄▄▄▄▄▄▄   ¦○│") # 4
+ QMSG+=(" │ ¦        ║     ╙╥╜║─╢║ ║║╓╜║ ╖             █ ▄▄▄ █ ▀ ▀ ▄█▀█▀ █▄▀ █ ▄▄▄ █   ¦ │") # 5
+ QMSG+=(" │○¦        ║      ╨ ╙─╜╙─╜╨╙ ╙─╜             █ ███ █ ▀█▀ ▀ ▀█▄█▄ ▄ █ ███ █   ¦○│") # 6
+ QMSG+=(" │ ¦        ║  ╓─╖╥ ╥╓─╖─╥─╓─╖╓╥╖╓─╖          █▄▄▄▄▄█ █▀▄▀█ ▄ ▄ █ █ █▄▄▄▄▄█   ¦ │") # 7
+ QMSG+=(" │○¦        ║  ╙─╖╙╥╜╙─╖ ║ ╟─ ║║║╙─╖          ▄▄▄▄▄ ▄▄▄█▀█  ▀ ▀▄  ▀▄ ▄ ▄ ▄    ¦○│") # 8
+ QMSG+=(" │ ¦        ╙─┘╙─╜ ╨ ╙─╜ ╨ ╙─╜╨ ╨╙─╜          ▄▀█ ██▄█  █ ▀███▄ ▄▀█▀██▀▀██▀   ¦ │") # 9
+ QMSG+=(" │○¦    ┌──────────────────────────────┐      █▄▄  ▀▄▀ ▄▄ █▀▄▄▄▄█ █ ▀ ▀▀▄ ▀   ¦○│") #10
+ QMSG+=(" │ ¦    │° Greetz to:                 °│      ▀█▄▀  ▄  █ ▄▄  ▄██▀▀▀▀█▀▀█▄ ▀   ¦ │") #11
+ QMSG+=(" │○¦    │   • Cyborg666     • RIMSy    │       ▀▀▀ ▀▄ ▄ ██  ▀▀   ▄▀▄ ▀ ▀▄ ▀   ¦○│") #12
+ QMSG+=(" │ ¦    │   • Lord Grumble  • PajaCo   │      █ █▄▀▄▄▄██▀ ▀██▄▀▄█▀▀▀█ ▀▄▀ ▀   ¦ │") #13
+ QMSG+=(" │○¦    │.  • jgs/spunk     • sbot    .│      █ █▄█▄▄  ▀▄ █▀▄▄▄ ▀▀▄▄█▄██▄ ▀   ¦○│") #14
+ QMSG+=(" │ ¦    └──────────────────────────────┘      ▄▄▄▄▄▄▄ ██▄▄▄  ▄▀ █ █ ▄ █▀  ▀   ¦ │") #15
+ QMSG+=(" │○¦                                          █ ▄▄▄ █ ▄▀██  ▀██  ▀█▄▄▄█▀▄█▀   ¦○│") #16
+ QMSG+=(" │ ¦ KThxBye,                                 █ ███ █ █▀▄ ▀███▀▄▄▀▀▄▄▄▄ ▀█▀  /\ │") #17
+ QMSG+=(" │○¦   csßlúèÇhîp                             █▄▄▄▄▄█ █▀  █▀▄▀ ▄ █▀▀▄███▄▀   \○\│") #18
+ QMSG+=(" │ ¦                                         ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  \/ ") #19
+ QMSG+=(" │○¦,-'\"-._,-'\"'--'\"'-.,-'\"'-._-\"-._,-\"'-.__,-^-._,-'\"'-._,-''-._,-\"--._-\"-.._/  ") #20
+ QMSG+=("                                                                                 ") #21
+#QMSG+=(" If your cursor is not visible: stty sane ; tput cnorm                           ") #22
+#        0         1         2         3         4         5        6          7         8
+#        012345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+	local clr
+
+	local cWWW="${atPFX}${atUSC};${fgBBLU};${bgBLK}${atSFX}"
+	local cQR="${atPFX}${fgBLK};${bgWHT}${atSFX}"
+	local cRIP="${atPFX}${atUSC};${fgGRY};${bgBLK}${atSFX}"
+
+	[ "$2" != "q" ] && {
+		statusSet "KThxBye"
+
+		PAT 25 1
+		for ((y = 0;  y < 24;  y++)); do
+			echo ""
+			for ((x = 1;  x <= 80;  x++)); do
+				if false; then :
+				elif [[  $y -eq 19 &&                $x -eq 79                ]] ; then clr=${GRY}   # holes
+				elif [[  $y -eq 18 &&                $x -eq 79                ]] ; then clr=${WHT}   # holes
+				elif [[  $y -eq 17 &&                $x -eq 78                ]] ; then clr=${WHT}   # holes
+
+				elif [[ ($y -eq 10 || $y -eq 15) &&  $x -eq  8                ]] ; then clr=${BRN}   # greet box
+				elif [[ ($y -ge 11 && $y -le 14) && ($x -eq  8  || $x -eq 38) ]] ; then clr=${BRN}   # greet box
+				elif [[ ($y -ge 11 && $y -le 14) &&  $x -eq 10                ]] ; then clr=${WHT}   # greet txt
+
+				elif [[  $y -eq 20               && ($x -eq  2 ||  $x -eq  3) ]] ; then clr=${cRIP}
+				elif [[  $y -eq 20               &&  $x -eq  1                ]] ; then clr=${WHT}
+				elif [[  $y -eq 20                                            ]] ; then clr=${GRY}   # tear
+
+				elif [[  $y -eq 22               &&  $x -eq  2                ]] ; then clr=${WHT}   # cursor:
+				elif [[  $y -eq 22               &&  $x -eq 32                ]] ; then clr=${BGRN}  # stty
+
+				elif [[                              $x -eq  1 ||  $x -eq 80  ]] ; then clr=${WHT}   # tractor
+				elif [[                              $x -eq  2 ||  $x -ge 77  ]] ; then clr=${GRY}   # cut
+				elif [[                              $x -eq  4                ]] ; then clr=${WHT}
+
+				elif [[  $y -eq  0               &&  $x -eq  5                ]] ; then clr=${YEL}   # thx
+
+				elif [[  $y -eq  2               &&  $x -eq 30                ]] ; then clr=${cWWW}
+				elif [[  $y -eq  2               &&  $x -eq 71                ]] ; then clr=${WHT}
+
+				elif [[ ($y -ge  4 && $y -le  9) &&  $x -eq 12                ]] ; then clr=${BCYN}   # csys logo
+				elif [[ ($y -ge  4 && $y -le  9) &&  $x -eq 37                ]] ; then clr=${WHT}
+
+				elif [[ ($y -ge  4 && $y -le 19) &&  $x -eq 45                ]] ; then clr=${cQR}
+				elif [[ ($y -ge  4 && $y -le 19) &&  $x -eq 76                ]] ; then clr=${WHT}
+
+				elif [[  $y -eq 18                 &&  $x -eq  7              ]] ; then clr=${GRY}   # cs
+				elif [[  $y -eq 18                 &&  $x -eq  9              ]] ; then clr=${BGRN}  # Blue <sic>
+				elif [[  $y -eq 18                 &&  $x -eq 13              ]] ; then clr=${BBLU}  # Chip
+
+				elif [[  $y -eq 20                 &&  $x -eq 79              ]] ; then clr=${WHT}
+				fi
+				echo -en "${clr}${QMSG[$y]:$x:1}"
+			done
+			sleep 0.03
+		done
+
+		PAT $((SCRH -1)) 1 "\n\n"
+		PAT $((SCRH -2)) 1
+	}
+
+	exit $1
+}
+# -MAKE:quit.s
+# +MAKE:cli.s - cli parser
+#!/bin/bash
+
+#+============================================================================= ========================================
+parseCLI() {  # (...)
+	DEBUG=0     # debug mode
+	NDRAW=0     # piece: normal draw (default is grid draw) [debug mode only]
+	SKIP=0      # skip intros
+	FAST=0      # fast draw
+
+	MONITOR=0   # monitor mode
+
+	DOIT=       # perform action
+	FILE=       # records file
+	MSG=        # message request {help, etc.}
+	SEED=       # PRNG seed
+	USEED=X     # user defined PRNG seed
+	KEYDRV=v2   # keyboard driver (v2 for everything except WSL, so far)
+	CTRLC=1     # trap ^C
+
+	while [[ ! -z "$1" ]]; do
+		local arg="$1"
+
+		[[ "${arg:0:1}" == "+" ]] && {
+			USEED="${arg:1}"
+			if [[ ! "$USEED" =~ ^[0-9]+$ ]] || ((USEED > 65535)); then
+				echo "! Invalid seed"
+				quit 53 q
+			fi
+			shift
+			continue
+		}
+
+		case "$arg" in
+			"-d"  | "--debug"   )  DEBUG=1        ;;
+			"-n"  | "--monitor" )  MONITOR=1      ;;
+			"-s"  | "--skip"    )  SKIP=1         ;;
+			"-f"  | "--fast"    )  SKIP=1
+			                       FAST=1         ;;
+
+			"-k1" | "--kdbv1"   )  KEYDRV=v1      ;;
+			"-k2" | "--kdbv2"   )  KEYDRV=v2      ;;
+
+			"-h"  | "--help"    )  MSG=HELP       ;;
+
+			"-H"  | "--man"     )  MSG=README     ;;
+
+			"-v"  | "--version" )  MSG=VER        ;;
+
+			"-c"  | "--ctrlc"   )  CTRLC=0        ;;
+
+			"-r"  | "--records" )  MSG=RECORDS
+			                       FILE="$2"
+			                       shift
+			                       ;;
+			"-x"  | "--rexport" )  DOIT=hisExport
+			                       FILE="$2"
+			                       shift
+			                       ;;
+			"-i"  | "--rimport" )  DOIT=hisImport
+			                       FILE="$2"
+			                       shift
+			                       ;;
+			"-m"  | "--rmerge"  )  DOIT=hisMerge
+			                       FILE="$2"
+			                       shift
+			                       ;;
+			"-b"  | "--break"   )  DOIT=unmake
+			                       FILE=""
+			                       ;;
+			"-B"  | "--brkovr"  )  DOIT=unmake
+			                       FILE=force
+			                       ;;
+			        "--id"      )  DOIT=idMake
+			                       FILE="id.out"
+			                       ;;
+			* )  echo "! Unknown command line switch: |$1|"
+			     MSG=HELP
+			     ;;
+		esac
+		shift
+	done
+
+	((! DEBUG)) && ((SKIP = FAST = 0))  # fast startup in debug mode only
+
+	if [[ "$MSG" == "HELP" ]] ; then
+		cat << EOF
+${NAME} v${VER}
+  -h  --help    : this info
+  -H  --man     : full documentation
+  -v  --version : show version number
+
+  -k1 --kbdv1   : force v1 keyboard driver (supports WSL)
+  -k2 --kbdv2   : force v2 keyboard driver (improved driver)
+      --id      : generate id.out for this linux install [debug/porting]
+
+  -r  --records : show hi score records
+  -x  --rexport : eXport hi score records  [filename]  <-- optional
+  -i  --rimport : Import hi score records  <filename>  <-- required
+  -m  --rmerge  : merGe hi score records   <filename>  <-- required
+  +N            : seed(N) - repeat a specific game
+
+EOF
+
+		((DEBUG))  &&  cat << EOF
+  -d  --debug   : debug mode (extra keys - see controller help screen)
+  -s  --skip    : skip intro sequence
+  -f  --fast    : fast startup
+  -c  --ctrlc   : Enable [do not disable] ^C
+  -n  --monitor : monitor debug messages
+  -b  --break   : break code in to components - use MAKE.sh to rebuild
+  -B  --brkovr  : break code in to components - overwrite existing files
+
+EOF
+
+		helpRequired
+		echo ""
+		quit 0 q
+	fi
+
+	case "$MSG" in
+		"README" )
+			local re=/^~~README-BEGIN/,/^~~README-END/
+			less -x4 <<< $(sed -n "${re}p" $(which $0) | sed -e '1d' -e '$d')
+			quit 0 q
+			;;
+
+		"VER" )
+			echo -e "${NAME} v${VER}"
+			quit 0 q
+			;;
+
+		"RECORDS" )
+			sysSetup
+	
+			if [[ ! -z "$FILE" ]]; then
+				if [[ ! -f "$FILE" ]]; then
+					echo "! Cannot read file: |$FILE|"
+					exit 130
+				fi
+				if grep hs_NORM~0,1, $FILE ; then
+					echo "! Not a high score file: |$FILE|"
+					exit 131
+				fi
+				CMDhs="$FILE"
+			fi
+	
+			hisStats
+			quit 0
+			;;
+	esac
+
+	[[ ! -z "$DOIT" ]] && {
+		sysSetup quick
+		$DOIT $FILE
+		rv=$?
+		quit $rv q
+	}
+
+	# Will not return ...yeah, it's dirty - but it's a debug monitor!
+	(($MONITOR))  &&  dbgMonitor
+}
+# -MAKE:cli.s
+# +MAKE:lang.s - translation file
+#!/bin/bash
+
+#+============================================================================= ========================================
+langSetEN() {
+	LANG=EN
+	AZ="$AZEN"
+
+	txtDebugMode="DEBUG MODE"   # [variable length]
+
+	txtStatsHelp="${keyL}F1${keyR} Keys .. ${keyL}F2${keyR} Combinations .. ${keyL}F10${keyR} Records"
+
+	txtKeyYes="Y"
+	txtKeyNo="N"
+	txtQuitChk="> CONFIRM SHUT-DOWN? ${keyL}${txtKeyYes}${keyR}/${keyL}${txtKeyNo}${keyR}"
+
+	# PLAYFIELD
+	txtScore="SCORE:     "      # [11] score
+	txtMult="Mult "             # [ 5] points multiplier
+	txtLast="Last "             # [ 5] score for last landed piece
+	txtBest="Best "             # [ 5] best piece score (this game)
+	txtLines="Lines"            # [ 5] Lines cleared
+	txtLevel="Level"            # [ 5] Level (speed of play)
+	txtJunk="Junk "             # [ 5] Lines of junk (challenge mode)
+	txtPieces="Drops"           # [ 5] Pieces remaining (challenge mode)
+	txtSpeed="Speed"            # [ 5] Speed of play (challenge mode)
+
+	# START SCREEN
+	txtStyle="Style"            # [5] Gaming Style
+	declare -g -A txtOptStyle
+	txtOptStyle[NORM]="NORM"    # [4] Normal
+	txtOptStyle[CHAL]="CHAL"    # [4] Challenge
+	txtOptStyle[NVIS]="NVIS"    # [4] Invisible
+
+	txtSound="Sound"            # [5] Sound mode
+	declare -g -A txtOptSound
+	txtOptSound[OFF]="OFF"      # [3] Sound off
+	txtOptSound[BEL]="BEL"      # [3] "BEL" (ASCII #7)
+
+	txtHighScore="High Score"   # [10]
+
+	# "PRESS START"
+	txtPress="PRESS"            # [5] length {5..8}
+	txtStart="START"            # [5] length {5..8}
+
+	# HIGH SCORE TABLE [variable length, but all the same]
+	txtHsRank="Ranking   "      # [10] 1st/2nd/3rd
+	txtHsInit="Initials  "      # [10]
+	txtHsScor="Score     "      # [10]
+	txtHsLine="Lines     "      # [10]
+	txtHsMult="Best Mult."      # [10]
+	txtHsPiec="Best Piece"      # [10]
+	txtHsTime="Play Time "      # [10]
+	txtHsSilv="Silver    "      # [10] Combo blocks
+	txtHsGold="Gold      "      # [10] Combo blocks
+	txtHsLtet="    L-tets"      # [10] tetrominoes
+	txtHsJtet="    J-tets"      # [10]
+	txtHsStet="    S-tets"      # [10]
+	txtHsZtet="    Z-tets"      # [10]
+	txtHsTtet="    T-tets"      # [10]
+	txtHsOtet="    O-tets"      # [10]
+	txtHsItet="    I-tets"      # [10]
+	txtHsTotl="Total Tets"      # [10]
+	txtHsSeed="PRNG Seed "      # [10]
+
+	# GET INITAILS
+	txtIdentify="Identify yourself, human."  # [variable length]
+	txtHIGHSCORE="HIGH SCORE"   # [10]
+	txtINITIALS="INITIALS"      # [8]
+
+	# BONUS
+	txtPerfect=" PERFECT "      # [9] Clear all pieces from pit
+
+	# COMBOS HELP SCREEN - |F2|
+	txtCombinations="Combinations"  # [variable length]
+	txtMirror="MIRROR   "      # [9]
+	txtRotation="ROTATION "    # [9]
+	txtPair="Pair    "         # [8]
+	txtPairP="p"               # [1]
+	txtSplit="Split   "        # [8]
+	txtSplitS="s"              # [1]
+	txtUnique="Unique"         # [6]
+	txtRotate="Rotate"         # [6] "rotation"
+	txtSilv="SILV"             # [4] "silver"
+	txtGold="GOLD"             # [4] "gold"
+
+	# Splash strips : "Cyborg Systems is..."
+	txtSplashEnt="ENTERTAINING YOU"         # [variable length]
+	txtSplashCtrl="PUTTING YOU IN CONTROL"  # [variable length]
+}
+
+#+============================================================================= ========================================
+#
+#
+#
+#               Thanks for playing BAShTrish
+#               Спасибо за игру в Башотрис      <--- did I(/google) get this right?
+#
+#
+#
+
+langSetRU() {
+	LANG=RU
+	AZ="$AZRU"
+
+	txtDebugMode="РЕЖИМ ОТЛАДКИ"   # [variable length]
+
+	txtStatsHelp="${keyL}F1${keyR} Подсказка .. ${keyL}F2${keyR} Комбинации .. ${keyL}F10${keyR} Результаты"
+
+	txtKeyYes="Д"
+	txtKeyNo="Н"
+	txtQuitChk="> ПОДТВЕРДИТЬ ВЫХОД? ${keyL}${txtKeyYes}${keyR}/${keyL}${txtKeyNo}${keyR}"
+
+	# PLAYFIELD
+	txtScore="Очки:      "      # [11] score
+	txtMult="Бонус"             # [ 5] points multiplier
+	txtLast="Посл "             # [ 5] score for last landed piece
+	txtBest="Лучш "             # [ 5] best piece score (this game)
+	txtLines="Линии"            # [ 5] Lines cleared
+	txtLevel="Уров "            # [ 5] Level (speed of play)  +START
+	txtJunk="Мусор"             # [ 5] Lines of junk (challenge mode)
+	txtPieces="Шт   "           # [ 5] Pieces remaining (challenge mode)
+	txtSpeed="Темп "            # [ 5] Speed of play (challenge mode)
+
+	# START SCREEN
+	txtStyle="Стиль"            # [5] Gaming Style
+	declare -g -A txtOptStyle
+	txtOptStyle[NORM]="НОРМ"    # [4] Normal
+	txtOptStyle[CHAL]="ТЯЖЛ"    # [4] Challenge
+	txtOptStyle[NVIS]="ОЧЕН"    # [4] Invisible
+
+	txtSound="Звук "            # [5] Sound mode
+	declare -g -A txtOptSound
+	txtOptSound[OFF]="БЕЗ"      # [3] Sound off
+#	txtOptSound[BEL]="ЗВУ"      # [3] "BEL" (ASCII #7)
+	txtOptSound[BEL]="BEL"      # [3] "BEL" (ASCII #7)
+
+	txtHighScore="РЕЗУЛЬТАТЫ"   # [10] Banner for High Scores table
+
+	# "PRESS START"
+	txtPress="НАЖМИТЕ"         # [7] length {5..8}
+	txtStart="СТАРТ"           # [5] length {5..8}
+
+	# HIGH SCORE TABLE [variable length, but all the same]
+	txtHsRank="Рейтинг   "      # [10] 1st/2nd/3rd
+	txtHsInit="Инициалы  "      # [10] Initials
+	txtHsScor="Очки      "      # [10] Score
+	txtHsLine="Линии     "      # [10] Number of lines
+	txtHsMult="Лучш Множ."      # [10] Best/highest multiplier
+	txtHsPiec="Лучш Очки "      # [10] Best/highest scoring single piece
+	txtHsTime="Время Игры"      # [10] Total game time
+	txtHsSilv="Серебро   "      # [10] Combo blocks
+	txtHsGold="Золото    "      # [10] Combo blocks
+	txtHsLtet="    L-tets"      # [10] tetrominoes
+	txtHsJtet="    J-tets"      # [10]
+	txtHsStet="    S-tets"      # [10]
+	txtHsZtet="    Z-tets"      # [10]
+	txtHsTtet="    T-tets"      # [10]
+	txtHsOtet="    O-tets"      # [10]
+	txtHsItet="    I-tets"      # [10]
+	txtHsTotl="Всего     "      # [10] total tetrominos
+	txtHsSeed="Случайное "      # [10] PRNG Seed
+
+	# GET INITAILS
+	txtIdentify="Назови себя, человек."  # [variable length]
+	txtHIGHSCORE="  РЕКОРД  "   # [10] [you just got a] "HIGH SCORE"
+	txtINITIALS="ИНИЦИАЛЫ"      # [8]  Enter your name
+
+	# BONUS
+	txtPerfect=" ИДЕАЛЬНО "      # [9] Clear all pieces from pit
+
+	# COMBOS HELP SCREEN - |F2|
+	txtCombinations="Комбинации"  # [variable length]
+	txtMirror="ЗЕРКАЛО  "      # [9]
+	txtRotation="ВРАЩЕНИЕ "    # [9]
+	txtPair="Пара    "         # [8]
+	txtPairP="п"               # [1]
+	txtSplit="Трещина "        # [8]
+	txtSplitS="т"              # [1]
+	txtUnique="Уникал"         # [6]
+	txtRotate="Вращен"         # [6] "rotation"
+	txtSilv="СЕРБ"             # [4] "silver"
+	txtGold="ЗОЛТ"             # [4] "gold"
+
+	# Splash strips : "Cyborg Systems is..."
+	txtSplashEnt="РАЗВЛЕКАЕТ ВАС"            # [variable length]
+	txtSplashCtrl="ПЕРЕДАЮ ВАМ КОНТРОЛЬ"  # [variable length]
+}
+
+#+============================================================================= ========================================
+langSet() {  # (lang)
+	case "$1" in
+		RU )  langSetRU ;;
+		*  )  langSetEN ;;
+	esac
+
+	stPitLang $LANG  # Start screen (incl. logo)
+}
+
+#+============================================================================= ========================================
+langInit() {  # (lang)
+	langEN="English"
+	AZEN=" ABCDEFGHIJKLMNOPQRSTUVWXYZ☺☻♣♦♥♠♂♀♪☼0123456789-."
+
+	langRU="Рyсский"
+	AZRU=" АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ☺☻♣♦♥♠♂♀♪☼0123456789-."
+
+	langSet "$1"
+}
+
+# -MAKE:lang.s
+# +MAKE:help.s - help screens
+#!/bin/bash
 
 #****************************************************************************** ****************************************
 #                               ,---------------.
 #                              (  SPLASH SCREEN  )
 #                               `---------------'
 #****************************************************************************** ****************************************
-CTRLbuild() {
+ctrlBuild() {
 
 	CTRL=()
 #        0         1         2         3         4         5        6          7         8
@@ -708,18 +2550,18 @@ CTRLbuild() {
  CTRL+=("         ▐Q▌ ▐Del▌                   ▐◄──▌                                       ")   #11
  CTRL+=("         ▄▄▄▄▄▄▄▄▄                     ┌┴┐                                       ")   #12
 
-if [ $DEBUG -eq 1 ]; then
- CTRL+=(" ▐Ins▌  █▄▄▄▄▄▄▄▄▄███████████████████▄▄▄▄▄████████████████████████████████   ▐0▌ ")   #13
+if [[ $DEBUG -eq 1 ]]; then
+ CTRL+=(" ▐Ins▌  █▄▄▄▄▄▄▄▄▄███████████████████▄▄▄▄▄████████████████████████████████  ▐0▌  ")   #13
  CTRL+=(" Place  ██         ▐W▌ ▐↑▌             Θ                                ██ NoDrop")   #14
  CTRL+=("        ██        __//▲||__                                   ▐X▌ ▐.▌   ██       ")   #15
- CTRL+=(" ▐End▌  ██       /    ║    \                                   ,--.     ██       ")   #16
- CTRL+=(" Ditch  ██ ▐A▌  /  °  ║  °  \  ▐→▌        ___                 ( @► )    ██       ")   #17
+ CTRL+=(" ▐End▌  ██       /    ║    \                                   ,--.     ██  ▐F5▌ ")   #16
+ CTRL+=(" Ditch  ██ ▐A▌  /  °  ║  °  \  ▐→▌        ___                 ( @► )    ██  NVIS ")   #17
  CTRL+=("        ██     <◄═════╬═════►>           ( ☼ )          ,--.   ¬--'     ██       ")   #18
- CTRL+=(" ▐6▌▐^▌ ██ ▐←▌  \  .  ║  .  /  ▐D▌        ▐P▌          ( ◄@ )           ██       ")   #19
- CTRL+=(" Move↑  ██       \__  ║  __/                            ¬--'            ██       ")   #20
+ CTRL+=(" ▐6▌▐^▌ ██ ▐←▌  \  .  ║  .  /  ▐D▌        ▐P▌          ( ◄@ )           ██  ▐F6▌ ")   #19
+ CTRL+=(" Move↑  ██       \__  ║  __/                            ¬--'            ██  Line ")   #20
  CTRL+=("        ██          ||▼//                             ▐Z▌ ▐,▌           ██       ")   #21
- CTRL+=(" ▐PgUp▌ ██         ▐S▌ ▐↓▌                                              ██       ")   #22
- CTRL+=(" Lvl-Up ██████████████████████████████████████████████████████████████████       ")   #23
+ CTRL+=(" ▐PgUp▌ ██         ▐S▌ ▐↓▌                                              ██ ▐F12▌ ")   #22
+ CTRL+=(" Lvl-Up ██████████████████████████████████████████████████████████████████  Rig  ")   #23
 
 else
  CTRL+=("        █▄▄▄▄▄▄▄▄▄███████████████████▄▄▄▄▄████████████████████████████████       ")   #13
@@ -736,7 +2578,7 @@ else
 fi
 
  CTRL+=("                                                                                 ")   #24
- CTRL+=("                           #-#PUTTING#YOU#IN#CONTROL-#                           ")    #25
+ CTRL+=("                           #-#PUTTING#YOU#IN#CONTROL#-#                          ")   #25
 #        012345678901234567890123456789012345678901234567890123456789012345678901234567890
 #        0         1         2         3         4         5        6          7         8
 }
@@ -745,4354 +2587,467 @@ fi
 # Plot a single character on the screen
 # Colour according to position & character
 #
-CTRLplot() {  # (x, y, chr)
-	goto="\033[$1;$2H"
-	ch=$3
-	[ "$ch" == "¬" ] && ch="\`"
-	[ "$ch" == "|" ] && ch="\\"
-	if [ $1 -le 11 ]; then  # TETRIZ
+ctrlPlot() {  # (x, y, chr)
+	local ch=$3
+
+	# translate escaped psuedonyms
+	[[ "$ch" == "¬" ]]  &&  ch="\`"
+	[[ "$ch" == "|" ]]  &&  ch="\\"
+
+	if [[ $1 -le 11 ]]; then  # Башотрис Logo
 		case $ch in
-			"L"      )  echo -en "${goto}${tetL[4]}${tetGR:0:6}"  ;;
-			"J"      )  echo -en "${goto}${tetJ[4]}${tetGR:0:6}"  ;;
-			"T"      )  echo -en "${goto}${tetT[4]}${tetGR:0:6}"  ;;
-			"O"      )  echo -en "${goto}${tetO[4]}${tetGR:0:6}"  ;;
-			"I"      )  echo -en "${goto}${tetI[4]}${tetGR:0:6}"  ;;
-			"S"      )  echo -en "${goto}${tetS[4]}${tetGR:0:6}"  ;;
-			"Z"      )  echo -en "${goto}${tetZ[4]}${tetGR:0:6}"  ;;
-			"∙"      )  echo -en "${goto}${clrGRIDv}$ch"  ;;
-			"▀"      )  echo -en "${goto}${clrGRIDh}$ch"  ;;
-			" "      )  echo -en "${goto}${clrGRIDb}$ch"  ;;
-			[▐▌]     )  echo -en "${goto}${atPFX}${fgBLU};${bgBLK}${atSFX}$ch"  ;;  # key sides
-			[QDel◄─] )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}$ch"  ;;  # keys
-			*        )  echo -en "${goto}${atOFF}$ch" ;;
+			"L"      )  PAT $1 $2 "${tetL[4]}▒"  ;;
+			"J"      )  PAT $1 $2 "${tetJ[4]}▒"  ;;
+			"T"      )  PAT $1 $2 "${tetT[4]}▒"  ;;
+			"O"      )  PAT $1 $2 "${tetO[4]}▒"  ;;
+			"I"      )  PAT $1 $2 "${tetI[4]}▒"  ;;
+			"S"      )  PAT $1 $2 "${tetS[4]}▒"  ;;
+			"Z"      )  PAT $1 $2 "${tetZ[4]}▒"  ;;
+
+			"∙"      )  PAT $1 $2 "${clrPitV}$ch"      ;;
+			"▀"      )  PAT $1 $2 "${clrPitH}$ch"      ;;
+			" "      )  PAT $1 $2 "${clrPitB}$ch"      ;;
+
+			[▐▌]     )  PAT $1 $2 "${BLU}$ch"           ;;  # key sides
+			[QDel◄─] )  PAT $1 $2 "${clrKeycap}$ch"     ;;  # keys
+
+			*        )  PAT $1 $2 "${atOFF}$ch"         ;;
 		esac
 
 	elif [ $1 -eq 25 ]; then  # slogan
 		case $ch in
-			[A-Z\-] )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgRED}${atSFX}$ch"  ;;
-			[#]     )  echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgRED}${atSFX} "   ;;
-			" "     )  echo -en "${goto}${atOFF}$ch" ;;
+			[A-Z\-] )  PAT $1 $2 "${clrCsSlogan}$ch"  ;;
+			[#]     )  PAT $1 $2 "${clrCsSlogan} "   ;;
+			" "     )  PAT $1 $2 "${atOFF}$ch" ;;
 		esac
 
 	else  # controller
 		if [[ $DEBUG -eq 1 && ($2 -le 6  || $2 -ge 75) ]]; then  # DEBUG
 			case $ch in
-				[▐▌]    )  echo -en "${goto}${atPFX}${fgMAG};${bgBLK}${atSFX}$ch"  ;;  # key sides
-				" "     )  echo -en "${goto}${atOFF}$ch" ;;
+				[▐▌]    )  PAT $1 $2 "${MAG}$ch"  ;;  # key sides
+				" "     )  PAT $1 $2 "${atOFF}$ch" ;;
 				*       )
-					if [ $(($1 %3)) -eq 1 ]; then
-						echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgMAG}${atSFX}$ch"  # keys
+					if [[ $(($1 %3)) -eq 1 ]]; then
+						PAT $1 $2 "${clrKeyDbg}$ch"  # keys
 					else
-						echo -en "${goto}${atPFX}${atBLD};${fgMAG};${bgBLK}${atSFX}$ch"  # text
-					fi
-					;;
+						PAT $1 $2 "${BMAG}$ch"  # text
+					fi  ;;
 			esac
 			return
 
 		elif [[ $1 -eq 15 || $1 -eq 21 ]]; then  # keys
 			case $ch in
-				"."|",")
-					echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}$ch"
-					return  ;;
+				"."|",")  PAT $1 $2 "${clrKeycap}$ch"
+				          return  ;;
 			esac
 
 		elif [[ $2 -ge 56 ]]; then  # outlines
 			case $ch in
-				"."|",")
-					echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLK}${atSFX}$ch"
-					return  ;;
+				"."|",")  PAT $1 $2 "${YEL}$ch"
+				          return  ;;
 			esac
 
 		else  # detail
 			case $ch in
-				"."|",")
-					echo -en "${goto}${atPFX}${fgRED};${bgBLK}${atSFX}$ch"
-					return  ;;
+				"."|",")  PAT $1 $2 "${RED}$ch"
+				          return  ;;
 			esac
 		fi
 
 		case $ch in
-			[▐▌]    )  echo -en "${goto}${atPFX}${fgBLU};${bgBLK}${atSFX}$ch"  ;;  # key sides
-			[▄█]    )  echo -en "${goto}${atPFX}${fgYEL};${bgBLK}${atSFX}$ch"  ;;  # border
-			[┌┴┐]   )  echo -en "${goto}${atPFX}${fgWHT};${bgBLK}${atSFX}$ch"  ;;  # switch
-			[☼◄▼▲►@])  echo -en "${goto}${atPFX}${atBLD};${fgCYN};${bgBLK}${atSFX}$ch"  ;;  # caps
-			[°]     )  echo -en "${goto}${atPFX}${fgRED};${bgBLK}${atSFX}$ch"  ;;  # detail
-			[ΦΘ]    )  echo -en "${goto}${atPFX}${atBLD};${fgRED};${bgBLK}${atSFX}$ch"  ;;  # LED
-			[═╬║]   )  echo -en "${goto}${atPFX}${fgWHT};${bgBLK}${atSFX}$ch"  ;;  # cross
-			[QDELWASDZXP◄─←↓↑→] )
-				echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}$ch"  ;;  # keys
+			[▐▌]     )  PAT $1 $2 "${BLU}$ch"   ;;  # key sides
+			[▄█]     )  PAT $1 $2 "${BRN}$ch"   ;;  # border
+			[┌┴┐]    )  PAT $1 $2 "${WHT}$ch"   ;;  # switch
+			[☼◄▼▲►@] )  PAT $1 $2 "${BCYN}$ch"  ;;  # caps
+			[°]      )  PAT $1 $2 "${RED}$ch"   ;;  # detail
+			[ΦΘ]     )  PAT $1 $2 "${BRED}$ch"  ;;  # LED
+			[═╬║]    )  PAT $1 $2 "${WHT}$ch"   ;;  # cross
+			[QDelWASDZXP◄─←↓↑→] )
+				PAT $1 $2 "${clrKeycap}$ch"     ;;  # keys
 			"<"|">"|"-"|"_"|"("|")"|"/"|"\`"|"'"|"\\" )
-				echo -en "${goto}${atPFX}${atBLD};${fgYEL};${bgBLK}${atSFX}$ch"  ;;  # outlines
+				PAT $1 $2 "${YEL}$ch"           ;;  # outlines
 
-			" "     )  echo -en "${goto}${atOFF}$ch" ;;
+			" "     )  PAT $1 $2 "${atOFF}$ch"  ;;
 		esac
 	fi
 }
 
 #+============================================================================= ========================================
-CSdrawBackdropReveal() {
-	CSbd=()
-	CSbd+=("")
-	for ((y = 0;  y < 6;  y++)); do
-		CSbd+=(${nbsp})
-		CSbd+=(${nbsp})
-		CSbd+=(${nbsp})
-		CSbd+=(${nbsp})
-		for ((x = 1;  x <= 13;  x++)); do
-			for ((i = 0;  i < 4;  i++)); do
-				CSbd[$(($y*4 +1 +$i))]="${CSbd[$(($y*4 +1 +$i))]}${CSmini[$i]}"
-			done
-		done
-	done
-	cnt=${#CSbd[@]}
-	for ((i = 0;  i < cnt;  i++)); do
-		CSbd[i]="${CSbd[i]}${nbsp}"
-	done
-	CSbd+=("$(printf "%*s." 80 "")")
-
-	for ((x = 40;  x >= 0;  x--)); do
-		if [ $x -gt 0 ]; then
-			echo -en "${atPFX}${fgWHT};${bgBLK};${atSFX}"
-			for ((y = 1;  y <= 25;  y++)); do
-				GOTO $y $x
-				echo -en "│"
-				GOTO $y $((81 -$x))
-				echo -en "│"
-			done
-		fi
-		if [ $x -lt 40 ]; then
-			echo -en ${CSminiClr}
-			for ((y = 1; y <= 25;  y++)); do
-				GOTO $y $(($x +1))
-				echo -en "${CSbd[$y]:$(($x +1 -1)):1}"
-				GOTO $y $((80 -$x))
-				echo -en "${CSbd[$y]:$((80 -$x -1)):1}"
-			done
-		fi
-		[[ -z $1 ]] && sleep 0.01
-	done
-}
-
-#+============================================================================= ========================================
-Help() {
-	CTRLbuild
+ctrlReveal() {
+	local  y  yy  x
 
 	for ((y = 1;  y <= 26;  y++)); do
 		if [ $y -le 25 ]; then
-			GOTO $y 1
-			echo -en "${atOFF}────────────────────────────────────────────────────────────────────────────────"
+			PAT $y 1 "${WHT}────────────────────────────────────────────────────────────────────────────────"
 		fi
 		((yy = $y -1))
 		if [ $yy -ge 1 ]; then
 			for ((x = 1;  x <= 80;  x++)); do
-				CTRLplot $yy $x "${CTRL[$yy]:$x:1}"
+				ctrlPlot $yy $x "${CTRL[$yy]:$x:1}"
 			done
 		fi
 		sleep 0.01
 	done
+}
+
+#+============================================================================= ========================================
+helpCtrl() {
+	ctrlBuild
+	ctrlReveal
 
 	# anykey
 	keyFlush
-	local anykey=1
 	local i=0
-	while (($anykey)); do
-		[ $i -eq  0 ] && echo -en "\033[19;43H${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}P"  # ■"
-		[ $i -eq 10 ] && echo -en "\033[19;43H${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}${nbsp}"
+	while : ; do
+		[[ $i -eq  0 ]]  &&  PAT 19 43 "${clrKeycap}P"
+		[[ $i -eq 10 ]]  &&  PAT 19 43 "${clrKeycap}${nbsp}"
 		sleep 0.05
-		((i++))
-		[ $i -ge 14 ] && i=0
-		keyGet 
-		case $KEY in
-			[pP] )  break ;;
-			BKSP )  Quit 0 ;;
+		[[ $((++i)) -ge 14 ]]  &&  i=0
+		keyGet
+		case ${KEY^^} in
+			[P]    )  break ;;
+			"BKSP" )  quit 0 ;;
 		esac
 	done
 }
 
 #+============================================================================= ========================================
-required() {
-	echo "Required terminal settings:"
-	echo "  # Terminal size: {80 x 25} (24 + 1 status line)"
-	echo ""
-	echo "Play with PuTTY over SSH:"
-	echo "  # Font         : Courier New"
-	echo "    PuTTY -> Settings -> Window -> Appearance -> Font -> Change = Courier New"
-	echo "  # Character Set: UTF-8"
-	echo "    PuTTY -> Settings -> Window -> Translation -> Remote Charset = UTF-8"
-	echo ""
-	echo "Kali terminal window looks good with: [File->Preferences]"
-	echo "  # Font         : Bitstream Vera Sans Mono"
-	echo "  # Colour Scheme: Linux"
-	echo ""
-	echo "Windows Subsytem Linux (WSL)"
-	echo "  # Font        : Courier New"
-	echo "  # Command line: $0 -k1"
-	echo ""
+helpRequired() {
+	cat << EOT
+Required terminal settings:
+  # Terminal size: {80 x 25} (24 + 1 status line)
+
+Play with PuTTY over SSH:
+  # Font         : Courier New
+    PuTTY -> Settings -> Window -> Appearance -> Font -> Change = Courier New
+  # Character Set: UTF-8
+    PuTTY -> Settings -> Window -> Translation -> Remote Charset = UTF-8
+
+Kali terminal window looks good with: [File->Preferences]
+  # Font         : Bitstream Vera Sans Mono
+  # Colour Scheme: Linux
+
+Windows Subsytem Linux (WSL)
+  # Font        : Courier New
+  # Command line: $0 -k1 <-- this should auto-detect now!
+
+EOT
 }
+
+#------------------------------------------------------------------------------ ----------------------------------------
+CTXT=()
+ CTXT+=('                                                                                ') #  0 <--
+ CTXT+=('   ╔═══╗            ╥                                                           ') #  1
+ CTXT+=('   ║                ║    ♦           ╥   ♦                                      ') #  2
+ CTXT+=('   ║     ╓──╖ ╓─╥─╖ ║──╖ ╥ ╓──╖ ┌──╖ ╟─  ╥ ╓──╖ ╓──╖ ╓──╖                       ') #  3
+ CTXT+=('   ║     ║  ║ ║ ║ ║ ║  ║ ║ ║  ║ ╓──║ ║   ║ ║  ║ ║  ║ ╙──╖                       ') #  4
+ CTXT+=('   ╚═══╝ ╙──╜ ╨   ╨ ╙──╜ ╨ ╨  ╨ ╙──╜ ╙─╜ ╨ ╙──╜ ╨  ╨ ╙──╜                       ') #  5
+ CTXT+=('                                                                                ') #  6
+ CTXT+=('  ,----[4 x 4]----.   ,---[4 x 3]----.   ,----[4 x 2]----.                      ') #  7 <--
+ CTXT+=(' /                 \ /                \ /                 \                     ') #  8
+ CTXT+=(' |                  |                  |                  |                     ') #  9
+ CTXT+=(' :   ┌───────┐┌─┐   :   ┌────┐┌────┐   :   ┌─┐┌───────┐   :     MIRROR TETS     ') # 10
+ CTXT+=(' :   └──┐T┌──┘│ │   :   │J┌──┘└──┐L│   :   │ │└─────┐J│   :                     ') # 11
+ CTXT+=(' :   ┌─┐│ │┌──┘ │   :   │ │┌────┐│ │   :   │J└─────┐│ │   :       L <–> J       ') # 12
+ CTXT+=(' :   │ │└─┘└──┐T│   :   │ ││    ││ │   :   └───────┘└─┘   :       S <–> Z       ') # 13
+ CTXT+=(' :   │T└──┐┌─┐│ │   :   │ ││  O ││ │   :                  :                     ') # 14
+ CTXT+=(' :   │ ┌──┘│ │└─┘   :   └─┘└────┘└─┘   :   ┌───────┐┌─┐   :                     ') # 15
+ CTXT+=(' :   │ │┌──┘T└──┐   :   +2 I–TET       :   │L┌─────┘│ │   :                     ') # 16
+ CTXT+=(' :   └─┘└───────┘   :   @4 ROTATION    :   │ │┌─────┘L│   :                     ') # 17
+ CTXT+=(' :   *2 MIRROR      :   =8    %%%%%%%% :   └─┘└───────┘   :                     ') # 18
+ CTXT+=(' :   =2          $$ :                  :                  :                     ') # 19
+ CTXT+=(' :                  :                  :   ┌────┐┌────┐   :                     ') # 20
+ CTXT+=(' :   ┌─┐┌───────┐   :   ┌─┐┌─┐┌────┐   :   │    ││    │   :                     ') # 21
+ CTXT+=(' :   │ ││L┌─────┘   :   │ ││ │└──┐L│   :   │  O ││ O  │   :                     ') # 22
+ CTXT+=(' :   │ ││ │┌────┐   :   │ ││S└──┐│ │   :   └────┘└────┘   :                     ') # 23
+ CTXT+=(' :   │ │└─┘└──┐L│   :   │ │└──┐ ││ │   :                  :                     ') # 24
+ CTXT+=(' :   │L└──┐┌─┐│ │   :   │L└──┐│ ││ │   :    I–pair        :                     ') # 25
+ CTXT+=(' :   └────┘│ ││ │   :   └────┘└─┘└─┘   :   ┌──────────┐   :                     ') # 26
+ CTXT+=(' :   ┌─────┘L││ │   :   +2 I–TET       :   └──────────┘   :                     ') # 27
+ CTXT+=(' :   └───────┘└─┘   :   *2 MIRROR      :   ┌──────────┐   :                     ') # 28
+ CTXT+=(' :   *2 MIRROR      :   @2 ROTATION    :   └──────────┘   :                     ') # 29
+ CTXT+=(' :   =2          $$ :   =8    %%%%%%%% :                  :                     ') # 30
+ CTXT+=(' :                  :                  :                  :                     ') # 31
+ CTXT+=(' :                  :                  :                  :                     ') # 32 <--
+ CTXT+=(' :   ┌────┐┌────┐   :   ┌─┐┌───────┐   :    I–split       :                     ') # 33
+ CTXT+=(' :   └──┐ │└──┐L│   :   │ ││L┌─────┘   :   ┌──────────┐   :                     ') # 34
+ CTXT+=(' :   ┌─┐│Z└──┐│ │   :   │ ││ │┌────┐   :   └──────────┘   :                     ') # 35
+ CTXT+=(' :   │ │└────┘│ │   :   │ │└─┘│    │   :   ¦          ¦   :                     ') # 36
+ CTXT+=(' :   │ │┌────┐│ │   :   │L└──┐│ O  │   :   ┌──────────┐   :                     ') # 37
+ CTXT+=(' :   │ │└──┐Z│└─┘   :   └────┘└────┘   :   └──────────┘   :                     ') # 38
+ CTXT+=(' :   │L└──┐│ └──┐   :   +2 I–TET       :                  :                     ') # 39
+ CTXT+=(' :   └────┘└────┘   :   *2 MIRROR      :  J+J  @2 =2   $$ :                     ') # 40
+ CTXT+=(' :   *2 MIRROR      :   @4 ROTATION    :  J+L  @4 =4 %%%% :                     ') # 41
+ CTXT+=(' :   @2 ROTATION    :   =16   %%%%%%%% :  J+O  @4 =4 %%%% :                     ') # 42
+ CTXT+=(' :   =4        %%%% :         %%%%%%%% :  J+Ip @4 =4 %%%% :                     ') # 43
+ CTXT+=(' :                  :                  :  J+Is @2 =2   %% :                     ') # 44
+ CTXT+=(' :   ┌────┐┌────┐   :   ┌────┐┌────┐   :                  :                     ') # 45
+ CTXT+=(' :   └──┐Z│└──┐L│   :   └──┐Z│└──┐L│   :  L+L  @2 =2   $$ :                     ') # 46
+ CTXT+=(' :   ┌─┐│ └──┐│ │   :   ┌─┐│ └──┐│ │   :  L+O  @4 =4 %%%% :                     ') # 47
+ CTXT+=(' :   │ │└────┘│ │   :   │ │└────┘│ │   :  L+Ip @4 =4 %%%% :                     ') # 48
+ CTXT+=(' :   │T└──┐┌─┐│ │   :   │J└─────┐│ │   :  L+Is @2 =2   %% :                     ') # 49
+ CTXT+=(' :   │ ┌──┘│ │└─┘   :   └───────┘└─┘   :                  :                     ') # 50
+ CTXT+=(' :   │ │┌──┘T└──┐   :   +2 I–TET       :  O+O  @1 =1    $ :                     ') # 51
+ CTXT+=(' :   └─┘└───────┘   :   *2 MIRROR      :  O+Ip @4 =4 %%%% :                     ') # 52
+ CTXT+=(' :   *2 MIRROR      :   @4 ROTATION    :  O+Is @2 =2   %% :                     ') # 53
+ CTXT+=(' :   @4 ROTATION    :   =16   %%%%%%%% :                  :                     ') # 54
+ CTXT+=(' :   =8    %%%%%%%% :         %%%%%%%% :  I+I  @2 =2   $$ :                     ') # 55
+ CTXT+=(' :                  :                  :                  :                     ') # 56 <--
+ CTXT+=(' :                  :   ┌───────┐┌─┐   :                  :                     ') # 57
+ CTXT+=(' :                  :   └──┐T┌──┘│ │   :                  :                     ') # 58
+ CTXT+=(' :                  :   ┌─┐│ │┌──┘ │   :                  :                     ') # 59
+ CTXT+=(' :                  :   │ │└─┘└──┐T│   :                  :                     ') # 60
+ CTXT+=(' :                  :   │J└─────┐│ │   :                  :                     ') # 61
+ CTXT+=(' :                  :   └───────┘└─┘   :                  :                     ') # 62
+ CTXT+=(' :                  :    +2 I–TET      :                  :                     ') # 63
+ CTXT+=(' :                  :    *2 MIRROR     :                  :                     ') # 64
+ CTXT+=(' :                  :    @4 ROTATION   :                  :                     ') # 65
+ CTXT+=(' :                  :    =16  %%%%%%%% :                  :                     ') # 66
+ CTXT+=(' :                  :         %%%%%%%% :                  : ,-----------------. ') # 67
+ CTXT+=(' :                  :                  :                  : | Unique | Rotate | ') # 68
+ CTXT+=(' !-================" !================" !================-" |--------|--------| ') # 69
+ CTXT+=('     SILV:  4/12        SILV: 18/64        SILV:  9/30      |   31   |   106  | ') # 70
+ CTXT+=('     GOLD:  4/ 4        GOLD:  0/ 0        GOLD:  4/ 7      |    8   |    11  | ') # 71
+ CTXT+=('   ================   ================   ================   |========|========| ') # 72
+ CTXT+=('            8/16              18/64              13/37      |   39   |   117  | ') # 73
+ CTXT+=('                                                            !-----------------" ') # 74
+ CTXT+=('                                                                                ') # 75
+ CTXT+=('                                                                                ') # 76
+ CTXT+=('                                                                                ') # 77
+ CTXT+=('                                                                                ') # 78
+ CTXT+=('                                                                                ') # 79
+ CTXT+=('                                                                                ') # 80
+COFF=(0 7 32 56)
+
+CMAP=()
+ CMAP+=('')
+ CMAP+=('   ooooo            o                                                           ') #  1 <--
+ CMAP+=('   o                o    o           o   o                                      ') #  2
+ CMAP+=('   o     oooo ooooo oooo o oooo oooo oo  o oooo oooo oooo                       ') #  3
+ CMAP+=('   o     o  o o o o o  o o o  o oooo o   o o  o o  o oooo                       ') #  4
+ CMAP+=('   ooooo oooo o   o oooo o o  o oooo ooo o oooo o  o oooo                       ') #  5
+ CMAP+=('                                                                                ') #  6
+ CMAP+=('  ,----[4 x 4]----.   ,---[4 x 3]----.   ,----[4 x 2]----.                      ') #  7 <--
+ CMAP+=(' /                 \ /                \ /         	       \                     ') #  8
+ CMAP+=(' |                  |                  |                  |                     ') #  9
+ CMAP+=(' :   tttttttttttt   :   jjjjjjllllll   :   jjjjjjjjjjjj   :                     ') # 10
+ CMAP+=(' :   ttttTttttt t   :   jJjjjjllllLl   :   j jjjjjjjjJj   :                     ') # 11
+ CMAP+=(' :   tttt ttttt t   :   j jooooool l   :   jJjjjjjjjj j   :                     ') # 12
+ CMAP+=(' :   t ttttttttTt   :   j jo    ol l   :   jjjjjjjjjjjj   :                     ') # 13
+ CMAP+=(' :   tTtttttttt t   :   j jo  O ol l   :                  :                     ') # 14
+ CMAP+=(' :   t ttttt tttt   :   jjjoooooolll   :   llllllllllll   :                     ') # 15
+ CMAP+=(' :   t tttttTtttt   :   +2 I–TET       :   lLllllllll l   :                     ') # 16
+ CMAP+=(' :   tttttttttttt   :   @4 ROTATION    :   l llllllllLl   :                     ') # 17
+ CMAP+=(' :   *2 MIRROR      :   =8    %%%%%%%% :   llllllllllll   :                     ') # 18
+ CMAP+=(' :   =2          $$ :                  :                  :                     ') # 19
+ CMAP+=(' :                  :                  :   oooooooooooo   :                     ') # 20
+ CMAP+=(' :   llllllllllll   :   lllsssllllll   :   o    oo    o   :                     ') # 21
+ CMAP+=(' :   l llLlllllll   :   l ls sllllLl   :   o  O oo O  o   :                     ') # 22
+ CMAP+=(' :   l ll lllllll   :   l lsSssssl l   :   oooooooooooo   :                     ') # 23
+ CMAP+=(' :   l llllllllLl   :   l lssss sl l   :                  :                     ') # 24
+ CMAP+=(' :   lLllllllll l   :   lLlllls sl l   :    I–pair:       :                     ') # 25
+ CMAP+=(' :   lllllll ll l   :   llllllssslll   :   iiiiiiiiiiii   :                     ') # 26
+ CMAP+=(' :   lllllllLll l   :   +2 I–TET       :   iiiiiiiiiiii   :                     ') # 27
+ CMAP+=(' :   llllllllllll   :   *2 MIRROR      :   iiiiiiiiiiii   :                     ') # 28
+ CMAP+=(' :   *2 MIRROR      :   @2 ROTATION    :   iiiiiiiiiiii   :                     ') # 29
+ CMAP+=(' :   =2          $$ :   =8    %%%%%%%% :                  :                     ') # 30
+ CMAP+=(' :                  :                  :                  :                     ') # 31
+ CMAP+=(' :                  :                  :                  :                     ') # 32 <--
+ CMAP+=(' :   zzzzzzllllll   :   llllllllllll   :    I–split:      :                     ') # 33
+ CMAP+=(' :   zzzz zllllLl   :   l llLlllllll   :   iiiiiiiiiiii   :                     ') # 34
+ CMAP+=(' :   lllzZzzzzl l   :   l ll loooooo   :   iiiiiiiiiiii   :                     ') # 35
+ CMAP+=(' :   l lzzzzzzl l   :   l llllo    o   :   i          i   :                     ') # 36
+ CMAP+=(' :   l lzzzzzzl l   :   lLllllo O  o   :   iiiiiiiiiiii   :                     ') # 37
+ CMAP+=(' :   l lzzzzZzlll   :   lllllloooooo   :   iiiiiiiiiiii   :                     ') # 38
+ CMAP+=(' :   lLllllz zzzz   :   +2 I–TET       :                  :                     ') # 39
+ CMAP+=(' :   llllllzzzzzz   :   *2 MIRROR      :  J+J  @2 =2   $$ :                     ') # 40
+ CMAP+=(' :   *2 MIRROR      :   @4 ROTATION    :  J+L  @4 =4 %%%% :                     ') # 41
+ CMAP+=(' :   @2 ROTATION    :   =16   %%%%%%%% :  J+O  @4 =4 %%%% :                     ') # 42
+ CMAP+=(' :   =4        %%%% :         %%%%%%%% :  J+Ip @4 =4 %%%% :                     ') # 43
+ CMAP+=(' :                  :                  :  J+Is @2 =2   %% :                     ') # 44
+ CMAP+=(' :   zzzzzzllllll   :   zzzzzzllllll   :                  :                     ') # 45
+ CMAP+=(' :   zzzzZzllllLl   :   zzzzZzllllLl   :  L+L  @2 =2   $$ :                     ') # 46
+ CMAP+=(' :   tttz zzzzl l   :   jjjz zzzzl l   :  L+O  @4 =4 %%%% :                     ') # 47
+ CMAP+=(' :   t tzzzzzzl l   :   j jzzzzzzl l   :  L+Ip @4 =4 %%%% :                     ') # 48
+ CMAP+=(' :   tTtttttttl l   :   jJjjjjjjjl l   :  L+Is @2 =2   %% :                     ') # 49
+ CMAP+=(' :   t ttttt tlll   :   jjjjjjjjjlll   :                  :                     ') # 50
+ CMAP+=(' :   t tttttTtttt   :   +2 I–TET       :  O+O  @1 =1    $ :                     ') # 51
+ CMAP+=(' :   tttttttttttt   :   *2 MIRROR      :  O+Ip @4 =4 %%%% :                     ') # 52
+ CMAP+=(' :   *2 MIRROR      :   @4 ROTATION    :  O+Is @2 =2   %% :                     ') # 53
+ CMAP+=(' :   @4 ROTATION    :   =16   %%%%%%%% :                  :                     ') # 54
+ CMAP+=(' :   =8    %%%%%%%% :         %%%%%%%% :  I+I  @2 =2   $$ :                     ') # 55
+ CMAP+=(' :                  :                  :                  :                     ') # 56 <--
+ CMAP+=(' :                  :   tttttttttttt   :                  :                     ') # 57
+ CMAP+=(' :                  :   ttttTttttt t   :                  :                     ') # 58
+ CMAP+=(' :                  :   jjjt ttttt t   :                  :                     ') # 59
+ CMAP+=(' :                  :   j jtttttttTt   :                  :                     ') # 60
+ CMAP+=(' :                  :   jJjjjjjjjt t   :                  :                     ') # 61
+ CMAP+=(' :                  :   jjjjjjjjjttt   :                  :                     ') # 62
+ CMAP+=(' :                  :    +2 I–TET      :                  :                     ') # 63
+ CMAP+=(' :                  :    *2 MIRROR     :                  :                     ') # 64
+ CMAP+=(' :  MIRROR:         :    @4 ROTATION   :                  :                     ') # 65
+ CMAP+=(' :     L <––> J     :    =16  %%%%%%%% :                  :                     ') # 66
+ CMAP+=(' :     S <––> Z     :         %%%%%%%% :                  : ,-----------------. ') # 67
+ CMAP+=(' :                  :                  :                  : | oooooo | llllll | ') # 68
+ CMAP+=(' !-================" !================" !================-" |-----------------| ') # 69
+ CMAP+=('     ooooo  oooo        ooooo ooooo        ooooo  oooo      |   oo   /   lll  | ') # 70
+ CMAP+=('     ttttt  tttt        ttttt ttttt        ttttt  tttt      |   oo   /   lll  | ') # 71
+ CMAP+=('   ================   ================   ================   |========|========| ') # 72
+ CMAP+=('            iiii              iiiii              iiiii      |   oo   /   lll  | ') # 73
+ CMAP+=('                                                            !-----------------" ') # 74
+ CMAP+=('                                                                                ') # 75
+ CMAP+=('                                                                                ') # 76
+ CMAP+=('                                                                                ') # 77
+ CMAP+=('                                                                                ') # 78
+ CMAP+=('                                                                                ') # 79
+ CMAP+=('                                                                                ') # 80
 
 #+============================================================================= ========================================
-checkSys() {
-	local sz=($(stty size))
-	SCRH=${sz[0]}
-	SCRW=${sz[1]}
-	
-	local missing=()
-	! which which >/dev/null 2>&1 && missing+=("which") || {
-		! which stty >/dev/null 2>&1 && missing+=("stty")  # keyboard driver
-		! which tput >/dev/null 2>&1 && missing+=("tput")  # keyboard driver
-		! which grep >/dev/null 2>&1 && missing+=("grep")  # sprites/hi-score/rigging
-		! which sed  >/dev/null 2>&1 && missing+=("sed")   # sprites/hi-score/rigging/timing
-		! which date >/dev/null 2>&1 && missing+=("date")  # Timing
-	}
-	
-	if [[ ${#missing[@]} -gt 0 ]]; then
-		echo "You need to install the following utils to play $NAME"
-		for (( i = 0;  i < ${#missing[@]};  i++)); do
-			echo "  # ${missing[$i]}"
-		done
-		exit 91
-	fi
-
-	CMD=$(which $0)
-
-	if [[ $SCRW -lt 80 || $SCRH -lt 25 ]]; then
-		echo "! Terminal too small: {$SCRW x $SCRH}"
-		echo ""
-		required
-		exit 92
-		
-	elif [[ $SCRW -gt 80 || $SCRH -gt 25 ]]; then
-		echo "? Oversized window: {$SCRW x $SCRH}"
-		echo ""
-		required
-		echo ""
-		echo "$NAME will run in the top-left of this window,"
-		echo "Do NOT report bugs found in this mode!"
-		echo 'Press ` to redraw the playfield during play'
-		echo ""
-		echo "Press <return> to play or ^C to abort"
-		
-		read
-	fi
-}
-
-#+============================================================================= ========================================
-Intro() {
-	CLS
-
-	CSdraw
-
-	Help
-
-	# wipe to game backdrop
-	for ((x = 1;  x <= 40;  x++)); do
-		echo -en "${atPFX}${fgWHT};${bgBLK};${atSFX}"
-		for ((y = 1;  y <= 25;  y++)); do
-			GOTO $y $x
-			echo -en "│"
-			GOTO $y $((81 -$x))
-			echo -en "│"
-		done
-		if [ $x -gt 0 ]; then
-			echo -en ${CSminiClr}
-			for ((y = 1; y <= 25;  y++)); do
-				GOTO $y $(($x -1))
-				echo -en " "
-				GOTO $y $((81 -$x))
-				echo -en " "
-			done
-		fi
-		sleep 0.01
-	done
-
-#	CSdrawBackdropReveal
-}
-
-#****************************************************************************** ****************************************
-#                            ,------------------.
-#                           (  SYSTEM FUNCTIONS  )
-#                            `------------------'
-#****************************************************************************** ****************************************
-
-#+============================================================================= ========================================
-# Move cursor to specified coords
-#
-# These are SCREEN (not graph) coords, so they index from the top-left = {1,1}
-# ...and therefore coords a given as {line, column}, ie. {y, x}
-#
-GOTO() {  # (y, x)
-	echo -en "\033[$1;$2H"
-}
-
-#+=============================================================================
-# Move cursor home
-#
-HOME() {
-	GOTO 1 1
-}
-
-#+=============================================================================
-# CLS
-#
-CLS() {
-	echo -en "\033[2J"
-	HOME
-}
-
-#+============================================================================= ========================================
-# strstr - return true or false
-#
-strstr() {  # (haystack, needle) -> t/f
-	[ "${1#*$2*}" == "$1" ] && return 1
-	return 0
-}
-
-#****************************************************************************** ****************************************
-#                             ,--------------.
-#                            (  GAME COLOURS  )
-#                             `--------------'
-#****************************************************************************** ****************************************
-
-clrGRIDv="${atPFX}${fgWHT};${bgBLU}${atSFX}"             # main grid box (vert)
-clrGRIDh="${atPFX}${fgBLU};${bgBLK}${atSFX}"             # main grid box (horz)
-clrGRIDb="${atPFX}${fgBLK};${bgBLK}${atSFX}"             # main grid box (body)
-
-clrSH="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"       # shoulder box
-clrSHjoin="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"   # join shoulder to grid
-
-clrBS="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"       # basket box
-clrBSjoin="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"   # join basket to grid
-
-clrMT="${atPFX}${fgWHT};${bgBLK}${atSFX}"                # mini-tet box
-clrMTscore="${atPFX}${atBLD};${fgWHT};${bgBLK}${atSFX}"  # ...
-
-clrFgX="${fgBLK}"                                      # primary colour
-clrFgO="${fgWHT}"
-clrFgI="${fgCYN}"
-clrFgT="${fgYEL}"
-clrFgL="${fgMAG}"
-clrFgJ="${fgRED}"
-clrFgS="${fgGRN}"
-clrFgZ="${fgBLU}"
-
-clrX="${atPFX};${clrFgX};${bgBLK}${atSFX}"                # tet: none
-clrI="${atPFX}${atBLD};${clrFgI};${bgBLK}${atSFX}"        # tet: I
-clrO="${atPFX}${atBLD};${clrFgO};${bgBLK}${atSFX}"        # tet: O
-clrT="${atPFX}${atBLD};${clrFgT};${bgBLK}${atSFX}"        # tet: T
-clrL="${atPFX}${atBLD};${clrFgL};${bgBLK}${atSFX}"        # tet: L
-clrJ="${atPFX}${atBLD};${clrFgJ};${bgBLK}${atSFX}"        # tet: J
-clrS="${atPFX}${atBLD};${clrFgS};${bgBLK}${atSFX}"        # tet: S
-clrZ="${atPFX}${atBLD};${clrFgZ};${bgBLK}${atSFX}"        # tet: Z
-
-clrBm="${atPFX}${clrFgX};${bgBLK}${atSFX}"                # mini-tet: Blank
-clrIm="${atPFX}${clrFgI};${bgBLK}${atSFX}"                # mini-tet: I
-clrOm="${atPFX}${clrFgO};${bgBLK}${atSFX}"                # mini-tet: O
-clrTm="${atPFX}${clrFgT};${bgBLK}${atSFX}"                # mini-tet: T
-clrLm="${atPFX}${clrFgL};${bgBLK}${atSFX}"                # mini-tet: L
-clrJm="${atPFX}${clrFgJ};${bgBLK}${atSFX}"                # mini-tet: J
-clrSm="${atPFX}${clrFgS};${bgBLK}${atSFX}"                # mini-tet: S
-clrZm="${atPFX}${clrFgZ};${bgBLK}${atSFX}"                # mini-tet: Z
-
-clrFgV="${fgWHT}"
-clrFgG="${fgYEL}"
-
-clrCBsilv="${atPFX}${atBLD};${clrFgV};${bgBLK}${atSFX}"           # ..silver
-clrCBgold="${atPFX}${atBLD};${clrFgG};${bgBLK}${atSFX}"           # ..gold
-
-clrCBbox="${atPFX}${fgBLU};${bgBLK}${atSFX}"                      # combo box
-clrCBsep="${atPFX}${fgBLU};${bgWHT}${atSFX}"                      # ..separator
-clrCBv="${atPFX}${fgBLK};${bgWHT}${atSFX}"                        # ..value
-
-
-clrSCbox="${atPFX}${fgWHT};${bgBLK}${atSFX}"             # score box
-
-clrSCOREbg=${bgBLU}                                               # Score
-clrSCOREh="${atPFX}${atBLD};${fgWHT};${clrSCOREbg}${atSFX}"       # ..heading
-clrSCOREv="${atPFX}${fgBLK};${bgWHT}${atSFX}"                     # ..value
-
-clrMULTbg=${bgMAG}                                                # Multiplier
-clrMULTh="${atPFX}${atBLD};${fgWHT};${clrMULTbg}${atSFX}"         # ..heading
-clrMULTv="${clrSCOREv}"                                           # ..value
-
-clrLINESbg=${bgRED}                                               # Lines
-clrLINESh="${atPFX}${atBLD};${fgWHT};${clrLINESbg}${atSFX}"       # ..heading
-clrLINESv="${clrSCOREv}"                                          # ..value
-
-clrTIME="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"              # Time
-clrTIMEs="${atPFX}${fgBLU};${bgBLK}${atSFX}"                      # ..sidebars
-
-clrLVLbg=${bgMAG}                                                 # Level
-clrLVLh="${atPFX}${atBLD};${fgWHT};${clrLVLbg}${atSFX}"           # ..heading
-clrLVLv="${clrSCOREv}"                                            # ..value
-
-clrLASTbg=${bgRED}                                                # Last tet
-clrLASTh="${atPFX}${atBLD};${fgWHT};${clrLASTbg}${atSFX}"         # ..heading
-clrLASTv="${clrSCOREv}"                                           # ..value
-
-clrBESTbg=${bgGRN}                                                # best tet
-clrBESTh="${atPFX}${atBLD};${fgWHT};${clrBESTbg}${atSFX}"         # ..heading
-clrBESTv="${clrSCOREv}"                                           # ..value
-
-clrScoreMult="${atPFX}${clrSCOREbg};$(($clrMULTbg -10))${atSFX}"  # div: score-mult
-clrMultLast="${atPFX}${clrMULTbg};$(($clrLASTbg -10))${atSFX}"    # div: mult-last
-clrLastBest="${atPFX}${clrLASTbg};$(($clrBESTbg -10))${atSFX}"    # div: last-best
-clrBestEnd="${atPFX}${clrBESTbg};${fgBLK}${atSFX}"                # div: best-none
-
-clrEndLines="${atPFX}${bgBLK};$(($clrLINESbg -10))${atSFX}"       # div: start-lines
-clrLinesLvl="${atPFX}${clrLINESbg};$(($clrLVLbg -10))${atSFX}"    # div: lines-level
-clrLvlEnd="${atPFX}${clrLVLbg};${fgBLK}${atSFX}"                  # div: level-none
-
-clrSTATUS="${atPFX}${fgCYN};${bgBLK}${atSFX}"
-
-clrNAME="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-clrNAMEc="${atPFX}${atREV};${fgBLK};${bgWHT}${atSFX}"
-
-keyLR="${atPFX}${fgBLU};${bgBLK}${atSFX}"
-keyL="${keyLR}▐${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}"
-keyR="${keyLR}▌${clrSTATUS}"
-
-
-#****************************************************************************** ****************************************
-#                         ,-----------------.
-#                        (  KEYBOARD DRIVER  )
-#                         `-----------------'
-#****************************************************************************** ****************************************
-
-#+=============================================================================
-keyStop() {
-#	echo "Stop keyboard driver"
-#	stty sane            # Set terminal to "sane" settings
-	stty ${KeyStty}      # Restore original terminal settings (may fail)
-#	tput cnorm           # Make the cursor visible
-	KEY=
-	KeyQ=
-	KeyRun=0
-}
-
-#+=============================================================================
-keyStart() {  # (ctrlC_Handler)
-	KeyEOK=[a-zA-NP-Z~^\$@\e]  # why no O ???  <- answer: Kali!
-	
-	KEY=
-	KeyQ=
-
-	trap $1 INT          # We need to tidy up as we exit
-
-	KeyStty=$(stty -g)   # Save our current terminal settings
-
-#	tput civis           # Hide the cursor
-
-	# change terminal settings
-	# -echo  : do not echo typed characters to the screen
-	# -icanon: do not wait for a CR
-	# min    : minimum number of characters per 'read'
-	# time   : time-out if no new characters received within N/10 seconds
-
-	if [[ "$KEYDRV" == "v2" ]] ; then
-		stty -echo -icanon min 0 time 0  # Change our terminal settings
-		# ...you may want to disassociate ^Q, ^S, ^C, ^Z, etc. - see `stty -a`
-		#	stty intr  ^-  quit  ^-  erase  ^-  kill  ^-  eof     ^- \
-		#	     eol   ^-  eol2  ^-  swtch  ^-  start ^-  stop    ^- \
-		#		 susp  ^-  rprnt ^-  werase ^-  lnext ^-  discard ^- 
-		# ...good luck killing the program ;)
-	else # v1
-		stty -echo
-	fi
-	
-	KeyRun=1
-}
-
-#+=============================================================================
-keyXlat() {
-	printf -v x "%02X" "'$KEY"
-	case $x in
-		# we never see either of these values‽ :(
-		0A )  KEY=LF ;;
-		0D )  KEY=CR ;;
-		# couple of special cases
-		7F )  KEY=BKSP ;;
-		1B )  KEY=ESC ;;
-		09 )  KEY=TAB ;;
-		*  )
-			printf -v x "%d" "'$KEY"
-			if [[ ($x -ge 0) && ($x -le 31) ]]; then
-				# If you need {^Q, ^S, ^C, ^Z, ^D, etc.},
-				#   you will need to unbind them with stty [see keyStart()]
-				printf -v x "%02X" $((x|=64))
-				KEY=$(echo -en "^\x${x}")
-				[[ "$KEY" == "^H" ]] && KEY=BKSP  # Kali
-			fi ;;
-	esac
-}
-
-#+=============================================================================
-keyXlatEsc() {
-#GOTO 1 1 		
-#printf "%c%c%c  " "${KEY:1:1}" "${KEY:2:1}" "${KEY:3:1}"
-
-	case $KEY in
-		$'\033'[A   )  KEY=UP    ;;
-		$'\033'[B   )  KEY=DOWN  ;;
-		$'\033'[C   )  KEY=RIGHT ;;
-		$'\033'[D   )  KEY=LEFT  ;;
-
-		$'\033'[11~ )  KEY=F1    ;;
-		$'\033'[12~ )  KEY=F2    ;;
-		$'\033'[13~ )  KEY=F3    ;;
-		$'\033'[14~ )  KEY=F4    ;;
-
-		$'\033'[OP )  KEY=F1    ;;  # kali
-		$'\033'[OQ )  KEY=F2    ;;  # kali
-		$'\033'[OR )  KEY=F3    ;;  # kali
-		$'\033'[OS )  KEY=F4    ;;  # kali
-
-		$'\033'[15~ )  KEY=F5    ;;
-		$'\033'[17~ )  KEY=F6    ;;
-		$'\033'[18~ )  KEY=F7    ;;
-		$'\033'[19~ )  KEY=F8    ;;
-		$'\033'[20~ )  KEY=F9    ;;
-		$'\033'[21~ )  KEY=F10   ;;
-		$'\033'[23~ )  KEY=F11   ;;
-		$'\033'[24~ )  KEY=F12   ;;
-		 
-		$'\033'[1~  )  KEY=HOME  ;;
-		$'\033'[H   )  KEY=HOME  ;;  # kali
-		
-		$'\033'[4~  )  KEY=END   ;;
-		$'\033'[F   )  KEY=END   ;;  # kali
-		
-		$'\033'[5~  )  KEY=PGUP  ;;
-		$'\033'[6~  )  KEY=PGDN  ;;
-		$'\033'[2~  )  KEY=INS   ;;
-
-		$'\033'[3~  )  KEY=DEL   ;;
-		$'\033'[3   )  KEY=DEL   ;; # i have no idea why this has started happening!?
-
-		## Add more keys here
-
-		*) ;;
-	esac
-#	[ -n "$1" ] && eval "$2=\$KEY"  # store the result in the specified variable
-}
-
-#+=============================================================================
-keyFlush() {
-	if [[ "$KEYDRV" == "v2" ]] ; then
-		IFS= read -r
-	else # v1
-		IFS= read -r -d '' -t0.01
-	fi
-
-	KEY=
-	KeyQ=
-}
-
-#+=============================================================================
-keyGet() {
-	KEY=
-
-	if [[ "$KEYDRV" == "v2" ]] ; then
-		IFS= read -r
-		KeyQ="${KeyQ}${REPLY}"
-	else # v1
-		local esc=0
-		while true ; do
-			IFS= read -r -s -n1 -d '' -t0.05  # -s doesn't seem to work - stackoverflow suggests this is common
-			[ $? -ne 0 ] && break
-			KeyQ="${KeyQ}${REPLY}"
-			if [[ $esc -eq 0 ]]; then
-				[[ ${REPLY} == $'\033' ]] && esc=1 || break
-			else  # esc=1
-				case ${REPLY} in
-					${KeyEOK} )  break  ;;  # the for loop	
-				esac
-			fi
-		done
-	fi
-
-	local buflen=${#KeyQ}
-	
-	case ${buflen} in
-		0)	return 1  ;;  # error 1 - no keys found
-		1)	KEY="${KeyQ}"
-			KeyQ=
-			keyXlat
-			return 0  ;;  # error=0K
-	esac
-
-	if [[ ${KeyQ:0:1} == $'\033' ]]; then
-		local i=
-		for (( i = 1;  i < ${buflen};  i++ )); do
-			case ${KeyQ:$i:1} in
-				${KeyEOK} )  break  ;;  # the for loop
-			esac
-		done
-		[[ $i == ${buflen} ]] && return 2  # error 2 - unterminated escape sequence
-		
-		KEY=${KeyQ:0:$((++i))}
-		KeyQ=${KeyQ:$i}
-		keyXlatEsc
-	else
-		KEY="${KeyQ:0:1}"
-		KeyQ="${KeyQ:1}"
-		keyXlat
-	fi
-
-	return 0
-}
-
-#****************************************************************************** ****************************************
-#                             ,----------------.
-#                            (  CTRL-C HANDLER  )
-#                             `----------------'
-#****************************************************************************** ****************************************
-
-#+============================================================================= ========================================
-# Force the user to exit cleanly so we can restore the TTY settings
-#
-ctrlC_init() {
-	[[ ! -z $1 ]] && trap $1 INT
-}
-
-#+============================================================================= ========================================
-ctrlC_quit() {
-	STATUS="Press ◄▬▬ to quit"
-	return
-}
-
-#+============================================================================= ========================================
-ctrlC_pipe() {
-	rm $DBGpipe
-	echo -e "\nExiting cleanly"
-	return
-}
-
-#****************************************************************************** ****************************************
-#                            ,---------------.
-#                           (  GAME GRAPHICS  )
-#                            `---------------'
-#****************************************************************************** ****************************************
-
-# box (shoulder) ===
-shTL="╔"
-shT="═"
-shTR="╗"
-shL="║"
-shR="║"
-shBL="╚"
-shB="═"
-shBR="╝"
-
-# joints (shoulder) [outward]
-shJR="╠"
-shJH="═"
-shJB="╤"
-
-# sign jl
-snST="⌡"
-snSB="⌠"
-
-# box (score) ---
-scTL="┌"
-scT="─"
-scTR="┐"
-scL="│"
-scR="│"
-scBL="└"
-scB="─"
-scBR="┘"
-
-scDIV="▀"
-
-# joints (score)
-scJT="┴" #[outward]
-scJL="├" #[inward]
-scJR="┤" #[inward]
-
-# box (mini tet) ---
-mtTL=${scTL}
-mtT=${scT}
-mtTR=${scTR}
-mtL=${scL}
-mtR=${scR}
-mtBL=${scBL}
-mtB=${scB}
-mtBR=${scBR}
-
-mtDIV1="-"
-mtDIV2="="
-mtJL="├" #[inward]
-mtJR="┤" #[inward]
-
-# joints (mtet)
-mtJL=${mtJL} #[inward]
-mtJR=${mtJR} #[inward]
-
-# box (grid) ###
-grL="∙"
-grR="∙"
-grB="▀"
-grBL="▀"
-grBR="▀"
-
-# box (basket) ###
-bsL="█"
-bsR="█"
-bsB="▀"
-bsBL="▀"
-bsBR="▀"
-
-# joints (basket)
-bsJH="═"
-bsJT="╤"
-bsJTR="╕"
-
-# tetromino
-tetGR="▒▒"   # normal block
-tetGRc="▓▓"  # combo block
-tetGRs="░░"  # shadow block
-
-# combo blocks
-cmGR="▓▓"
-cmGOLD='*'
-cmSILV='+'
-
-#****************************************************************************** ****************************************
-#                           ,-----------------.
-#                          (  PLAYFIELD SETUP  )
-#                           `-----------------'
-#****************************************************************************** ****************************************
-
-#+============================================================================= ========================================
-# Initialise most/all of the game logic
-#
-PFinit() {
-	PFy=4
-	PFx=20
-
-	PFd=$((4*4 +2))          # depth of game grid (number of playable lines)
-	PFw=$((0    +10   +0 ))  #             left, grid, right
-	PFh=$((1 +1 +$PFd +1 ))  # invisible, empty, grid, base
-
-	PSy=5  # offset from PFy
-	PSx=3  # offset from PFx
-	PSw=15
-	PSh=3
-
-	SHh=6
-	SHw=12
-	SHy=$(($PFy -1))
-	SHx=$(($PFx -$SHw -3))
-
-	SCh=9
-	SCw=14
-	SCy=$(($SHy +$SHh +2))
-	SCx=$(($SHx -1))
-
-#	TMy=$(($SCy +$SCh +2))
-#	TMx=$(($SCx +2))
-	TMy=25
-	TMx=71
-
-	BSh=13
-	BSw=12
-	BSy=$(($PFy))
-	BSx=$(($PFx + $PFw*2 +2 +3))
-
-	LVLy=$(($BSy +BSh))
-	LVLx=$(($BSx -1))
-	LVLh=4
-	LVLw=$(($SCw))
-
-	MTh=17
-	MTw=12
-	MTy=$(($BSy -1))
-	MTx=$(($BSx + $BSw +5))
-
-	CBy=$(($MTy +$MTh))
-	CBx=$(($MTx -1))
-
- 	PF=()
-
-	EMPTY=
-	printf -v EMPTY "%02X" "${gridPl}"
-	for ((i = 0;  i < $PFw;  i++)); do
-		printf -v EMPTY "%s%02X" "$EMPTY" "$tetiB"
-	done
-	printf -v EMPTY  "%s%02X" "$EMPTY" "${gridPr}"
-	for ((i = 1; i < $PFh; i++)); do  # not base
-		PF+=("$EMPTY")
-	done
-
-	local s=
-	printf -v s "%02X" "${gridPbl}"
-	for ((i = 0;  i < $PFw;  i++)); do
-		printf -v s "%s%02X" "$s" "$gridPb"
-	done
-	printf -v s  "%s%02X" "$s" "${gridPbr}"
-	PF+=("$s")
-
-	# clear all the tetrominoes
-	tet0=("${tetB[@]}")
-	tet1=("${tetB[@]}")
-	tet2=("${tetB[@]}")
-	tet3=("${tetB[@]}")
-	tet4=("${tetB[@]}")
-
-	# Start position
-	tetSty=0
-	tetStx=3
-	tetStr=0
-
-	# Prime the basket
-#	TETadd 0  # 0 = do NOT update stats
-#	TETadd 0
-#	TETadd 0
-
-	# pick a starting shoulder piece
-	RND
-	[[ $(($RNDn &1)) -eq 0 ]] && tet4=(${tetT[@]}) || tet4=(${tetI[@]})
-
-	# zero the piece counters
-	for i in L J S Z T O I ; do
-		eval tet$i[8]=0
-	done
-
-	# Initialise score
-	score=0
-	scoreMul=1  # multiplier
-	scoreMulMax=1  # maximum multiplier achieved
-	scoreLvl=$LEVEL  # level
-	scoreLin=0  # lines
-	scoreLast=0 # last line
-	scoreBest=0 # best line
-
-	# combo counters
-	tetGold=0
-	tetSilv=0
-
-	# status bar
-	STATUS=   # input here
-	STATUSd=  # currently displayed
-	statNow=0
-	statClear=0
-}
-
-#+============================================================================= ========================================
-# Draw the main grid
-# This WILL also draw all the right colours and graphics for placed tets
-#
-PFdrawGrid() {  # (slp)
-	grb=${grB}${grB}
-	for ((y = $((${#PF[@]} -1));  y >= 1;  y--)); do
-		(($DEBUG)) && grL=$(($y %10))
-		GOTO $(($PFy +$y -1))  $PFx
-		echo -en ${clrGRID}
-		for ((x = 0;  x < $(($PFw +2));  x++)); do
-			(($DEBUG)) && grb=$(($x %10))${grB}
-			local ch=$((0x${PF[$y]:$(($x *2)):2}))
-			case $ch in
-				"${gridPl}"  )  echo -en ${clrGRIDv}${grL}  ; continue ;;
-				"${gridPr}"  )  echo -en ${clrGRIDv}${grR}  ; continue ;;
-				"${gridPb}"  )  echo -en ${clrGRIDh}${grb}  ; continue ;;
-				"${gridPbl}" )  echo -en ${clrGRIDh}${grBL} ; continue ;;
-				"${gridPbr}" )  echo -en ${clrGRIDh}${grBR} ; continue ;;
-			esac
-
-			gr="${tetGR}"
-
-			printf -v cc "%d" $(($ch & $maskT))
-			case $cc in
-				"${tetiB}"  )  clr="${tetB[4]}" ; bgc="$((${clrFgB}+10))"  ;;
-				"${tetiO}"  )  clr="${tetO[4]}" ; bgc="$((${clrFgO}+10))"  ;;
-				"${tetiI}"  )  clr="${tetI[4]}" ; bgc="$((${clrFgI}+10))"  ;;
-				"${tetiT}"  )  clr="${tetT[4]}" ; bgc="$((${clrFgT}+10))"  ;;
-				"${tetiL}"  )  clr="${tetL[4]}" ; bgc="$((${clrFgL}+10))"  ;;
-				"${tetiJ}"  )  clr="${tetJ[4]}" ; bgc="$((${clrFgJ}+10))"  ;;
-				"${tetiS}"  )  clr="${tetS[4]}" ; bgc="$((${clrFgS}+10))"  ;;
-				"${tetiZ}"  )  clr="${tetZ[4]}" ; bgc="$((${clrFgZ}+10))"  ;;
-				
-				"${tetiV}"  )  clr="${clrCBsilv}" ; bgc="$((${clrFgV}+10))"  ; gr="${tetGRc}";;
-				"${tetiG}"  )  clr="${clrCBgold}" ; bgc="$((${clrFgG}+10))"  ; gr="${tetGRc}";;
-				
-#				"${tetiVV}" )  clr="${cmSILV}${cmSILV}"  ;;  #!! super-combos!?
-#				"${tetiGG}" )  clr="${cmGOLD}${cmGOLD}"  ;;
-			esac
-			
-			if (($DEBUG)); then
-				printf -v cc "%d" $(($ch & $maskC))
-				case $cc in
-					"$maskB"    )  clr="${atPFX};${atBLD};${fgBLK};${bgc}${atSFX}" ; gr="∙∙"  ;;
-					"$maskL"    )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="═-"  ;;
-					"$maskD"    )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╓╖"  ;; 
-					"$maskU"    )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╙╜"  ;; 
-					"$maskR"    )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="-═"  ;; 
-					"$maskLD"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╦╗"  ;; 
-					"$maskLU"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╩╝"  ;;
-					"$maskLR"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="══"  ;;
-					"$maskDU"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="║║"  ;;
-					"$maskDR"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╔╦"  ;;
-					"$maskUR"   )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╚╩"  ;;
-					"$maskLRU"  )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╩╩"  ;;
-					"$maskLRD"  )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╦╦"  ;;
-					"$maskUDL"  )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╬╣"  ;;
-					"$maskUDR"  )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╠╬"  ;;
-					"$maskLDUR" )  clr="${atPFX};${fgBLK};${bgc}${atSFX}" ; gr="╬╬"  ;;
-					*) gr=$cc ;;
-				esac
-			fi
-		
-			echo -en "${clr}${gr}"
-		done
-		[ ! -z $1 ] && sleep $1
-	done
-
-	(($DEBUG)) && {
-		for ((i = 0;  i < $PFh;  i++)); do
-			DBGF "PF[%2d]=\"%s\"\n" $i ${PF[$i]}
-		done
-	}
-}
-
-#+============================================================================= ========================================
-# Draw shoulder - intro animation
-#
-PFdrawFromShoulder() {  # (slp, hslp)
-	PFdrawShoulder $1 $2
-	PFdrawScore $1
-}
-
-#+============================================================================= ========================================
-# Draw shoulder
-#
-PFdrawShoulder() {  # (slp, hslp, [joints])
-	local hslp=
-	[[ ! -z $2 ]] && [[ "$1" != "0" ]] && hslp=$2 #$(echo "scale=6; ${1} / 2" | bc)
-
-	# join shoulder to grid
-	for ((x = $(($PFx -1));  x >= $(($PFx -3)); x--)); do
-		goto="\033[${PFy};${x}H"
-		echo -en "${goto}${clrSH}${shJH}\b\033[2B${shJH}"
-		[ ! -z $hslp ] && sleep $1
-	done
-	goto="\033[${PFy};${x}H"
-	echo -en "${goto}${clrSH}${shJR}\b\033[2B${shJR}"
-
-	# right
-	goto="\033[$(($SHy +2));$((SHx +SHw -1))H"
-	echo -en "${goto}${clrSH}${shR}\b\033[2B${shR}"
-	[ ! -z $hslp ] && sleep $1
-
-	goto="\033[${SHy};$((SHx +SHw -1))H"
-	echo -en "${goto}${clrSH}${shTR}\b\033[$(($SHh -1))B${shBR}"
-	[ ! -z $hslp ] && sleep $1
-
-	# top & bottom
-	for ((x = $(($SHx +$SHw -2));  x >= $(($SHx +1)); x--)); do
-		goto="\033[${SHy};${x}H"
-		echo -en "${goto}${clrSH}${shT}\b\033[$(($SHh -1))B${shB}"
-		for ((y = $(($SHy +1));  y < $(($SHy +$SHh -1)); y++)); do
-			goto="\033[${y};${x}H"
-			echo -en "${goto}${atOFF} "
-		done
-		[ ! -z $hslp ] && sleep $hslp
-	done
-	goto="\033[${SHy};${x}H"
-	echo -en "${goto}${clrSH}${shTL}\b\033[$(($SHh -1))B${shBL}"
-
-	[[ ! -z $3 ]] && {
-		goto1="\033[$(($SHy +$SHh -1));$(($SHx +2))H"
-		goto2="\033[$(($SHy +$SHh -1));$(($SHx +$SHw -2))H"
-		echo -en "${clrSH}${goto1}${shJB}${goto2}${shJB}"
-	}
-
-	# left
-	max=$((x = $SHh -1, x /2))
-	for ((i = 1;  i <= max;  i++)); do
-		goto1="\033[$(($SHy +$i));${SHx}H"
-		goto2="\033[$(($SHy +SHh -1 -$i));${SHx}H"
-		echo -en "${goto1}${clrSH}${shL}${goto2}${shL}"
-		[ ! -z $hslp ] && sleep $1
-	done
-}
-
-#+============================================================================= ========================================
-# Draw main scoreboard
-#
-PFdrawScore() {  # (slp)
-	# shoulder to score
-	goto1="\033[$(($SHy +$SHh -1));$(($SHx +2))H"
-	goto2="\033[$(($SHy +$SHh -1));$(($SHx +$SHw -2))H"
-	echo -en ${clrSH}${goto1}${shJB}${goto2}${shJB}
-	[ ! -z $1 ] && sleep $1
-
-	goto1="\033[$(($SHy +$SHh));$(($SHx +2))H"
-	goto2="\033[$(($SHy +$SHh));$(($SHx +$SHw -2))H"
-	echo -en ${clrSH}${goto1}${snST}${goto2}${snST}
-	[ ! -z $1 ] && sleep $1
-
-	goto1="\033[$(($SCy -1));$(($SCx +2))H"
-	goto2="\033[$(($SCy -1));$(($SCx +$SCw -4))H"
-	echo -en ${clrSCbox}${goto1}${snSB}${goto2}${snSB}
-	[ ! -z $1 ] && sleep $1
-
-	goto1="\033[${SCy};$(($SCx +2))H"
-	goto2="\033[${SCy};$(($SCx +$SCw -4))H"
-	echo -en ${clrSCbox}${goto1}${scJT}${goto2}${scJT}
-	[ ! -z $1 ] && sleep $1
-
-	# score top
-	max=$((x = $SCw -6, x /2))
-	for ((i = 0;  i < $max;  i++)); do
-		goto1="\033[${SCy};$(($SCx +3 +$i))H"
-		goto2="\033[${SCy};$(($SCx +$SCw -5 -$i))H"
-		echo -en "${goto1}${clrSCbox}${scT}${goto2}${scT}"
-		[ ! -z $1 ] && sleep $1
-	done
-
-	goto="\033[${SCy};$(($SCx +$SCw -3))H"
-	echo -en "${goto}${clrSCbox}${scT}"
-	[ ! -z $1 ] && sleep $1
-
-	goto1="\033[${SCy};$(($SCx +1))H"
-	goto2="\033[${SCy};$(($SCx +$SCw -2))H"
-	echo -en "${goto1}${clrSCbox}${scT}${goto2}${scT}"
-	[ ! -z $1 ] && sleep $1
-
-	goto1="\033[${SCy};$(($SCx))H"
-	goto2="\033[${SCy};$(($SCx +$SCw -1))H"
-	echo -en "${goto1}${clrSCbox}${scTL}${goto2}${scTR}"
-	[ ! -z $1 ] && sleep $1
-
-	# sides
-	local space=$(printf "%*s" $(($SCw -2)) "")
-	for ((y = 1;  y <= 7;  y++)); do
-		goto="\033[$(($SCy +$y));${SCx}H"
-		if [ $(($y & 1)) -eq 1 ]; then
-			echo -en "${goto}${clrSCbox}${scL}${space}${scR}"
+CbLast=
+CbClr=
+CbCh=
+
+helpCbGet() {  # (y, x, yoff)
+	local clr  c
+	local l=$(($1 +$3))
+
+	CbCh=${CTXT[$l]:$2:1}
+
+	if [[ "$CbCh" == " " ]]; then  # space
+		if [[ $l -eq 10  &&  $2 -eq 75 ]]; then  # mirror text
+			CbClr="${atOFF}"
 		else
-			echo -en "${goto}${clrSCbox}${scJL}${space}${scJR}"
+			CbClr=""
 		fi
-		[ ! -z $1 ] && sleep $1
-	done
-	goto="\033[$(($SCy +$y));${SCx}H"
-	echo -en "${goto}${clrSCbox}${scBL}${space}${scBR}"
-
-	# Score banners
-	local bar=
-	for ((i = 1;  i < $(($SCw -1));  i++)) ; do bar="${bar}▄" ; done
-
-	goto="\033[$(($SCy +1));$(($SCx +1))H"
-	echo -en ${goto}${clrSCOREh}" SCORE:     "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +2));$(($SCx +1))H"
-	echo -en ${goto}${clrSCOREh}" "${clrSCOREv}"          "${clrSCOREh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +3));$(($SCx +1))H"
-	echo -en ${goto}${clrScoreMult}${bar}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +4));$(($SCx +1))H"
-	echo -en ${goto}${clrMULTh}" Mult. "${clrMULTv}"    "${clrMULTh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +5));$(($SCx +1))H"
-	echo -en ${goto}${clrMultLast}${bar}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +6));$(($SCx +1))H"
-	echo -en ${goto}${clrLASTh}" Last  "${clrLASTv}"    "${clrLASTh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +7));$(($SCx +1))H"
-	echo -en ${goto}${clrLastBest}${bar}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +8));$(($SCx +1))H"
-	echo -en ${goto}${clrBESTh}" Best  "${clrBESTv}"    "${clrBESTh}" "
-	echo -en ${goto}${clrBESTh}" Best  "${clrBESTv}"    "${clrBESTh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($SCy +9));$(($SCx +1))H"
-	echo -en ${goto}${clrBestEnd}${bar}
-	[ ! -z $1 ] && sleep $1
-
-}
-
-#+============================================================================= ========================================
-# Draw tet basket - intro anim
-#
-PFdrawFromBasket() {  # (slp, hslp)
-	PFdrawBasket $1
-	PFdrawLevel $1
-	PFdrawCombo $1 $2
-	PFdrawMtets $1
-}
-
-#+============================================================================= ========================================
-# Draw tet basket
-#
-PFdrawBasket() {  # (slp)
-	# join shoulder to grid
-	for ((i = 0;  i < 3;  i++)); do
-		x=$(($PFx + $PFw*2 +2 +$i))
-		local goto1="\033[${PFy};${x}H"
-		local goto2="\033[$(($PFy +5));${x}H"
-		local goto3="\033[$(($PFy +11));${x}H"
-		echo -en "${clrBSjoin}${goto1}${shJH}${goto2}${shJH}${goto3}${shJH}"
-		[ ! -z $1 ] && sleep $1
-	done
-	echo -en "\033[$(($BSy +$BSh -2));$(($BSx -1))H${clrBSjoin}${bsJT}"
-
-	local space=$(printf "%*s" $(($BSw -2)) "")
-	for ((y = $BSy;  y <= $((BSy +BSh -2));  y++)); do
-		local goto="\033[${y};${BSx}H"
-		echo -en "${goto}${clrBS}${bsL}${atOFF}${space}${clrBS}${bsR}"
-		[ ! -z $1 ] && sleep $1
-	done
-
-	local bar=${bsBL}
-	for ((i = 1;  i < $(($BSw -1));  i++)) ; do bar="${bar}${bsB}" ; done
-	bar="${bar}${bsBR}"
-
-	goto="\033[$((BSy +BSh -1));${BSx}H"
-	echo -en ${goto}${clrBS}${bar}
-	[ ! -z $1 ] && sleep $1
-}
-
-#+============================================================================= ========================================
-# Draw lines/level box
-#
-PFdrawLevel() {  # (slp)
-	# joinery
-	goto="\033[$(($BSy +$BSh -2));$(($BSx -1))H"
-	echo -en ${goto}${clrBSjoin}${bsJT}
-	goto="\033[$(($BSy +$BSh -2));$(($BSx +$BSw))H"
-	echo -en ${goto}${clrBSjoin}${bsJTR}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($BSy +$BSh -1));$(($BSx -1))H"
-	echo -en ${goto}${clrSCbox}${scL}
-	goto="\033[$(($BSy +$BSh -1));$(($BSx +$BSw))H"
-	echo -en ${goto}${clrSCbox}${scR}
-	[ ! -z $1 ] && sleep $1
-
-	# sides
-	local space=$(printf "%*s" $(($LVLw -2)) "")
-	echo -en "\033[$(($LVLy));${LVLx}H${clrSCbox}${scL}${space}${scR}"
-	[ ! -z $1 ] && sleep $1
-	echo -en "\033[$(($LVLy +1));${LVLx}H${clrSCbox}${scJL}${space}${scJR}"
-	[ ! -z $1 ] && sleep $1
-	echo -en "\033[$(($LVLy +2));${LVLx}H${clrSCbox}${scL}${space}${scR}"
-	[ ! -z $1 ] && sleep $1
-	echo -en "\033[$(($LVLy +3));${LVLx}H${clrSCbox}${scBL}${space}${scBR}"
-	[ ! -z $1 ] && sleep $1
-
-	# titles
-	local bar=
-	for ((i = 1;  i < $(($LVLw -1));  i++)) ; do bar="${bar}▄" ; done
-
-	goto="\033[$(($LVLy));$(($LVLx +1))H"
-	echo -en ${goto}${clrEndLines}${bar}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($LVLy +1));$(($LVLx +1))H"
-	echo -en ${goto}${clrLINESh}" Lines "${clrLINESv}"    "${clrLINESh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($LVLy +2));$(($LVLx +1))H"
-	echo -en ${goto}${clrLinesLvl}${bar}
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($LVLy +3));$(($LVLx +1))H"
-	echo -en ${goto}${clrLVLh}" Level "${clrLVLv}"    "${clrLVLh}" "
-	[ ! -z $1 ] && sleep $1
-
-	goto="\033[$(($LVLy +4));$(($LVLx +1))H"
-	echo -en ${goto}${clrLvlEnd}${bar}
-}
-
-#+============================================================================= ========================================
-# Draw mini-tet stats box
-#
-PFdrawMtets() {  # (slp)
-	goto="\033[$(($MTy +$MTh -1));${MTx}H"
-	echo -en "${goto}${clrSCbox}└─┬──────┬─┘"
-	for ((y = 2;  y < $MTh;  y++)); do
-		goto="\033[$(($MTy +$MTh -$y));${MTx}H"
-		if [ $y -eq 3 ]; then
-			echo -en "${goto}${clrSCbox}╞==========╡"
-		elif (($y & 1)); then
-			echo -en "${goto}${clrSCbox}├----------┤"
-		else
-			order="BIOTZSJL"
-			i=${order:$(($y/2 -1)):1}
-			eval tet=('$'{tet$i[@]})
-			local mtet="${tet[7]//./ }"
-			echo -en "${goto}${clrSCbox}│${tet[9]}${mtet}${clrSCbox}      │"
-		fi
-		[ ! -z $1 ] && sleep $1
-	done
-	goto="\033[${MTy};${MTx}H"
-	echo -en "${goto}${clrSCbox}┌──────────┐"
-}
-
-#+============================================================================= ========================================
-# Draw combo stats box
-#
-PFdrawCombo() {  # (slp, hslp)
-	COMBO=()
-	COMBO+=("▄▄▄█▄▄▄▄▄▄█▄▄▄▄█")
-	COMBO+=("█SS▌xxx▐GG▌xxx▐I")
-	COMBO+=("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█")
-
-	[ ! -z $1 ] && hslp=$2 #$(echo "scale=6; ${1} / 2" | bc)
-
-	for ((x = 0;  x < ${#COMBO[1]};  x++)); do
-		for ((y = 0;  y < ${#COMBO[@]};  y++)); do
-			chr=${COMBO[$y]:$x:1}
-			case $chr in
-				[█▄▀] ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBbox}$chr"  ;;
-				[▌▐]  ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBsep}$chr"  ;;
-				S     ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBsilv}▓"    ;;
-				G     ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBgold}▓"    ;;
-				x     ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBv} "       ;;
-				I     ) echo -en "\033[$(($CBy +$y));$(($CBx +$x))H${clrCBbox}▌"     ;;
-			esac
-		done
-		[ ! -z $1 ] && sleep $hslp
-	done
-}
-
-#****************************************************************************** ****************************************
-#                          ,-----------------------.
-#                         (  TETROMINO DEFINITIONS  )
-#                          `-----------------------'
-#****************************************************************************** ****************************************
-
-tetCnt=7
-tetW=4
-tetH=4
-tetName="BOITLJSZ"  # for the random selector
-
-tetB=("80808080808080808080808080808080"  # 0    : rot_0
-      "80808080808080808080808080808080"  # 1    : rot_1
-      "80808080808080808080808080808080"  # 2    : rot_2
-      "80808080808080808080808080808080"  # 3    : rot_3
-      ${clrX} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      "...." 0 ${clrBm}                   # 7,8,9: MTet, cnt, colour
-      "B")                                # 10   : Name
-										
-tetO=("808080808080808080151c8080131a80"  # 0    : rot_0
-      "808080808080808080151c8080131a80"  # 1    : rot_1
-      "808080808080808080151c8080131a80"  # 2    : rot_2
-      "808080808080808080151c8080131a80"  # 3    : rot_3
-      ${clrO} -1 0                        # 4,5,6: colour, Xoffs, Yoffs
-      "..██" 0 ${clrOm}                   # 7,8,9: MTet, cnt, colour
-      "O")                                # 10   : Name
-										
-tetI=("80808080808080802129292880808080"  # 0    : rot_0
-      "80248080802680808026808080228080"  # 1    : rot_1
-      "80808080808080802129292880808080"  # 2    : rot_2
-      "80248080802680808026808080228080"  # 3    : rot_3
-      ${clrI} -1 1                        # 4,5,6: colour, Xoffs, Yoffs
-      "▄▄▄▄" 0 ${clrIm}                   # 7,8,9: MTet, cnt, colour
-      "I")                                # 10   : Name
-										
-tetT=("8080808080808080313D388080328080"  # 0    : rot_0
-      "8080808080348080313E808080328080"  # 1    : rot_1
-      "8080808080348080313B388080808080"  # 2    : rot_2
-      "80808080803480808037388080328080"  # 3    : rot_3
-      ${clrT} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      ".▀█▀" 0 ${clrTm}                   # 7,8,9: MTet, cnt, colour
-      "T")                                # 10   : Name
-										
-tetL=("80808080808080804549488042808080"  # 0    : rot_0
-      "80808080414c80808046808080428080"  # 1    : rot_1
-      "808080808080448041494a8080808080"  # 2    : rot_2
-      "80808080804480808046808080434880"  # 3    : rot_3
-      ${clrL} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      ".█▀▀" 0 ${clrLm}                   # 7,8,9: MTet, cnt, colour
-      "L")                                # 10   : Name
-
-tetJ=("808080808080808051595c8080805280"  # 0    : rot_0
-      "808080808054808080568080515a8080"  # 1    : rot_1
-      "80808080548080805359588080808080"  # 2    : rot_2
-      "80808080805558808056808080528080"  # 3    : rot_3
-      ${clrJ} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      ".▀▀█" 0 ${clrJm}                   # 7,8,9: MTet, cnt, colour
-      "J")                                # 10   : Name
-
-tetS=("808080808080808080656880616a8080"  # 0    : rot_0
-      "8080808064808080636c808080628080"  # 1    : rot_1
-      "808080808080808080656880616a8080"  # 2    : rot_2
-      "8080808064808080636c808080628080"  # 3    : rot_3
-      ${clrS} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      ".▄█▀" 0 ${clrSm}                   # 7,8,9: MTet, cnt, colour
-      "S")                                # 10   : Name
-
-tetZ=("8080808080808080717c808080737880"  # 0    : rot_0
-      "808080808080748080757a8080728080"  # 1    : rot_1
-      "8080808080808080717c808080737880"  # 2    : rot_2
-      "808080808080748080757a8080728080"  # 3    : rot_3
-      ${clrZ} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
-      ".▀█▄" 0 ${clrZm}                   # 7,8,9: MTet, cnt, colour
-      "Z")                                # 10   : Name
-										 
-
-#+=============================================================================
-# Grab tet #1 from the basket (to the grid tet #0)
-# Generate a new tet for the bottom of the basket
-#
-TETadd() {  # (show)
-	local i=
-
-	# Start new piece at the top
-	tetY=$tetSty
-	tetX=$tetStx
-	rot=$tetStr
-
-	# shuffle everything up one
-	tet0=(${tet1[@]})
-	tet1=(${tet2[@]})
-	tet2=(${tet3[@]})
-
-	# create a new tet
-#	i=$(($RNDn %$tetCnt +1))  # well, didn't this cause some horrors?!
-	while true ; do
-		RND
-		((RNDn &= 7))
-		[[ $RNDn -eq 0 ]] && continue
-		
-		i=${tetName:$RNDn:1}
-		eval tet3=('$'{tet$i[@]})
-
-		[[ ("${tet3[10]}" != "${tet0[10]}") && ("${tet3[10]}" != "${tet1[10]}") ]] && break
-	done
-#	i=${tetName:$RNDn:1}
-#	eval tet3='$'{tet$i[@]}
-
-	# Add new/grid tet to the stats
-	i=${tet0[10]}
-	eval tmp='$'{tet$i[8]}
-	((tmp += 1))
-	eval tet$i[8]='$'{tmp}
-	[ "$1" == 1 ] && TETshowMtet
-
-#	# take a quick stab at emptying the keyboard buffer
-#	if [[ $1 -eq 1 ]]; then
-#		for ((i = 0;  i < 20;  i++)); do 
-#			keyGet
-#			[[ "$KEY" == "" ]] && break
-#		done
-#	fi
-	keyFlush
-
-	# Clear piece settings
-	tetVal=1
-	tetSwap=0
-
-	# check game-over
-	TETcollide  $tetY $tetX ${tet0[$rot]}
-	[ $? -ne 0 ] && RUN=2
-
-	keyFlush
-
-}
-
-#+=============================================================================
-# Put the piece in the playfield
-#
-TETplace() {
-	local cnt=0
-	for ((h = 0;  h < $tetH;  h++)); do
-		local y=$(($tetY + $h))
-		for ((w = 0;  w < tetW;  w++)); do
-			local x=$(($tetX +$w +1))
-			local z=$(($tetW*$h + $w))
-			local ch=${tet0[$rot]:$(($z*2)):2}
-			local chv=$((0x$ch))
-			if [[ $chv != $tetiB ]] ; then
-				PF[$y]="${PF[$y]:0:$(($x*2))}"$ch"${PF[$y]:$(($x*2+2))}"
-				((cnt++))
-				[ $cnt -eq 4 ] && break 2  # may cause a variation in game speed
-			fi
-		done
-	done
-
-	TETcheckComboAll
-	TETcheckLin
-}
-
-#+============================================================================= ========================================
-# Swap active-tet with shoulder-tet
-#
-TETswap() {
-	# undraw both
-	TETundraw
-	TETundrawSh
-
-	# swap them over
-	local tmp=("${tet4[@]}")
-	tet4=("${tet0[@]}")
-	tet0=("${tmp[@]}")
-
-	# position the new piece at the top
-	tetY=$tetSty
-	tetX=$tetStx
-	rot=$tetStr
-
-	# draw them back in
-	TETdraw
-	TETdrawSh
-
-	tetVal=1   # reset tet-value (score)
-	tetSwap=1  # can only do this once per drop (except debug mode)
-}
-
-#+=============================================================================
-# Draw a Shoulder or Basket tetromino
-# This does off-byte alignment for "pretty"
-#
-TETdrawTet() {  # ([un]draw, y, x, rot, tet)
-	local gr=$1
-	shift
-
-	local by=$1
-	shift
-
-	local bx=$1
-	shift
-
-	local br=$1
-	shift
-
-	local tet=("$@")
-
-	echo -en ${tet[4]} # colour
-
-	local h=
-	local w=
-
-	local x=$(($bx +${tet[5]})) #bidmas
-	for ((h = 0;  h < $tetH;  h++)); do
-		local y=$(($by +$h +${tet[6]}))  # adjust x coord as per table
-		GOTO $y $x
-		for ((w = 0;  w < $tetW;  w++)); do
-			local z=$(($h*$tetW +$w))
-			local ch=$((0x${tet[$br]:$(($z*2)):2}))
-			if [[ $ch != $tetiB ]] ; then
-				echo -en $gr
-			else
-				echo -en "\033[2C" # cursor right 2
-			fi
-		done
-	done
-}
-
-#+============================================================================= ========================================
-# Update mini-tet stats board
-#
-TETshowMtet() {
-	local tot=0
-	local y=0
-	for i in L J S Z T O I ; do
-		eval tet=('$'{tet$i[@]})
-		GOTO $(($MTy +1 + $y*2))  $(($MTx +7))
-		echo -en ${tet[4]} # colour (main, not mtet - for text)
-		printf "%3d" ${tet[8]}
-		((tot += ${tet[8]}))
-		((y += 1))
-	done
-
-	GOTO $(($MTy +1 + $y*2))  $(($MTx +5))
-	echo -en ${clrMTscore}
-	printf "%5d" $tot
-
-	# silver counter
-	GOTO $(($CBy +1))  $(($CBx +4))
-	echo -en "${atPFX}${fgBLK};${bgWHT}${atSFX}" # number
-	printf "%3d" $tetSilv
-
-	# gold counter
-	GOTO $(($CBy +1))  $(($CBx +11))
-	echo -en "${atPFX}${fgBLK};${bgWHT}${atSFX}" # number
-	printf "%3d" $tetGold
-}
-
-#+=========================================================
-# Redraw the basket - after adding a new piece
-#
-#!! a nice little scrolling up animation wouldn't go amiss here!
-#
-TETdrawBs() {
-	local i=
-
-	# undraw the old ones
-	for ((i = 0;  i <= 2;  i++)); do
-		eval tet='$'{tet$i[@]}
-		TETdrawTet "${nbsp}${nbsp}" $(($BSy -1 +$i*4)) $(($BSx +3)) 0 ${tet[@]}
-	done
-
-	# draw the new ones
-	for ((i = 1;  i <= 3;  i++)); do
-		eval tet='$'{tet$i[@]}
-		TETdrawTet ${tetGR} $(($BSy -5 +$i*4)) $(($BSx +3)) 0 ${tet[@]}
-	done
-}
-
-#+=========================================================
-# Draw the shoulder tet
-#
-TETdrawSh() {
-	TETdrawTet ${tetGR} $(($SHy)) $(($SHx +3)) 0 ${tet4[@]}
-}
-
-#+=========================================================
-# UN-Draw the shoulder tet
-#
-TETundrawSh() {
-	TETdrawTet "${nbsp}${nbsp}" $(($SHy)) $(($SHx +3)) 0 ${tet4[@]}
-}
-
-#+=============================================================================
-# Used by TETdraw and TETundraw
-#
-TETdrawShadowNow() {  # (graphic)
-	echo -en ${tet0[9]} # colour
-	local x=$(($PFx +1 + $shadX*2)) #bidmas
-	for ((h = 0;  h < $tetH;  h++)); do
-		[ $(($shadY + $h)) -eq 0 ] && continue
-		local y=$(($PFy +$shadY +$h -1))
-		GOTO $y $x
-		for ((w = 0;  w < $tetW;  w++)); do
-			local z=$(($h*$tetW +$w))
-			local ch=$((0x${tet0[$rot]:$(($z*2)):2}))
-			if [[ $ch != $tetiB ]] ; then
-				echo -en $1
-			else
-				echo -en "\033[2C" # cursor right 2
-			fi
-		done
-	done
-}
-
-#+=========================================================
-# Work out where the shadow should be and draw it
-#
-TETdrawShadow() {
-	shadY=$tetY
-	while TETcollide $shadY $tetX ${tet0[$rot]} ; do ((shadY++)) ; done
-	[ $((--shadY)) -le $tetY ] && return
-
-	shadX=$tetX
-
-	TETdrawShadowNow ${tetGRs}
-}
-
-#+=========================================================
-# UN-DRAW the shadow
-#
-TETundrawShadow() {
-	[ $shadY -le $tetY ] && return
-	TETdrawShadowNow "${nbsp}${nbsp}"
-}
-
-#+=============================================================================
-# Used by TETdraw and TETundraw
-#
-TETdrawNow() {  # (graphic)
-	echo -en ${tet0[4]} # colour
-	local x=$(($PFx +1 + $tetX*2)) #bidmas
-	for ((h = 0;  h < $tetH;  h++)); do
-		[ $(($tetY + $h)) -eq 0 ] && continue
-		local y=$(($PFy +$tetY +$h -1))
-		GOTO $y $x
-		for ((w = 0;  w < $tetW;  w++)); do
-			local z=$(($h*$tetW +$w))
-			local ch=$((0x${tet0[$rot]:$(($z*2)):2}))
-			if [[ $ch != $tetiB ]] ; then
-				echo -en $1
-			else
-				echo -en "\033[2C" # cursor right 2
-			fi
-		done
-	done
-}
-
-#+=============================================================================
-# DRAW a tet on the GRID
-#
-TETdraw() {
-	TETdrawShadow
-	TETdrawNow ${tetGR}
-}
-
-#+=============================================================================
-# UN-DRAW a tet on the GRID
-#
-TETundraw() {
-	[ "$KEY" != "DOWN" ] && TETundrawShadow
-	TETdrawNow "${nbsp}${nbsp}"
-}
-
-#+=============================================================================
-# Update the scoreboard
-#
-TETscoreShow() {
-	local goto=
-	local ch=
-	
-	goto="\033[$(($SCy +2));$(($SCx +2))H"
-	printf -v ch "%'10d" $score
-	echo -en "${goto}${clrSCOREv}${ch}"
-
-	goto="\033[$(($SCy +4));$(($SCx +8))H"
-	printf -v ch "%3d" $scoreMul
-	echo -en "${goto}${clrMULTv}x${ch}"
-
-	goto="\033[$(($SCy +6));$(($SCx +8))H"
-	printf -v ch "%4d" $scoreLast
-	echo -en "${goto}${clrLASTv}${ch}"
-
-	goto="\033[$(($SCy +8));$(($SCx +8))H"
-	printf -v ch "%4d" $scoreBest
-	echo -en "${goto}${clrBESTv}${ch}"
-
-	goto="\033[$(($LVLy +1));$(($LVLx +8))H"
-	printf -v ch "%4d" $scoreLin
-	echo -en "${goto}${clrLINESv}${ch}"
-
-	goto="\033[$(($LVLy +3));$(($LVLx +8))H"
-	printf -v ch "%4d" $scoreLvl
-	echo -en "${goto}${clrLVLv}${ch}"
-}
-
-#+============================================================================= ========================================
-# Special bonus if the board is cleared
-#
-TETperfect100() {
-	local c=(37 33 36 32 35 31 34)  # W,Y,C,G,M,R,B - what an interesting pattern!?
-
-	for ((i = 0;  i < 7;  i++)); do
-		local goto="\033[$(($PFy +$PFh -3 -$i/2));$(($PFx +9))H"
-		local clr="${atPFX}${c[$i]}${atSFX}"
-		echo -en "${goto}${clr}+100"
-		sleep 0.06
-		echo -en "${goto}    "
-	done
-}
-
-#+=============================================================================
-TETperfect() {
-	# Check if board is cleared
-	local j=1
-	for ((i = 0; i < $(($PFh -1)); i++)); do  # -1 to avoid the grid floor
-		[[ ${PF[$i]} == $EMPTY ]] && ((j += 1))
-	done
-	[ $j -ne $PFh ] && return
-
-	# +100
-	TETperfect100 &
-
-	[[ $SOUND == BEL ]] && echo -en "\a"
-
-	# baloon - threads need to do things atomically
-	local clr="${atPFX}${atBLD};${fgYEL}${atSFX}"
-	echo -en "\033[$(($PFy +6));$(($PFx +4))H${clr} ,---------."
-	echo -en "\033[$(($PFy +7));$(($PFx +4))H${clr}(  PERFECT  )"
-	echo -en "\033[$(($PFy +8));$(($PFx +4))H${clr} \`---------'"
-
-	# flashing "PERFECT"
-	s="PERFECT"
-	sl=${#s}
-	fg=31  # 31--> R,G,Y,B,M,C,W <--37
-	for ((i = 0;  i < 6;  i++)); do
-		for ((j = 0;  j < $sl;  j++)); do
-			echo -en "\033[$(($PFy +7));$(($PFx +7 +$j))H"${atPFX}$fg${atSFX}${s:$j:1}
-			[ $((++fg)) -eq 37 ] && fg=31
-			sleep 0.02
-		done
-	done
-
-	# clean up
-	local clr="${atOFF}"
-	echo -en "\033[$(($PFy +6));$(($PFx +4))H${clr}            "
-	echo -en "\033[$(($PFy +7));$(($PFx +4))H${clr}             "
-	echo -en "\033[$(($PFy +8));$(($PFx +4))H${clr}            "
-
-	# an extra 100 points (pre-multiplier) for clearing :)
-	STATUS="Perfect: +100"
-	((tetVal += 100))
-}
-
-#+============================================================================= ========================================
-# Update the score & score stats
-#
-TETscoreAdd() {
-	((scoreLast = $tetVal * $scoreMul))
-	[ $scoreLast -gt $scoreBest ] && scoreBest=$scoreLast
-	((score += $scoreLast))
-}
-
-#+============================================================================= ========================================
-# Score this tetromino
-#
-TETscore() {  # (cnt, silver, gold)
-	local cnt=$1
-	local silv=$2 
-	local gold=$3
-
-	# Basic score
-	if [ $cnt -eq 0 ]; then
-		TETscoreAdd
-		scoreMul=1
-		TETscoreShow
 		return
 	fi
 
-	((scoreLin += $cnt))  # tally lines
+	local x=0
+	if [[ $l -le 5 ]]; then  # banner
+		c=${CMAP[$l]:$2:1}
+		eval clr='$'{tet${c^^}[4]}
+		x=1
 
-	# score ... lines*10; or lines*20 for a tetris
-	[ $cnt -ne 4 ] && ((tetVal += $cnt *10)) || ((tetVal += $cnt *20))
-	TETperfect   # check if board is cleared
-	TETscoreAdd  # update score
+	elif [[ ($l -eq 25  ||  $l -eq 33)  &&  $2 -eq 44 ]]; then  # 2x4 I-names
+		clr="${tetI[4]}"
+		x=1
 
-	((scoreMul += 1))  # enhance multiplier for next piece
-	[[ ${scoreMul} -gt ${scoreMulMax} ]] && scoreMulMax=${scoreMul}
+	elif [[ $l -ge 40  &&  $l -le 55 ]]; then  # 2x4 combos
+		case "$2" in
+			"42" | "44" )  eval clr='$'{tet${CbCh^^}[4]} ; x=1 ;;
+			"43"        )  clr="${WHT}"                  ; x=1 ;;
+		esac
 
-	if [ $scoreLvl -ne 20 ] ; then    # already at full speed
-		local tmp=$(($scoreLvl))
-		((scoreLvl = $scoreLin /10 +$LEVEL))  # calculate level
-		[ $tmp -ne $scoreLvl ] && STATUS="Level Up!"
-		SPEEDset
+	elif [[ $l -eq 10  &&  $2 -ge 64  &&  $2 -le 74 ]]; then  # mirror text
+		#clr="${atPFX}${atUSC}${fgWHT:2};${bgBLK}${atSFX}"
+		clr="\033[0;4;37;40m"
+		x=1
+
+	elif [[ $l -ge 12  &&  $l -le 13  &&  $2 -ge 66 ]]; then  # mirror tets
+		case "$CbCh" in
+			[JLSZTOI] )  eval clr='$'{tet${CbCh^^}[4]} ; x=1 ;;
+			*         )  clr=${WHT}
+		esac
+		x=1
 	fi
 
-	TETscoreShow  # update scoreboard
-
-	# all the animations may result in buffered keystrokes...
-#	while keyGet ; do : ; done  # flush keyboard buffer
-	keyFlush
-}
-
-#+============================================================================= ========================================
-fragDoit() { 
-	local y=$1
-	local x=
-	for (( x = 0;  x < $PFw;  x++)); do
-		local o=$((0x${PF[$y]:$(($x*2+2)):2}))  # old piece
-		
-		printf -v n "%02X" $(($o | $maskLDUR))  # new piece (fragment)
-		PF[$y]="${PF[$y]:0:$(($x*2+2))}"$n"${PF[$y]:$(($x*2+4))}"
-		
-		[[ $(($o & $maskC)) -eq $maskLDUR ]] && continue
-		[[ $(($o & $maskU)) -eq $maskU    ]] && fragFrom $((y -1))  $x  down
-		[[ $(($o & $maskD)) -eq $maskD    ]] && fragFrom $((y +1))  $x  up
-	done
-}
-
-
-#+============================================================================= ========================================
-fragFrom() {
-	local y=$1
-	local x=$2
-	local d=$3  # direction to parent
-
-	local o=$((0x${PF[$y]:$(($x*2+2)):2}))
-
-	[[ $(($o & $maskT)) -eq $tetiW    ]] && return  # wall
-	[[ $(($o & $maskC)) -eq $maskLDUR ]] && return  # fragment
-	[[ $(($o & $maskC)) -eq $maskB    ]] && return  # blank
-
-	printf -v n "%02X" $(($o | $maskLDUR))  # new piece (fragment)
-	PF[$y]="${PF[$y]:0:$(($x*2+2))}"$n"${PF[$y]:$(($x*2+4))}"
-
-	[[ ("$d" != "up"   ) && ($(($o & $maskU)) -eq $maskU) ]] && fragFrom $((y -1))  $x         down
-	[[ ("$d" != "down" ) && ($(($o & $maskD)) -eq $maskD) ]] && fragFrom $((y +1))  $x         up
-	[[ ("$d" != "left" ) && ($(($o & $maskL)) -eq $maskL) ]] && fragFrom $y         $(($x -1)) right
-	[[ ("$d" != "right") && ($(($o & $maskR)) -eq $maskR) ]] && fragFrom $y         $(($x +1)) left
-}
-
-#+============================================================================= ========================================
-# Clear lines (with animation)
-#
-TETlines() {
-	local cnt=$1
-	shift
-	local list=("$@")
-	
-	local y=
-	local l=
-	local i=
-
-	if [[ $cnt -eq 4 ]]; then
-		[[ $SOUND == BEL ]] && echo -en "\a"
-	fi
-
-	# fancy animation goes here!
-	for (( i=0;  i<3; i++ )); do
-		for l in ${list[@]} ; do
-			GOTO $(($PFy +$l -1)) $(($PFx +1))
-			for ((x =0;  x < $PFw; x++)); do  echo -en ${tetGRc} ;  done
-		done
-		sleep 0.2
-		for l in ${list[@]} ; do
-			GOTO $(($PFy +$l -1)) $(($PFx +1))
-			for ((x = 0;  x < $PFw; x++)); do  echo -en ${tetGRs} ;  done
-		done
-		sleep 0.1
-	done
-
-	# Edit the grid
-	for ((i = 0;  i < $cnt;  i++)); do
-		local l=$((${list[$i]} +$i))  # +$i as lines will be disappearing
-		fragDoit $l
-		for ((y = $l;  y > 0;  y--)); do
-			PF[$y]=${PF[$(($y -1))]}
-		done
-	done
-	PFdrawGrid
-	
-	TETcheckComboAll
-}
-
-#+============================================================================= ========================================
-# Check for combo blocks
-#
-TETcheckCombo() {
-	local y=$1
-	local x=$2
-
-	local v=
-	local t=
-	local c=
-	local g=
-
-	v=$((0x${PF[$y]:$(($x*2 +2)):2}))
-	((g = v &$maskT))
-	for ((h = 0;  h < 4;  h++)); do
-		for ((w = 0;  w < 4;  w++)); do
-			v=$((0x${PF[$(($y +$h))]:$(($(($x+$w))*2 +2)):2}))  # I'm getting good at this :)
-			((t = v &$maskT))
-			[[ $t -ge ${tetiB} ]] && return 0
-			[[ $t -ne $g ]] && g=0
-			((c = v &$maskC))
-			[[ $c -eq 0 || $c -eq 15 ]] && return 0
-			[[ $h -eq 0 && $(($c & $maskU)) -gt 0 ]] && return 0
-			[[ $w -eq 0 && $(($c & $maskL)) -gt 0 ]] && return 0
-			[[ $w -eq 3 && $(($c & $maskR)) -gt 0 ]] && return 0
-			[[ $h -eq 3 && $(($c & $maskD)) -gt 0 ]] && return 0
-		done
-	done
-	[[ $g -eq 0 ]] && return 1 || return 2  # 1=silver, 2=gold
-}
-
-#+============================================================================= 
-flashCombo() {
-	local y=$1
-	local x=$2
-	local c=$3
-
-	local i
-	local h
-	local w
-	for ((i = 0;  i < 4;  i++)); do
-		for ((h = 0;  h < 4;  h++)); do
-			for ((w = 0;  w < 4;  w++)); do
-				local goto="\033[$(($PFy +$y +$h -1));$(($PFx +$(($x +$w))*2 +1))H"
-				local v=$((0x${PF[$(($y +$h))]:$(($(($x+$w))*2 +2)):2}))  # I'm getting good at this :)
-				local t=$((v &$maskT))
-				local clr=${tetI[4]}
-				(($i & 1))  &&  ch=${tetGR}  ||  ch=${tetGRc}
-				case $t in 
-					"${tetiO}"  )  echo -en "${goto}${tetO[4]}${ch}"  ;;
-					"${tetiI}"  )  echo -en "${goto}${tetI[4]}${ch}"  ;;
-					"${tetiT}"  )  echo -en "${goto}${tetT[4]}${ch}"  ;;
-					"${tetiL}"  )  echo -en "${goto}${tetL[4]}${ch}"  ;;
-					"${tetiJ}"  )  echo -en "${goto}${tetJ[4]}${ch}"  ;;
-					"${tetiS}"  )  echo -en "${goto}${tetS[4]}${ch}"  ;;
-					"${tetiZ}"  )  echo -en "${goto}${tetZ[4]}${ch}"  ;;
-				esac
-			done
-		done
-		sleep 0.16
-	done
-}
-
-#+============================================================================= 
-makeCombo() {
-	local cblk=()
-		cblk+=("0109090C") # >--.
-		cblk+=("0509090A") # ,--'
-		cblk+=("0309090C") # '--.
-		cblk+=("0109090A") # >--'
-
-	local y=$1
-	local x=$2
-	local t=$3
-
-	local h=
-	local w=
-	for (( h = 0;  h < 4;  h++)); do
-		for (( w = 0;  w < 4;  w++)); do
-			local yy=$(($y +$h))
-			local xx=$(($(($x+$w))*2 +2))
-			local cv=$(($((0x${cblk[$h]:$(($w*2)):2})) |$t)) 
-			printf -v ch "%02X" $cv
-			PF[$yy]="${PF[$yy]:0:$xx}"$ch"${PF[$yy]:$(($xx+2))}"
-		done
-	done
-}
-
-#+============================================================================= 
-TETcheckComboAll() {
-	local x=
-	local y=
-	local cntV=0
-	local cntG=0
-	for ((y = 2;  y < $(($PFh -4)); y++)); do
-		for ((x = 0;  x < $(($PFw -3)); x++)); do
-			TETcheckCombo $y $x
-			rv=$?
-			case $rv in
-				1)	[[ $SOUND == BEL ]] && echo -en "\a"
-					STATUS="${BWHT}SILVER${atOFF} COMBO!"
-					flashCombo $y $x &
-					makeCombo $y $x "${tetiV}"
-					((tetSilv++))
-					((cntV++))
-					;;
-				2)	[[ $SOUND == BEL ]] && echo -en "\a"
-					STATUS="${YEL}*GOLD*${atOFF} COMBO!"
-					flashCombo $y $x &
-					makeCombo $y $x "${tetiG}"
-					((tetGold++))
-					((cntG++))
-					;;
-			esac
-		done
-	done
-	
-	if [[ $(($cntV +$cntG)) -gt 1 ]]; then
-		STATUS="${YEL}**${BWHT}D${MAG}O${GRN}U${YEL}B${MAG}L${BWHT}E${YEL}**${atOFF} COMBO!"
-	fi
-	wait
-	PFdrawGrid
-	TETshowMtet
-	
-}
-
-#+============================================================================= ========================================
-# Check for complete lines
-#
-TETcheckLin() {
-	local lines=()
-	local silver=0
-	local gold=0
-	local SILVER=0
-	local GOLD=0
-	for ((h = $tetH;  h > 0;  h--)); do
-		local y=$(($tetY +$h -1))
-		[ $y -ge $(($PFh -1)) ] && continue  # off the grid
-
-#		strstr ${PF[$y]} "-" && continue     # Still has gaps
-		for ((x = 1;  x <= $PFw;  x++)); do
-			[[ $((0x${PF[$y]:$(($x*2)):2})) == $tetiB ]] && continue 2
-		done
-
-		lines+=("$y")                        # array of complete lines
-
-#!		local tmp="${PF[$y]//[^${cmSILV}]}"  # how many silver blocks
-#!		((silver += ${#tmp} /2))
-
-#!		local tmp="${PF[$y]//[^${cmGOLD}]}"   # how many gold blocks
-#!		((gold += ${#tmp} /2))
-	done
-	local cnt=${#lines[@]}
-
-	[ $cnt -ne 0 ] && TETlines $cnt ${lines[@]}  # Clear lines (animation)
-
-	TETscore $cnt $silver $gold  # ALWAYS called (for multiplier calculation)
-}
-
-#+=============================================================================
-#         Auto-drop time
-# Factor  Lvl-0 .. Lvl-20
-#   45  : 1.000    0.100
-#   46  : 1.000    0.080
-#   47  : 1.000    0.060
-#
-SPEEDset() {
-	((speed = 1000 - $scoreLvl*46))
-}
-
-#+=============================================================================
-# Start stopwatch
-#
-TIMEstart() {
-	timePause=0
-	timeStart=$(date -u +%s)
-}
-
-#+=============================================================================
-# Update stopwatch
-#
-TIMEshow() {
-	timeNow=$(date -u +%s)
-	timeTotal=$((timeNow -timeStart -timePause))
-	GOTO $TMy $(($TMx +1))
-	echo -en "${clrTIME}$(date -u -d @${timeTotal} +"%T")"
-}
-
-#+=============================================================================
-# Timestamp last drop, and next drop
-#
-SPEEDstamp() {
-	speedLast=$(date +%s%N | sed -e 's/\(.*\)....../\1/')
-	((speedNext = $speedLast + $speed))
-}
-
-#+=============================================================================
-# return:  1=Collision. 0=Not-Collision
-#
-TETcollide() {  # (y, x, tet[rot])
-	for ((h = 0;  h < $tetH;  h++)); do
-		local y=$(($1 +$h))
-		for ((w = 0;  w < tetW;  w++)); do
-			local x=$(($2 +$w +1))
-			local z=$(($h*$tetW +$w))
-#			[ "${3:$z:1}" == "#" ] && [ "${PF[$y]:$x:1}" != "-" ] && return 1
-			[[ ($((     0x${3:$(($z*2)):2})) != $tetiB) && 
-			   ($((0x${PF[$y]:$(($x*2)):2})) != $tetiB) ]] && return 1
-		done
-	done
-	return 0
-}
-
-#+=============================================================================
-statFast=4200  # most messages
-statSlow=6000  # long messages
-
-STATUSupdate() {  # (spd)
-	statNow=$(date +%s%N | sed -e 's/\(.*\)....../\1/')
-
-	[[ -z $statNow || -z $statClear ]] && return
-
-	[ "$STATUSd" != "" ] && [ $statNow -gt $statClear ] && STATUS=
-
-	[ "$STATUSd" == "$STATUS" ] && return
-
-	STATUSd="$STATUS"
-
-	GOTO 25 1
-	echo -en ${atOFF}
-	printf "%*s" 71 ""
-
-	GOTO 25 3
-	echo -en ${clrSTATUS}$STATUSd
-	[[ ! -z $STATUSd ]] && DBG "STATUS=\"$STATUSd\""
-
-	((statClear = $statNow +$statSpeed))  # clear messages after 3200mS
-}
-
-#+=============================================================================
-# Exit cleanly
-#
-Quit() {  # (errorlevel)
-
-#        0         1         2         3         4         5        6          7         8
-#        012345678901234567890123456789012345678901234567890123456789012345678901234567890
-QMSG=()
- QMSG+=(" │○¦ Thanks for playing Башотрис                                              ¦○│") # 0
- QMSG+=(" │ ¦                                                                          ¦ │") # 1
- QMSG+=(" │○¦ All feedback welcome at: www.github.com/csBlueChip/BAShTris/issues       ¦○│") # 2
- QMSG+=(" │ ¦                                                                          ¦ │") # 3
- QMSG+=(" │○¦        ╓────╖╥ ╥╓─╖╓─╖╓─╖╓─╖             ▄▄▄▄▄▄▄   ▄ ▄▄▄▄ ▄▄▄▄ ▄▄▄▄▄▄▄   ¦○│") # 4
- QMSG+=(" │ ¦        ║     ╙╥╜║─╢║ ║║╓╜║ ╖             █ ▄▄▄ █ ▀ ▀ ▄█▀█▀ █▄▀ █ ▄▄▄ █   ¦ │") # 5
- QMSG+=(" │○¦        ║      ╨ ╙─╜╙─╜╨╙ ╙─╜             █ ███ █ ▀█▀ ▀ ▀█▄█▄ ▄ █ ███ █   ¦○│") # 6
- QMSG+=(" │ ¦        ║  ╓─╖╥ ╥╓─╖─╥─╓─╖╓╥╖╓─╖          █▄▄▄▄▄█ █▀▄▀█ ▄ ▄ █ █ █▄▄▄▄▄█   ¦ │") # 7
- QMSG+=(" │○¦        ║  ╙─╖╙╥╜╙─╖ ║ ╟─ ║║║╙─╖          ▄▄▄▄▄ ▄▄▄█▀█  ▀ ▀▄  ▀▄ ▄ ▄ ▄    ¦○│") # 8
- QMSG+=(" │ ¦        ╙─┘╙─╜ ╨ ╙─╜ ╨ ╙─╜╨ ╨╙─╜          ▄▀█ ██▄█  █ ▀███▄ ▄▀█▀██▀▀██▀   ¦ │") # 9
- QMSG+=(" │○¦    ┌──────────────────────────────┐      █▄▄  ▀▄▀ ▄▄ █▀▄▄▄▄█ █ ▀ ▀▀▄ ▀   ¦○│") #10
- QMSG+=(" │ ¦    │° Greetz to:                 °│      ▀█▄▀  ▄  █ ▄▄  ▄██▀▀▀▀█▀▀█▄ ▀   ¦ │") #11
- QMSG+=(" │○¦    │   • Cyborg666     • RIMSy    │       ▀▀▀ ▀▄ ▄ ██  ▀▀   ▄▀▄ ▀ ▀▄ ▀   ¦○│") #12
- QMSG+=(" │ ¦    │   • Lord Grumble  • PajaCo   │      █ █▄▀▄▄▄██▀ ▀██▄▀▄█▀▀▀█ ▀▄▀ ▀   ¦ │") #13
- QMSG+=(" │○¦    │.  • jgs/spunk     • sbot    .│      █ █▄█▄▄  ▀▄ █▀▄▄▄ ▀▀▄▄█▄██▄ ▀   ¦○│") #14
- QMSG+=(" │ ¦    └──────────────────────────────┘      ▄▄▄▄▄▄▄ ██▄▄▄  ▄▀ █ █ ▄ █▀  ▀   ¦ │") #15
- QMSG+=(" │○¦                                          █ ▄▄▄ █ ▄▀██  ▀██  ▀█▄▄▄█▀▄█▀   ¦○│") #16
- QMSG+=(" │ ¦ KThxBye,                                 █ ███ █ █▀▄ ▀███▀▄▄▀▀▄▄▄▄ ▀█▀   ¦ │") #17
- QMSG+=(" │○¦   csßlúèÇhîp                             █▄▄▄▄▄█ █▀  █▀▄▀ ▄ █▀▀▄███▄▀    ¦○│") #18
- QMSG+=(" │ ¦                                         ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  ¦/ ") #19
- QMSG+=(" │○¦,-'\"-._,-'\"'--'\"'-.,-'\"'-._-\"-._,-\"'-.__,-^-._,-'\"'-._,-''-._,-\"--._-\"-._/   ") #20
- QMSG+=("                                                                                 ") #21
- QMSG+=(" If your cursor is not visible: stty sane ; tput cnorm                           ") #22
-#        0         1         2         3         4         5        6          7         8
-#        012345678901234567890123456789012345678901234567890123456789012345678901234567890
-
-local cTHX="${atPFX}${atBLD};${fgYEL};${bgBLK}${atSFX}"
-local cWWW="${atPFX}${atBLD};${atUSC};${fgBLU};${bgBLK}${atSFX}"
-local cCSYS="${atPFX}${atBLD};${fgCYN};${bgBLK}${atSFX}"
-local cBOX="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-local cQR="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-local cSTTY="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"
-
-local cCS="${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-local cBLUE="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"
-local cCHIP="${atPFX}${atBLD};${fgBLU};${bgBLK}${atSFX}"
-
-local cRIP="${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-
-local cCUT="${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-local cCUT21L="${atPFX}${atBLD};${atUSC};${fgBLK};${bgBLK}${atSFX}"
-
-	STATUS="KThxBye"
-	STATUSupdate
-	sleep 0.3
-
-	[ "$2" != "q" ] && {
-		local slp=0.03
-
-		GOTO 25 1
-		for ((y = 0;  y <= 23;  y++)); do
-			echo ""
-			for ((x = 1;  x <= 80;  x++)); do
-				if false; then :
-				elif [[  ($y -eq 19) &&                 ($x -eq 78)  ]] ; then echo -en ${cCUT21L}
-				elif [[  ($y -eq 19) &&                 ($x -eq 79)  ]] ; then echo -en ${cRIP}
-
-				elif [[ (($y -eq 10) || ($y -eq 15)) &&  ($x -eq  8)                 ]] ; then echo -en ${cBOX}
-				elif [[ (($y -ge 11) && ($y -le 14)) && (($x -eq  8) || ($x -eq 38)) ]] ; then echo -en ${cBOX}
-				elif [[ (($y -ge 11) && ($y -le 14)) &&  ($x -eq 10)                 ]] ; then echo -en ${atOFF}
-
-				elif [[  ($y -eq 20) && (($x -eq  2) || ($x -eq  3)) ]] ; then echo -en ${cCUT21L}
-				elif [[  ($y -eq 20) &&                 ($x -eq  1)  ]] ; then echo -en ${atOFF}
-				elif [[  ($y -eq 20)                                 ]] ; then echo -en ${cCUT}
-
-				elif [[  ($y -eq 22)                 && ($x -eq  2)  ]] ; then echo -en ${atOFF} # cursor:
-				elif [[  ($y -eq 22)                 && ($x -eq 32)  ]] ; then echo -en ${cSTTY} # stty
-
-				elif [[                  ($x -eq  1) || ($x -eq 80)  ]] ; then echo -en ${atOFF}  # tractor
-				elif [[                  ($x -eq  2) || ($x -eq 78)  ]] ; then echo -en ${cCUT}
-				elif [[                  ($x -eq  4)                 ]] ; then echo -en ${atOFF}
-
-				elif [[  ($y -eq  0)                 && ($x -eq  5)  ]] ; then echo -en ${cTHX}
-
-				elif [[  ($y -eq  2)                 && ($x -eq 30)  ]] ; then echo -en ${cWWW}
-				elif [[  ($y -eq  2)                 && ($x -eq 71)  ]] ; then echo -en ${atOFF}
-
-				elif [[ (($y -ge  4) && ($y -le  9)) && ($x -eq 12)  ]] ; then echo -en ${cCSYS}
-				elif [[ (($y -ge  4) && ($y -le  9)) && ($x -eq 37)  ]] ; then echo -en ${atOFF}
-
-				elif [[ (($y -ge  4) && ($y -le 19)) && ($x -eq 45)  ]] ; then echo -en ${cQR}
-				elif [[ (($y -ge  4) && ($y -le 19)) && ($x -eq 76)  ]] ; then echo -en ${atOFF}
-
-				elif [[  ($y -eq 18)                 && ($x -eq  7)  ]] ; then echo -en ${cCS}
-				elif [[  ($y -eq 18)                 && ($x -eq  9)  ]] ; then echo -en ${cBLUE}
-				elif [[  ($y -eq 18)                 && ($x -eq 13)  ]] ; then echo -en ${cCHIP}
-
-				elif [[  ($y -eq 20)                 && ($x -eq 78)  ]] ; then echo -en ${cRIP}
-				elif [[  ($y -eq 20)                 && ($x -eq 79)  ]] ; then echo -en ${atOFF}
-				fi
-				echo -en "${QMSG[$y]:$x:1}"
-			done
-			sleep $slp
-		done
-
-		echo ""
-		GOTO 24 1
-	}
-
-	((KeyRun)) && keyStop # stty reset
-	tput cnorm
-
-	exit $1
-}
-
-#+=============================================================================
-Redraw() {  # (slow)
-	if ! (($1)); then
-		slp=0.025 
-		hslp=0.0125 
-	else
-		slp=
-		hslp=
-	fi
-
-	if [[ -z $slp ]]; then
-		if [[ $1 -ne 2 ]]; then
-			echo -en ${atOFF}
-			CLS
-			CSdrawBackdrop
-		fi
-	else
-		CSdrawBackdropReveal
-	fi
-
-	PFdrawGrid $slp
-
-	PFdrawFromShoulder $slp $hslp &
-	#	PFdrawScore $slp
-
-	PFdrawFromBasket $slp $hslp &
-	#	PFdrawLevel $slp
-	#	PFdrawCombo $slp
-	#	PFdrawMtets $slp
-
-	wait
-
-	TETscoreShow
-	TETshowMtet
-	((! $1)) && TETdrawSh
-}
-
-#+=============================================================================
-
-STRRU=()
-  # PFx+  12345678901234567890
- STRRU+=(".╔═╕.....╒═╤═╕......")  # PFy +  1            
- STRRU+=(".║─╖┌┐┬.┬┌┐│┌┐┬.┬┌┐.")  # PFy +  2
- STRRU+=(".║.║┌┤││││││├┘│/││..")  # PFy +  3
- STRRU+=(".╙─╨└┘└┴┘└┘┴┴.┴.┴└┘.")  # PFy +  4
-RUMAP=()
- RUMAP+=(".ttt.....ttttt......")  # PFy +  1            
- RUMAP+=(".tttlji.iootjji.iss.")  # PFy +  2
- RUMAP+=(".t.tjtitiootojiiis..")  # PFy +  3
- RUMAP+=(".tttjjtttootj.i.iss.")  # PFy +  4
-
-STREN=()
-  #                1         2
-  # PFx+  12345678901234567890
- STREN+=("..╔═╕....╒═╤═╕.♦....")  # PFy +  1            
- STREN+=("..║─┤╒╕╒╕┬.│┌─┐┬┌┐..")  # PFy +  2
- STREN+=("..║.││╡╘╕├┐││┌┘│└┐..")  # PFy +  3
- STREN+=("..╙─┘┴┴└┘┴┴┴┴└.┴└┘..")  # PFy +  4
-ENMAP=()
- ENMAP+=("..ttt....ttttt.o....")  # PFy +  1            
- ENMAP+=("..tttllsso.tjjjiss..")  # PFy +  2
- ENMAP+=("..t.tlissoitijjiss..")  # PFy +  3
- ENMAP+=("..tttllssoitjj.iss..")  # PFy +  4
-
-STRT=()
-  #                1         2
-  # PFx+  12345678901234567890
-  STRT+=("....................")  # PFy +  1
-  STRT+=("....................")  # PFy +  2
-  STRT+=("....................")  # PFy +  3
-  STRT+=("....................")  # PFy +  4
-  STRT+=("....................")  # PFy +  5
-  STRT+=("..Style:▐====▌......")  # PFy +  6  NORM/CHAL/NVIS
-  STRT+=("....................")  # PFy +  7
-  STRT+=("..Level:▐^^▌........")  # PFy +  8  00..20
-  STRT+=("....................")  # PFy +  9
-  STRT+=("..Sound:▐<<<▌.......")  # PFy + 10  OFF/BEL
-  STRT+=("....................")  # PFy + 11
-  STRT+=("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄")  # PFy + 12   
-  STRT+=("▐_~-▐High:Score▌-~_▌")  # PFy + 13   
-  STRT+=("▐..................▌")  # PFy + 14   
-  STRT+=("▐..................▌")  # PFy + 15   
-  STRT+=("▐..................▌")  # PFy + 16   
-  STRT+=("▐..................▌")  # PFy + 17   
-  STRT+=("▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌")  # PFy + 18   
-  #                1         2
-  # PFx+  12345678901234567890
-   
-#       ("▐ AAA - 12,456,890 ▌")
-   #        |     |1         2
-   # PFx+ 12345678901234567890
-#                  |      |   ")
-#       ("..Style:▐NORM▌  <-- ")
-
-clrHi=()
-clrHi+=("${atPFX}${atUSC};${atBLD};${fgYEL};${bgGRN}${atSFX}")
-clrHi+=("${atPFX}${atUSC};${atBLD};${fgGRN};${bgBLK}${atSFX}")
-clrHi+=("${atPFX}${fgGRN};${bgBLK}${atSFX}")
-
-SOUND=BEL   # < OFF/BEL
-LEVEL=00    # ^ 00..20
-STYLE=NORM  # = NORM/CHAL/NVIS
-LANG=EN
-AZ=$AZRU
-
-#+=============================================================================
-showLang() {
-	[[ $LANG == EN ]] && {
-		STRT[0]="${STREN[0]}"
-		STRT[1]="${STREN[1]}"
-		STRT[2]="${STREN[2]}"
-		STRT[3]="${STREN[3]}"
-		MAP=("${ENMAP[@]}")
-	} || {
-		STRT[0]="${STRRU[0]}"
-		STRT[1]="${STRRU[1]}"
-		STRT[2]="${STRRU[2]}"
-		STRT[3]="${STRRU[3]}"
-		MAP=("${RUMAP[@]}")
-	}
-
-	local goto=
-	local clr=
-	local str=
-	local ch=
-	local x=
-	local y=
-	
-	goto="\033[$(($SHy +2));$((SHx +1))H"
-	clr="${atPFX}${fgBLK};${bgCYN}${atSFX}"
-	[[ $LANG == RU ]] && str="▌Рyсский▐" || str="▌English▐"
-	echo -en "$goto$clr$str"
-
-	goto="\033[$(($SHy +3));$((SHx +2))H"
-	clr="${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-	[[ $LANG != RU ]] && str=" Русский " || str=" English "
-	echo -en "$goto$clr$str"
-
-	(($1)) && {
-		for ((y = 0;  y < 4;  y++)); do
-			for ((x = 0;  x < 20;  x++)); do
-				goto="\033[$(($PFy +$y +1));$(($PFx +$x +1))H"
-				ch="${STRT[$y]:$x:1}"
-				[[ $ch == . ]] && ch=" "
-				local clr="${MAP[$y]:$x:1}"
-				case $clr in
-					l )  clr="$clrL"   ;;
-					j )  clr="$clrJ"   ;;
-					t )  clr="$clrT"   ;;
-					o )  clr="$clrO"   ;;
-					i )  clr="$clrI"   ;;
-					s )  clr="$clrS"   ;;
-					* )  clr="$atOFF"  ;;
-				esac
-				echo -en "${goto}${clr}${ch}"
-			done
-		done
-	}
-
-}
-
-#+=============================================================================
-ctrlC_none(){
-	return 0
-}
-
-pressStart() {
-	trap ctrlC_none INT
-
-	local press="PRESS"
-	local start="START"
-	
-	[[ $LANG == RU ]] && {
-		press="НАЖМИТЕ"
-	    start="СТАРТ"
-	}
-	
-	local goto=
-	local ch=
-	local fg=31
-	local frst=1
-	local x=
-	while true; do
-		for ((x = 0;  x < ${#press};  x++)); do
-			goto="\033[$(($BSy +4));$(($BSx +3 +$x))H"
-			clr="${atPFX}${atBLD};${fg};${bgBLK}${atSFX}"
-			ch=${press:$x:1}
-			echo -en "${goto}${clr}${ch}"
-			((++fg))
-			[[ $fg -eq 38 ]] && fg=31
-			[[ $frst -eq 0 ]] && sleep 0.005
-		done
-			
-		for ((x = 0;  x < ${#start};  x++)); do
-			goto="\033[$(($BSy +5));$(($BSx +4 +$x))H"
-			clr="${atPFX}${atBLD};${fg};${bgBLK}${atSFX}"
-			ch=${start:$x:1}
-			echo -en "${goto}${clr}${ch}"
-			((++fg))
-			[[ $fg -eq 38 ]] && fg=31
-			[[ $frst -eq 0 ]] && sleep 0.005
-		done
-		frst=0
-	done
-}
-
-#+=============================================================================
-killStart() {
-	kill -13 $1
-	
-	GOTO $(($BSy +4)) $(($BSx +3))
-	echo -en "${atOFF}"
-	echo -en "       "
-	GOTO $(($BSy +5)) $(($BSx +4))
-	echo -en "     "
-}
-
-#+=============================================================================
-scrollPut() {
-	local clr=
-	local goto=
-	local l=
-	local ch=
-	local x=
-
-	l=$(($sy +$ss -18))
-	for ((x = 0;  x < ${#STRT[$l]};  x++)); do
-		goto="\033[$(($PFy +$sy));$(($PFx +$x +1))H"
-		ch="${STRT[$l]:$x:1}"
-		[[ "$ch" == "." ]] && ch=" "
-		if [[ $l -lt 4 ]]; then
-			clr="${MAP[$l]:$x:1}"
-			case $clr in
-				"l" )  clr="$clrL"   ;;
-				"j" )  clr="$clrJ"   ;;
-				"t" )  clr="$clrT"   ;;
-				"o" )  clr="$clrO"   ;;
-				"i" )  clr="$clrI"   ;;
-				"s" )  clr="$clrS"   ;;
-				*   )  clr="$atOFF"  ;;
-			esac
-
-		elif [[ $l -lt 11 ]]; then 
-			case $ch in
-				"▐" | "▌" )  clr=${WHT}   ;;
-				"="  )     
-					ch=${STYLE}
-					clr="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-					((x+=3))
-					;;
-				"^"  )
-					printf -v ch "%02d" $LEVEL
-					clr="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-					((x+=1))
-					;;
-				"<"  )
-					ch=${SOUND}
-					clr="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-					((x+=2))
-					;;
-				*   )  clr="$GRN"  ;;
-			esac
-
-		elif [[ ($l -eq 11) || ($l -eq 17) ]]; then # box top bottom
-			clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-
-		elif [[ $l -eq 12 ]]; then  # title
-			if [[ ($x -eq 0) || ($x -eq 19) ]]; then
-				clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-			else
-				case $ch in
-					"," | "_" | "-" )  clr="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"  ;;
-					"~")  clr="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"   
-					      ch="."
-					      ;;
-					"▐" | "▌" )  clr="${atPFX}${fgGRN};${bgBLK}${atSFX}"   ;;
-					":"       )  clr="${atPFX}${atBLD};${fgWHT};${bgGRN}${atSFX}"
-					             ch=" " 
-					             ;;
-					[^\ ]     )  clr="${atPFX}${atBLD};${fgWHT};${bgGRN}${atSFX}"   ;;
-					*         )  clr="${atOFF}"  ;;
-				esac
-			fi
-
-		elif [[ ($l -eq 13) ]]; then  # pre 1st place
-			if [[ $ch == " " ]]; then
-				clr="${atPFX}${atUSC};${atBLD};${fgYEL};${bgBLK}${atSFX}"
-			else
-				clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-			fi
-
-		elif [[ ($l -eq 14) ]]; then  # 1st place
-			clr="${clrHi[0]}"
-			if [[ ($x -eq 0) || ($x -eq 19) ]]; then     # box
-				clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-			elif [[ $x -eq 2 ]]; then                   # name$
-				ch="${HI0[2]:0:3}"
-				((x+=2))
-			elif [[ $x -eq 8 ]]; then                   # score$
-				printf -v ch "%'10d" ${HI0[3]}
-				((x+=9))
-			fi
-		
-		elif [[ ($l -eq 15) ]]; then  # 2nd place
-			clr="${clrHi[1]}"
-			if [[ ($x -eq 0) || ($x -eq 19) ]]; then     # box
-				clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-			elif [[ $x -eq 2 ]]; then                   # name$
-				ch="${HI1[2]:0:3}"
-				((x+=2))
-			elif [[ $x -eq 8 ]]; then                   # score$
-				printf -v ch "%'10d" ${HI1[3]}
-				((x+=9))
-			fi
-
-		elif [[ ($l -eq 16) ]]; then  # 3rd place
-			clr="${clrHi[2]}"
-			if [[ ($x -eq 0) || ($x -eq 19) ]]; then     # box
-				clr="${atPFX}${fgYEL};${bgBLK}${atSFX}"
-			elif [[ $x -eq 2 ]]; then                   # name$
-				ch="${HI2[2]:0:3}"
-				((x+=2))
-			elif [[ $x -eq 8 ]]; then                   # score$
-				printf -v ch "%'10d" ${HI2[3]}
-				((x+=9))
-			fi
-
-		fi
-		echo -en "${goto}${clr}${ch}"
-	done
-}
-
-#+=============================================================================
-scrollIn() {
-	for ((ss = 0;  ss < ${#STRT[@]};  ss++)); do
-		for ((sy = $((18 -$ss));  sy <= 18;  sy++)); do
-			scrollPut
-		done
-		sleep 0.01
-	done
-	echo -en "\033[$PFy;$(($PFx +1))H${atOFF}                    "
-#	showHi
-}
-
-#+=============================================================================
-scrollOut() {
-	for ((ss = ((${#STRT[@]} -1));  ss >= 0;  ss--)); do
-		for ((sy = 18;  sy >= $((18 -$ss));  sy--)); do
-			scrollPut
-		done
-		for ((x = 0;  x < ${#STRT[$l]};  x++)); do
-			goto="\033[$(($PFy +$sy));$(($PFx +$x +1))H"
-			clr="$atOFF"
-			echo -en "${goto}${clr} "
-		done
-		sleep 0.01
-	done
-}
-
-#+=============================================================================
-drawSEL() {
-	local goto="\033[$(($PFy +$2*2 +6 +$3));$(($PFx +16))H"
-	local clr="${atPFX}${atBLD};${fgGRN};${bgBLK}${atSFX}"
-	local ch="◄▬▬" #«"
-	[[ $1 -eq 0 ]] && ch="    "
-	echo -en "${goto}${clr}${ch}"
-}
-
-#+=============================================================================
-optScroll() {  # (y, x, clr, L|R, old, new)
-	local x=
-	local ch=
-	local old=
-	local new=
-	
-	local goto="\033[$1;$2H"
-	local l=$((${#5} +1))
-
-	if [[ $4 == L ]]; then  # left
-		for (( x = 1;  x <= $l;  x++)); do
-			[[ $x -eq 1          ]] && new="" || new="${6:$(($l -$x))}"
-			[[ $x -eq $l         ]] && ch=""  || ch="║"
-			[[ $x -ge $(($l -1)) ]] && old="" || old="${5:0:$(($l -$x -1))}"
-			echo -en "${goto}${3}${new}${ch}${old}"
-			sleep 0.05
-		done
-	else
-		for (( x = 1;  x <= $l;  x++)); do
-			[[ $x -eq $(($l -1)) ]] && old="" || old="${5:$x}"
-			[[ $x -eq $l         ]] && ch=""  || ch="║"
-			[[ $x -eq 1          ]] && new="" || new="${6:0:$(($x -1))}"
-			echo -en "${goto}${3}${old}${ch}${new}"
-			sleep 0.05
-		done
-	fi
-
-}
-
-#+=============================================================================
-showHi() {
-	local ch=
-	local goto=
-
-	local hi=($(grep "^~hs:$LEVEL," ${CMD}))	# get the three score for this level
-	IFS=',' read -r -a HI0 <<< "${hi[0]}"   # stick them in global arrays
-	IFS=',' read -r -a HI1 <<< "${hi[1]}"
-	IFS=',' read -r -a HI2 <<< "${hi[2]}"
-	
-	[[ $1 -eq 0 ]] && return # engineering menu only wants the values loaded
-
-	# no scrolling requested (initial display)
-	if [[ -z $2 ]]; then
-		for (( i = 0;  i < 3;  i++ )); do
-			IFS=',' read -r -a itm <<< "${hi[$i]}"
-			
-			clr=${clrHi[$i]}
-	
-			goto="\033[$(($PFy +15 +$i));$(($PFx +2))H"
-			echo -en "${goto}${clr}                  "
-	
-			goto="\033[$(($PFy +15 +$i));$(($PFx +3))H"
-			printf -v ch "%3s" "${itm[2]}"
-			echo -en "${goto}${clr}${ch} -"
-			
-			goto="\033[$(($PFy +15 +$i));$(($PFx +9))H"
-			printf -v ch "%'10d" "${itm[3]}"
-			echo -en "${goto}${clr}${ch}"
-			
-		done
-		
-	else
-		local pre=($(grep "^~hs:${3}," ${CMD}))
-		IFS=',' read -r -a PRE0 <<< "${pre[0]}"
-		IFS=',' read -r -a PRE1 <<< "${pre[1]}"
-		IFS=',' read -r -a PRE2 <<< "${pre[2]}"
-		
-		# Macs can't printf in to an array
-		local tmp
-		local old=()
-		printf -v tmp " %3s - %'10d " "${PRE0[2]}" "${PRE0[3]}" 
-		old+=("$tmp")
-		printf -v tmp " %3s - %'10d " "${PRE1[2]}" "${PRE1[3]}"
-		old+=("$tmp")
-		printf -v tmp " %3s - %'10d " "${PRE2[2]}" "${PRE2[3]}"
-		old+=("$tmp")
-		
-		local new=()
-		printf -v tmp " %3s - %'10d " "${HI0[2]}" "${HI0[3]}"
-		new+=("$tmp")
-		printf -v tmp " %3s - %'10d " "${HI1[2]}" "${HI1[3]}"
-		new+=("$tmp")
-		printf -v tmp " %3s - %'10d " "${HI2[2]}" "${HI2[3]}"
-		new+=("$tmp")
-		
-		local l=${#old[0]}
-		
-		if [[ "$2" == "left" ]]; then  # coming from the left
-			for ((x = 1;  x < $l;  x++)); do
-				for ((y =0;  y < 3;  y++)); do
-					clr=${clrHi[$y]}
-					goto="\033[$(($PFy +15 +$y));$(($PFx +2))H"
-					echo -en "${goto}${clr}${new[$y]:$(($l -$x))}│${old[$y]:0:$((0-$x-1))}"
-				done
-				sleep 0.02
-			done		
-			
-		else  # right
-			for ((x = 1;  x <= $l;  x++)); do
-				for ((y =0;  y < 3;  y++)); do
-					clr=${clrHi[$y]}
-					goto="\033[$(($PFy +15 +$y));$(($PFx +2))H"
-					echo -en "${goto}${clr}${old[$y]:$x}│${new[$y]:0:$(($x -1))}"
-				done
-				sleep 0.02
-			done		
-		fi
-		
-		for ((y =0;  y < 3;  y++)); do
-			clr=${clrHi[$y]}
-			goto="\033[$(($PFy +15 +$y));$(($PFx +2))H"
-			echo -en "${goto}${clr}${new[$y]}"
-		done
-		
-	fi
-}
-
-#+=============================================================================
-startDispNow() {
-	ss=$((${#STRT[@]} -1))
-	for ((sy = $((18 -$ss));  sy <= 18;  sy++)); do
-		scrollPut
-	done
-	showHi 1
-}
-
-#+=============================================================================
-start() {
-	SEL=0
-
-	showLang 0
-
-	showHi 0
-	(($FAST)) && startDispNow || scrollIn
-
-	local pid=
-	pressStart &
-	pid=$!
-	
-	STATUS=("Press${keyL}F10${keyR}to view game statistics.")
-
-	keyFlush
-	drawSEL 1 $SEL 0
-	while true; do
-		STATUSupdate
-		sleep 0.05
-		keyGet
-		case $KEY in
-			[pP] )
-				STATUS=
-				STATUSupdate
-				(($pid)) && killStart $pid
-				scrollOut
-				PFdrawShoulder 0 0 j
-				PFdrawGrid
-				PFdrawBasket 
-
-				return 
-				;;
-			"BKSP" )  
-				killStart $pid
-				Quit 0 
-				;;
-			[qQ] | DEL )  
-				if [[ $LANG == RU ]]; then
-					LANG=EN
-					AZ=$AZEN
+	if ((! $x)); then
+		[[ "$CbCh" == "!" ]] && CbCh="\`"
+		[[ "$CbCh" == '"' ]] && CbCh="'"
+
+		case "$CbCh" in
+			"+"                    )  clr=${CYN} ;;
+			"*"                    )  clr=${BRN} ;;
+			"@"                    )  clr=${MAG} ;;
+			"="                    )  clr=${GRN} ;;
+			[\:\|\'\`\-\,\.\/\+\]] )  clr=${BBLU} ;;
+			"%"                    )  clr=${GRY} ;;
+			"$"                    )  clr=${GRY} ;;
+			"["                    )  CbCh="${CbCh}${BWHT}" ;;
+
+			[┌─┐└┘│¦] )
+				c=${CMAP[$l]:$2:1}
+				if [[ "$c" != " " ]]; then
+					eval clr='$'{tet${c^^}[4]}
 				else
-					LANG=RU 
-					AZ=$AZRU
-				fi
-				showLang 1
-				(($pid)) && killStart $pid
-				pressStart &
-				local pid=$!
-				;;
-			DOWN | [sS] )
-				drawSEL 0 $SEL 0
-				if [[ $SEL -ne 2 ]]; then
-					drawSEL 1 $SEL 1
-					sleep 0.02
-					drawSEL 0 $SEL 1
-				fi
-				SEL=$((i=$SEL +1, i % 3))
-				drawSEL 1 $SEL 0
-				;;
+					clr="$CbLast"
+				fi ;;
 
-			[wW] | UP ) 
-				drawSEL 0 $SEL 0
-				if [[ $SEL -ne 0 ]]; then
-					drawSEL 1 $SEL -1
-					sleep 0.02
-					drawSEL 0 $SEL -1
-				fi
-				SEL=$((i=$SEL +2, i % 3))
-				drawSEL 1 $SEL 0
-				;;
-			LEFT  | [aA] )
-				goto="\033[$(($PFy +$SEL*2 +6));$(($PFx +10))H"
-				clr="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-				case $SEL in
-					0 ) local old=$STYLE
-						case $STYLE in
-							NVIS )  STYLE=CHAL ;;
-							CHAL )  STYLE=NORM ;;
-						esac 
-						[[ $old != $STYLE ]] && optScroll $(($PFy +$SEL*2 +6)) $(($PFx +10)) ${clr} "L" $old $STYLE
-						;;
-					1 ) if [[ $LEVEL -gt 0 ]]; then
-							local old=$LEVEL
-							((LEVEL--))
-							printf -v ch "%02d" $LEVEL
-							echo -en "${goto}${clr}${ch}"
-							scoreLvl=$LEVEL
-							TETscoreShow
-							showHi 1 left $old $LEVEL &
-#							keyFlush
-						fi ;;
-					2 ) local old=$SOUND
-						SOUND=OFF
-						[[ $old != $SOUND ]] && optScroll $(($PFy +$SEL*2 +6)) $(($PFx +10)) ${clr} "L" $old $SOUND
-						;;
-				esac
-				;;
-			RIGHT | [dD] )
-				goto="\033[$(($PFy +$SEL*2 +6));$(($PFx +10))H"
-				clr="${atPFX}${fgBLK};${bgWHT}${atSFX}"
-				case $SEL in
-					0 ) local old=$STYLE
-						case $STYLE in
-							NORM )  STYLE=CHAL ;;
-							CHAL )  STYLE=NVIS ;;
-						esac 
-						[[ $old != $STYLE ]] && optScroll $(($PFy +$SEL*2 +6)) $(($PFx +10)) ${clr} "R" $old $STYLE
-						;;
-					1 ) if [[ $LEVEL -lt 20 ]]; then
-							local old=$LEVEL
-							((LEVEL++))
-							printf -v ch "%02d" $LEVEL
-							echo -en "${goto}${clr}${ch}"
-							scoreLvl=$LEVEL
-							TETscoreShow
-							showHi 1 right $old $LEVEL &
-#							keyFlush
-						fi ;;
-					2 ) local old=$SOUND
-						SOUND=BEL
-						[[ $old != $SOUND ]] && optScroll $(($PFy +$SEL*2 +6)) $(($PFx +10)) ${clr} "R" $old $SOUND
-						;;
-				esac
-				;;
-
-			F10 )
-				(($pid)) && killStart $pid
-				dumpHi
-				CSdrawBackdropReveal 0
-				Redraw 2 # 1=fast, 2=don't redraw backdrop
-				showLang 0
-				startDispNow
-				drawSEL 1 $SEL 0
-				pressStart &
-				local pid=$!
-				;;
-			
-			F1 | "?" )
-				(($pid)) && killStart $pid
-				Help
-				CSdrawBackdropReveal 0
-				Redraw 2 # 1=fast, 2=don't redraw backdrop
-				showLang 0
-				startDispNow
-				drawSEL 1 $SEL 0
-				pressStart &
-				local pid=$!
-				;;
-			
+			* )
+				if [[ $l -ge 68 ]]; then
+					c=${CMAP[$l]:$2:1}
+					if [[ "$c" != " " ]]; then
+						eval clr='$'{tet${c^^}[4]}
+					else
+						clr="$CbLast"
+					fi
+				fi ;;
 		esac
-		
-		STATUSupdate
-	
-	done
-}
-
-#+=============================================================================
-PauseTwinkle() {
-	local i
-	goto="\033[$1;$2H"
-	fg=("$atBLD;$fgBLK" "$fgBLU" "$atBLD;$fgBLU" "$fgCYN" "$atBLD;$fgCYN" "$fgWHT" "$atBLD;$fgWHT")
-	for ((i = 1;  i < ${#fg[@]};  i++)); do
-		echo -en "${goto}${atPFX}${fg[i]};${bgBLK}${atSFX}◘"
-		sleep .01
-	done
-	for ((i = ${#fg[@]} -2;  i >= 0;  i--)); do
-		echo -en "${goto}${atPFX}${fg[i]};${bgBLK}${atSFX}◘"
-		sleep .01
-	done
-}
-
-#+=============================================================================
-hideGame()
-{
-	local y=
-	local x=
-
-	# grid
-	for ((y = 0;  y <= $PFd;  y++)); do
-		if [ $(($y & 1)) -eq 1 ]; then
-			for ((x = 0;  x < $(($PFw*2 -1));  x += 2)); do
-				GOTO $(($PFy +$y)) $(($PFx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX} ◘" # ; ■ "
-			done
-		else
-			for ((x = 0;  x < $(($PFw*2 -1));  x += 2)); do
-				GOTO $(($PFy +$y)) $(($PFx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}◘ " # ; ■ "
-			done
-		fi
-	done
-
-	# basket
-	for ((y = 0;  y < $(($BSh -1));  y++)); do
-		if [ $(($y & 1)) -eq 1 ]; then
-			for ((x = 0;  x < $(($BSw -3));  x += 2)); do
-				GOTO $(($BSy +$y)) $(($BSx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}◘ " # ; ■ "
-			done
-		else
-			for ((x = 0;  x < $(($BSw -3));  x += 2)); do
-				GOTO $(($BSy +$y)) $(($BSx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX} ◘" # ; ■ "
-			done
-		fi
-	done
-
-	# shoulder
-	for ((y = 1;  y < $(($SHh -1));  y++)); do
-		if [ $(($y & 1)) -eq 1 ]; then
-			for ((x = 0;  x < $(($SHw -3));  x += 2)); do
-				GOTO $(($SHy +$y)) $(($SHx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX} ◘" # ; ■ "
-			done
-		else
-			for ((x = 0;  x < $(($SHw -3));  x += 2)); do
-				GOTO $(($SHy +$y)) $(($SHx +$x +1))
-				echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}◘ " # ; ■ "
-			done
-		fi
-	done
-}
-
-#+=============================================================================
-rigGame() {
-	local tly=
-	local tlx=
-	
-	local n=
-	local t=
-	
-	# get titles
-	local list=($(
-		grep '^tc~[0-9]*~titl=' ${CMD} | \
-		sed -e 's/tc~\([0-9]*\)~titl="\([^"]*\).*/\1:\2/' \
-			-e 's/ /_/g' \
-	))
-	
-	local w=
-	for (( i = 0;  i < ${#list[@]};  i++)); do
-		t="${list[$i]//*:/}"
-		n=${#t}
-		[[ $n -gt $w ]] && w=$n
-	done
-	((w += 8))
-	tly=$(($((24 -${#list[@]})) /2))
-	tlx=$(($PFx +$PFw -$w/2 +1))
-	[[ $tlx -lt 1 ]] && tlx=1
-
-	# Display menu
-	GOTO $tly $tlx
-	echo -en "${RED}╔"
-	for (( i = 0;  i < $(($w -2)) ;  i++ )); do
-		echo -en "═"
-	done
-	echo -en "╗"
-
-	# show titles
-	local valid=
-	for (( i = 0;  i < ${#list[@]};  i++)); do
-		n=${list[$i]//:*/}
-		t=${list[$i]//*:/}
-		GOTO $(($tly +$i +1))  $(($tlx))
-		printf "${RED}║ ${GRN}%c ${BBLK}- ${BWHT}%-*s ${RED}║" $n $(($w -8)) "${t//_/ }"
-		echo -en "${BBLK}▒"
-		valid="${valid}${n}"
-	done
-
-	GOTO $(($tly +$i +1))  $(($tlx))
-	echo -en "${RED}╚"
-	for (( i = 0;  i < $(($w -2)) ;  i++ )); do
-		echo -en "═"
-	done
-	echo -en "╝${BBLK}▒"
-
-	GOTO $(($tly +${#list[@]} +2))  $(($tlx +1))
-	echo -en "${BBLK}"
-	for (( i = 0;  i < $w;  i++ )); do
-		echo -en "▒"
-	done
-
-	# get selection
-	while : ; do
-		keyGet
-		if strstr $valid $KEY ; then
-			# load selection
-			local item=($(
-				grep -E "^tc~$KEY~(rot|tet|PF)" ${CMD} | \
-				sed -e 's/tc~[0-9]*~//' \
-					-e 's/\[ /\[/' \
-					-e 's/ /_/g' \
-			))
-			
-			for (( i = 0;  i < ${#item[@]};  i++)); do
-				eval ${item[$i]}
-			done
-			return
-		fi
-		
-		# abort
-		if [[ "$KEY" == "BKSP" || "$KEY" == "ESC" ]]; then
-			return
-		fi
-		sleep 0.05
-	done
-}
-
-#+=============================================================================
-Pause() {
-	local y=
-	local x=
-	local i=
-	local timeSt=$(date -u +%s)
-
-	hideGame
-
-	local PAUSE=()
-	PAUSE+=("TTLTLLXJXJXJXIXXXIXTTTXTZLZZXZ")
-	PAUSE+=("TJXJLXIIXLJLIIXXIIJJXJXJLLXLXX")
-	PAUSE+=("JJXXXXIIXXLLITTTITXLXLLLJJXJXJ")
-
-	for ((y = 0;  y < $PSh;  y++)); do
-		for ((x = 0;  x < $PSw;  x++)); do
-			ct=${PAUSE[$y]:$((x*2   )):1}
-			cb=${PAUSE[$y]:$((x*2 +1)):1}
-			eval clrt='$'{clrFg$ct}
-			eval clrb='$'{clrFg$cb}
-			((clrb += 10))
-			GOTO $(($PFy +$PSy +$y)) $(($PFx +$PSx +$x +1))
-			echo -en "${atPFX}${clrt};${clrb}${atSFX}▀"
-		done
-	done
-
-	# be bored until we restart
-	local timeBored=0
-	local boredDelay=18 # seconds
-
-	local csuits="♠♣♥♦"
-	local csuit=${csuits:$(($RANDOM %4)):1}
-	local cvalues="A23456789JQK"
-	local cvalue=${cvalues:$(($RANDOM %12)):1}
-
-	local boredMsg=()
-	boredMsg+=("Press${keyL}P${keyR}to un-pause.")
-	boredMsg+=("You can redraw the screen at any time by pressing${keyL}\`${keyR}")
-	boredMsg+=("Алексей Пажитнов wrote Тетрис the year ${GROUP}${clrSTATUS} was formed.")
-	boredMsg+=("Two sugars please...")
-	boredMsg+=("E != mc²  ...  E² = m²(c^4) + p²c²")
-	boredMsg+=("Tell them you're busy!")
-	boredMsg+=("\"Bored Now\"")
-	boredMsg+=("one-two ... one-two ... Is this thing on?")
-	boredMsg+=("The array you're looking for is boredMsg[]")
-	boredMsg+=("The QBit was named by Benjamin Schumacher.")
-	boredMsg+=("\"You'll go blind doing that!\" [Conker T Squirrel]")
-	boredMsg+=("Come back, or I'll start ticking your score down!")
-	boredMsg+=("Were you thinking of the${keyL}${cvalue}${csuit}${keyR}?")
-	boredMsg+=("That's it, you're only getting Z-tets from now on >:-(")
-	boredMsg+=("Seriously: \`grep boredMsg ${NAME}\`")
-	boredMsg+=("WW91IGp1c3QgbG9zdCBUaGUgR2FtZQ==")
-	boredMsg+=("Did you know you can cheat by running \`${NAME} -d\` ?")
-	boredMsg+=("··· ·~ ~~ ··~ · ·~·· / ~~ ~~~ ·~· ··· · / ~·· ·· ~·· ·· ~ ~·~·~~")
-	boredMsg+=("My dad told me that last one ☺")
-	boredMsg+=("OK, I'm bored of being bored now...")
-	statSpeed=$statSlow
-
-#	x=0
-#	y=0
-
-	keyFlush
-	while true; do
-		keyGet
-		sleep 0.05
-		[ "$KEY" == "BKSP" ] && {
-			RUN=0
-			return
-		}
-		[ "$KEY" == "P" ] || [ "$KEY" == "p" ] && break
-
-		local timeNow=$(date -u +%s)
-		if [ $timeNow -gt $(($timeBored +$boredDelay)) ]; then
-			STATUS=${boredMsg[$boredCnt]}
-			# I really don't want to pull values out of the PRNG
-			# as it will effect the game!
-			[ $((++boredCnt)) -ge ${#boredMsg[@]} ] && boredCnt=0
-			timeBored=$(date -u +%s)
-		fi
-		STATUSupdate
-
-		y=$(($RANDOM % $PFh +$PFy))
-		i=$(($BSx +$BSw -2))
-		x=$(($RANDOM % $i +1))
-
-#		((x++))
-#		[[ $x -gt 80 ]] && x=0
-#		[[ $x -eq  0 ]] && ((y++))
-#		[[ $y -gt 24 ]] && y=24
-#		GOTO 1 1
-#		echo $y,$x
-
-		if [[ \
-			( ( ($(($y & 1)) -eq 0) && ($(($x & 1)) -eq 1) ) || \
-			  ( ($(($y & 1)) -eq 1) && ($(($x & 1)) -eq 0) ) \
-			) && \
-			( \
-				( ( ($y -ge $(($SHy +1)) ) && ($y -le $(($SHy +$SHh -2)) ) ) && \
-				  ( ($x -ge $(($SHx +1)) ) && ($x -le $(($SHx +$SHw -2)) ) ) \
-				) || \
-				( ( ($y -ge    $PFy      ) && ($y -le $(($PFy +$PSy -1)) ) ) && \
-				  ( ($x -ge $(($PFx +1)) ) && ($x -le $(($PFx + $PFw*2)) ) ) \
-				) || \
-				( ( ($y -ge $(($PFy +PSy)) ) && ($y -le $(($PFy +$PSy +$PSh -1)) ) ) && \
-				  ( ( ($x -ge $(($PFx +1            )) ) && ($x -le $(($PFx +$PSx   )) ) ) || \
-					( ($x -ge $(($PFx +$PSx +$PSw +1)) ) && ($x -le $(($PFx + $PFw*2)) ) ) \
-				  ) \
-				) || \
-				( ( ($y -ge $(($PFy +PSy +$PSh)) ) && ($y -le $(($PFy +$PFd   )) ) ) && \
-				  ( ($x -ge $(($PFx +1        )) ) && ($x -le $(($PFx + $PFw*2)) ) ) \
-				) || \
-				( ($y -ge    $BSy      ) && ($y -le $(($BSy +$BSh -2)) ) && \
-				  ($x -ge $(($BSx +1)) ) && ($x -le $(($BSx +$BSw -2)) ) \
-				) \
-			) \
-		]]; then
-			#GOTO $y $x
-			#echo -en "*"
-			PauseTwinkle $y $x &
-		fi
-
-	done
-	statSpeed=$statFast
-	wait
-
-	PFdrawGrid # not thread-safe!
-	PFdrawBasket &
-	PFdrawShoulder 0 0 j &
-	wait
-	TETdrawBs
-	TETdrawSh
-	TETdraw
-
-	local timeNd=$(date -u +%s)
-	((timePause += timeNd - timeSt))
-}
-
-#+=============================================================================
-drawRkt() {
-	local aty=$1
-	local atx=$2
-	local clr=  # 99: exhaust
-	[[ "$3" == "99" ]] && clr=99 || clr="${atPFX}${3};${bgBLK}${atSFX}"
-	shift
-	shift
-	shift
-
-	local exc=("${fgRED}" "${atBLD};${fgRED}" "${fgYEL}") # exhaust colours
-	local y=0
-	while [[ ! -z $1 ]]; do 
-		if [[ $(($aty +$y)) -ge 1 ]]; then
-			local x
-			for ((x = 0;  x < ${#1};  x++)); do
-				local ch=${1:$x:1}
-				local goto="\033[$(($aty+$y));$(($atx+$x))H"
-				if [[ "$clr" != "99" ]]; then
-					local ink=$clr
-				else 
-					local n=$RANDOM
-					local r=$(($n % ${#exc[@]}))
-					local ink="${atPFX}${exc[$r]};${bgBLK}${atSFX}"
-				fi
-				case "$ch" in
-					"¬" )  continue ;;
-					"X" )  echo -en "${goto}${atOFF} " ;;
-					*   )  echo -en "${goto}${ink}${ch}" ;;
-				esac
-			done
-		fi
-		((y++))
-		shift
-	done
-
-}
-
-#+=============================================================================
-getInitials() {
-	local sc=
-	
-	GOTO $(($PFy + 10)) $(($PFx + 2))
-	echo -en "${BBLK}-${WHT}-${YEL}- HIGH SCORE ${YEL}-${WHT}-${BBLK}-"
-
-	GOTO $(($PFy + 12)) $(($PFx + 5))
-	printf -v sc "%'10d" $score
-	echo -en "${WHT}▐${clrSCOREv}${sc}${WHT}▌"
-
-	GOTO $(($PFy + 14)) $(($PFx + 4))
-	echo -en "${MAG}INITIALS: ${clrNAME}▌   ▐"
-
-	local AZ=
-	[[ $LANG == RU ]] && AZ=$AZRU || AZ=$AZEN
-
-	local cur=0
-	local chr=$((${#AZ}-1))
-	local name=("${nbsp}" "${nbsp}" "${nbsp}")
-	name[$cur]=${AZ:$chr:1}
-
-	STATUS="Identify yourself, human."
-	STATUSupdate
-
-	local clr=${clrNAME}
-	local next=$(($(date +%s%N | sed -e 's/\(.*\)....../\1/') +300))
-	keyFlush
-	while : ; do
-		local now=$(date +%s%N | sed -e 's/\(.*\)....../\1/')
-		if [[ $now -gt $next ]]; then
-			next=$(($(date +%s%N | sed -e 's/\(.*\)....../\1/') +300))
-			[[ "$clr" == "${clrNAME}" ]] && clr=${clrNAMEc} || clr=${clrNAME}
-		fi
-		GOTO $(($PFy + 14)) $(($PFx + 15 + $cur))
-		echo -en "${clr}${name[$cur]}"
-		keyGet
-		case $KEY in
-			[Qq] ) 
-				if   [[ ${AZ:1:1} == "B" ]]; then 
-					AZ=$AZRU
-				elif [[ ${AZ:1:1} == "Б" ]]; then 
-					AZ="≡ßÇ"
-				else
-					AZ=$AZEN
-				fi 
-				name[$cur]=${AZ:$chr:1} 
-				;;
-
-			RIGHT | [dD] | [xX.] )  
-				if [[ $cur -lt 2 ]]; then
-					GOTO $(($PFy + 14)) $(($PFx + 15 + $cur))
-					echo -en "${clrNAME}${name[$cur]}"
-					((cur++)) 
-					[[ ${name[$cur]} == "${nbsp}" ]] && name[$cur]="${AZ:$chr:1}"
-				fi ;;
-						 
-			LEFT  | [aA] )  
-				if [[ $cur -gt 0 ]]; then
-					GOTO $(($PFy + 14)) $(($PFx + 15 + $cur))
-					echo -en "${clrNAME}${name[$cur]}"
-					((cur--)) 
-				fi ;;
-			
-			[zZ,] )  
-				name[$cur]=" "
-				if [[ $cur -gt 0 ]]; then
-					GOTO $(($PFy + 14)) $(($PFx + 15 + $cur))
-					echo -en "${clrNAME}${name[$cur]}"
-					((cur--)) 
-				fi ;;
-
-			DOWN | [sS]  )
-				chr=$((z = $chr +${#AZ} -1, z % ${#AZ}))
-				name[$cur]=${AZ:$chr:1} 
-				;;
-			
-			[wW] | UP    ) 
-				chr=$((z = $chr +1, z % ${#AZ}))
-				name[$cur]=${AZ:$chr:1}
-				;;
-			
-			[pP]         ) break ;;
-		esac
-		sleep 0.05
-		STATUSupdate
-	done
-	STATUS=
-	STATUSupdate
-	
-	if [[ $1 -le 2 ]]; then # move 2nd -> 3rd
-		local old=$(grep "^~hs:${LEVEL},2," ${CMD} | sed "s/\([^,],\).\(.*\)/\13\2/")
-		#                       -v-    -^-                                -^-
-		sed -ie "s/^~hs:${LEVEL},3,.*/${old}/" ${CMD}
 	fi
-	if [[ $1 -eq 1 ]]; then # move 1st -> 2nd
-		local old=$(grep "^~hs:${LEVEL},1," ${CMD} | sed "s/\([^,],\).\(.*\)/\12\2/")
-		sed -ie "s/^~hs:${LEVEL},2,.*/${old}/" ${CMD}
-	fi
-	# add new entry
-	local hsl="${name[0]}${name[1]}${name[2]},${score}"
-	hsl="${hsl},${scoreLin},${scoreMulMax},${scoreBest},${timeTotal},${SEED}"
-	local tot=0
-	for i in L J S Z T O I ; do
-		eval tet=('$'{tet$i[@]})
-		hsl="${hsl},${tet[8]}"
-		((tot += ${tet[8]}))
-	done
-	hsl="${hsl},${tot}"
-	hsl="${hsl},${tetSilv},${tetGold}"
-	sed -ie "s/^\(~hs:${LEVEL},${hs},\).*/\1${hsl}/" ${CMD}
 
-}
-
-#+=============================================================================
-rktLoadSprites() {
-	# load rocket sprites
-	RKT=() ; while read -r l ; do RKT+=("${l:7:-1}") ; done <<< $(grep "^rocket:" ${CMD})
-	X1A=() ; while read -r l ; do X1A+=("${l:7:-1}") ; done <<< $(grep "^rx1a_.:" ${CMD})
-	X1B=() ; while read -r l ; do X1B+=("${l:7:-1}") ; done <<< $(grep "^rx1b_.:" ${CMD})
-	X2A=() ; while read -r l ; do X2A+=("${l:7:-1}") ; done <<< $(grep "^rx2a_.:" ${CMD})
-	X2B=() ; while read -r l ; do X2B+=("${l:7:-1}") ; done <<< $(grep "^rx2b_.:" ${CMD})
-	X3A=() ; while read -r l ; do X3A+=("${l:7:-1}") ; done <<< $(grep "^rx3a_.:" ${CMD})
-	X3B=() ; while read -r l ; do X3B+=("${l:7:-1}") ; done <<< $(grep "^rx3b_.:" ${CMD})
-	X4A=() ; while read -r l ; do X4A+=("${l:7:-1}") ; done <<< $(grep "^rx4a_.:" ${CMD})
-	X4B=() ; while read -r l ; do X4B+=("${l:7:-1}") ; done <<< $(grep "^rx4b_.:" ${CMD})
-	GND=() ; while read -r l ; do GND+=("${l:7:-1}") ; done <<< $(grep "^rktgnd:" ${CMD})
-	STAR=() ; while read -r l ; do STAR+=("${l:8:-1}") ; done <<< $(grep "^rktstar:" ${CMD})
-	MOON=() ; while read -r l ; do MOON+=("${l:8:-1}") ; done <<< $(grep "^rktmoon:" ${CMD})
-	RKTLOADED=1
-}
-
-#+=============================================================================
-rktReveal() {  # (draw_rocket)
-	[[ "$RKTLOADED" != "1" ]] && rktLoadSprites
-	
-	local y=
-	for (( y = 0;  y < 19;  y++)); do
-		if [[ $y -lt 5 ]]; then
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${fgCYN}" "${STAR[$y]}"
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${atBLD};${fgWHT}" "${MOON[$y]}"
-		elif [[ $y -lt 7 ]]; then
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${fgCYN}" "${STAR[$y]}"
-		elif [[ $y -le 8 ]]; then
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${atBLD};${fgMAG}" "                    "
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${fgCYN}" "${STAR[$y]}"
-			[[ ! -z $1 ]] && drawRkt $(($PFy+$y)) $(($PFx+3)) "${atBLD};${fgMAG}" "${RKT[$(($y-7))]}"
-		elif [[ $y -lt 18 ]]; then
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${atBLD};${fgMAG}" "                    "
-			[[ ! -z $1 ]] && drawRkt $(($PFy+$y)) $(($PFx+3)) "${atBLD};${fgMAG}" "${RKT[$(($y-7))]}"
-		else
-			drawRkt $(($PFy+$y)) $(($PFx+1)) "${fgGRN}" "${GND[@]}"
-		fi
-		[[ $(($y%3)) -ne 2 ]] && sleep 0.12
-	done
-}
-
-#+=============================================================================
-cleanup() {
-	local cs=("")
-		cs+=("──╖╓────╖╓────╖╓")
-		cs+=("╓─╖║ °╓─╖║ °╓─╖║")
-		cs+=("╙─╖║  ╙─╖║  ╙─╖║")
-
-	local y=
-	for ((y = 1;  y <= 3;  y++)); do
-		echo -en "\033[${y};$(($PFx +3))H${CSminiClr}${cs[$y]}"
-	done
-
-	for (( y = 0;  y <= 11;  y++)); do
-		local l=$(($y % 3))
-		
-		echo -en "\033[$(($BSy+$y));$(($BSx+1))H${atOFF}          " 
-
-		if [[ $y -le 4  && $y -gt 0 ]]; then
-			echo -en "\033[$(($SHy+$y));$(($SHx+1))H${atOFF}          " 
-		fi
-		[[ $l -ne 2 ]] && sleep 0.12
-	done
-
-}
-
-#+=============================================================================
-teleport() {
-	local y=
-	local x=
-	local MASK=("${RKT[@]}")
-	local d=$((${#MASK[@]} -1))
-
-	for ((y = 0;  y < $d;  y++)); do
-		MASK[$y]=$(echo "${MASK[$y]}" | sed 's/ /S/g')
-		MASK[$y]=$(echo "${MASK[$y]}" | sed 's/X/¬/g')
-		MASK[$y]=$(echo "${MASK[$y]}" | sed 's/[^¬S]/G/g')
-	done
-
-	local hit=1
-	while [[ $hit -eq 1 ]] ; do
-		hit=0
-		for ((y = 0;  y < $d;  y++)); do
-			local w=${#MASK[$y]}
-			for ((x = 0;  x < $w;  x++)); do
-				local mch="${MASK[$y]:$x:1}"
-				case "$mch" in
-					"¬" ) continue ;;
-					"S" ) 
-						local s=" \`\'.,;:"  
-						local n=$RANDOM
-						((n %= ${#s}))
-						if [[ $n -eq 0 ]]; then
-							clr="${atBLD};${fgMAG}"
-							ch=" "
-							MASK[$y]="${MASK[$y]:0:$x}${ch}${MASK[$y]:$(($x+1))}"
-						else
-							local c=$RANDOM
-							((c %= 3))
-							case "$c" in
-								0 ) clr="${atBLD};${fgBLK}"  ;;
-								1 ) clr="${fgWHT}"           ;;
-								2 ) clr="${fgBLU}"           ;;
-							esac
-							ch="${s:$n:1}"
-							hit=1
-						fi ;;
-					"G" )
-						local s=" \\/{}[]()"
-						local n=$RANDOM
-						((n %= ${#s}))
-						if [[ $n -eq 0 ]]; then
-							clr="${atBLD};${fgMAG}"
-							ch="${RKT[$y]:$x:1}"
-							MASK[$y]="${MASK[$y]:0:$x}${ch}${MASK[$y]:$(($x+1))}"
-						else
-							local c=$RANDOM
-							((c %= 3))
-							case "$c" in
-								0 ) clr="${atBLD};${fgBLK}"  ;;
-								1 ) clr="${fgWHT}"           ;;
-								2 ) clr="${fgBLU}"           ;;
-							esac
-							ch="${s:$n:1}"
-							hit=1
-						fi ;;
-					*)
-						clr="${atBLD};${fgMAG}"
-						ch=${mch}
-						;;
-				esac
-				GOTO $(($PFy +$y +7)) $(($PFx +$x +3))
-				echo -en "${atPFX}${clr};${bgBLK}${atSFX}${ch}"
-			done
-			sleep 0.007
-		done
-	done
-}
-
-#+=============================================================================
-takeoff() {
-	local tly=$PFy
-	local tlx=$PFx
-
-	local ry=$(($tly+7))
-	local rx=$(($tlx+3))
-	local tx=$(($rx-2))
-	local spd=100
-	local step=2
-
-	# picture
-#	drawRkt $(($tly)) $(($tlx+1)) "${fgCYN}" "${STAR[@]}"
-#	drawRkt $(($tly)) $(($tlx+1)) "${atBLD};${fgWHT}" "${MOON[@]}"
-#	drawRkt $(($ry)) $(($rx)) "${atBLD};${fgMAG}" "${RKT[@]}"
-#	drawRkt $(($tly+18)) $(($tx)) "${fgGRN}" "${GND[@]}"
-	sleep 1
-
-	# start engines
-	local i=
-	local n=19
-	for (( i = 0 ;  i < $n;  i++)); do
-		if (($i & 1)); then drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X1A[@]}"
-		else                drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X1B[@]}" ; fi
-		sleep 0.$spd
-	done
-
-	# lift off
-	((ry--))
-	drawRkt $(($tly)) $(($tlx+1)) "${fgCYN}" "${STAR[@]}"
-	drawRkt $(($tly)) $(($tlx+1)) "${atBLD};${fgWHT}" "${MOON[@]}"
-	drawRkt $(($ry)) $(($rx)) "${atBLD};${fgMAG}" "${RKT[@]}"
-	
-	for (( n += $step;  i < $n;  i++)); do
-		if (($i & 1)); then drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X2A[@]}"
-		else                drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X2B[@]}" ; fi
-		sleep 0.$spd
-	done
-	
-	# 3
-	((ry--))
-	drawRkt $(($tly)) $(($tlx+1)) "${fgCYN}" "${STAR[@]}"
-	drawRkt $(($tly)) $(($tlx+1)) "${atBLD};${fgWHT}" "${MOON[@]}"
-	drawRkt $(($ry)) $(($rx)) "${atBLD};${fgMAG}" "${RKT[@]}"
-	
-	for (( n += $step;  i < $n;  i++)); do
-		if (($i & 1)); then drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X3A[@]}"
-		else                drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X3B[@]}" ; fi
-		sleep 0.$spd
-	done
-	
-	# fly away
-	local z=
-	for (( z = 1;  z < 25;  z++)); do
-		((ry--))
-		drawRkt $(($tly)) $(($tlx+1)) "${fgCYN}" "${STAR[@]}"
-		drawRkt $(($tly)) $(($tlx+1)) "${atBLD};${fgWHT}" "${MOON[@]}"
-		drawRkt $(($ry)) $(($rx)) "${atBLD};${fgMAG}" "${RKT[@]}"
-		
-		for (( n += $step;  i < $n;  i++)); do
-			if (($i & 1)); then drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X4A[@]}"
-			else                drawRkt $(($ry+${#RKT[@]}-2)) $(($rx+2)) 99 "${X4B[@]}" ; fi
-			[[ $z -eq 1 ]] && drawRkt $(($tly+18)) $(($tx)) "${fgGRN}" "${GND[@]}"
-			sleep 0.$spd
-		done
-		# accelerate
-		spd=$((1$spd -1003))
-		printf -v spd "%03d" $spd
-		#DBG $spd
-	done
-
-}
-
-#+=============================================================================
-brickout() {
-	local x=
-	local y=
-	local l=
-
-	echo -en "${atPFX}${atBLD};${fgBLK};${bgBLK}${atSFX}"
-#	echo -en "${atPFX}${fgRED};${bgBLK}${atSFX}"
-	for (( y = 18;  y >= 0;  y--)); do
-		local l=$(($y % 3))
-		case $l in
-			"0" )  echo -en "\033[$(($PFy+$y));$(($PFx+1))H█ ████ ████ ████ ███" ;;
-			"1" )  echo -en "\033[$(($PFy+$y));$(($PFx+1))H▄▄▄ ▄▄▄▄ ▄▄▄▄ ▄▄▄▄ ▄" ;;
-			"2" )  echo -en "\033[$(($PFy+$y));$(($PFx+1))H▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀" ;;
-		esac
-		
-		if [[ $y -le 11 ]]; then
-			case $l in
-				"0" )  echo -en "\033[$(($BSy+$y));$(($BSx+1))H█ ████ ███" ;;
-				"1" )  echo -en "\033[$(($BSy+$y));$(($BSx+1))H▄▄▄ ▄▄▄▄ ▄" ;;
-				"2" )  echo -en "\033[$(($BSy+$y));$(($BSx+1))H▀▀▀ ▀▀▀▀ ▀" ;;
-			esac
-		fi
-		
-		if [[ $y -le 4  && $y -gt 0 ]]; then
-			case $l in
-				"0" )  echo -en "\033[$(($SHy+$y));$(($SHx+1))H▀▀▀ ▀▀▀▀ ▀" ;;
-				"1" )  echo -en "\033[$(($SHy+$y));$(($SHx+1))H█ ████ ███" ;;
-				"2" )  echo -en "\033[$(($SHy+$y));$(($SHx+1))H▄▄▄ ▄▄▄▄ ▄" ;;
-			esac
-		fi
-		[[ $l -ne 2 ]] && sleep 0.12
-	done
-}
-
-#+=============================================================================
-DBG() {
-	[[ ($DEBUG -eq 1) && -p $DBGpipe ]] && echo $@  >$DBGpipe
-}
-
-#+=============================================================================
-# You cannot have any spaces in your format string
-# How to fix?
-#
-DBGF() {
-	[[ ($DEBUG -eq 1) && -p $DBGpipe ]] && printf $@  >$DBGpipe
-}
-
-#+=============================================================================
-DBGmonitor() {
-	[[ ! -e $DBGpipe ]] && mknod $DBGpipe p
-	if [[ -p $DBGpipe ]]; then
-		local d=$(date +%Y/%m/%d_%T)
-		echo -e "${GRN}$NAME debug monitor ${atOFF}... ${YEL}$d ${atOFF}... ${RED}^C to exit.${atOFF}"
-		ctrlC_init ctrlC_pipe  # trap ^C
-		tail -f $DBGpipe
+	if [[ "$clr" == "$CbLast" ]]; then
+		CbClr=""
 	else
-		echo "! Error: $DBGpipe exists, and is not a named pipe"
+		CbClr="$clr"
+		CbLast="$clr"
 	fi
-	exit 0
 }
 
-#+=============================================================================
-introduce() {
-	local slp=0.2
-	local i=
-	
-	TETdrawSh
-	sleep $slp
-	TETundrawSh
-	sleep $slp
-	TETdrawSh
-	sleep $slp
-	
-	for ((i = 1;  i <= 3;  i++)); do
-		TETadd 0  # 0 = do NOT update stats
-		TETdrawBs  # redraw basket tets
-		sleep $slp
-		TETdrawTet "${nbsp}${nbsp}" $(($BSy -1 +2*4)) $(($BSx +3)) 0 ${tet3[@]}
-		sleep $slp
-		TETdrawTet "${tetGR}"     $(($BSy -1 +2*4)) $(($BSx +3)) 0 ${tet3[@]}
-		sleep $slp
-	done
+#+============================================================================= ========================================
+helpCombo() {
+	local y  x  offi  off  s
 
-	TETadd 1  # 0 = do NOT update stats
-	TETdrawBs  # redraw basket tets
-	TETdraw
-	sleep $slp
-	TETundraw
-	sleep $slp
-	TETdraw
-}
-
-#+=============================================================================
-segment() {
-	local cnt=()
-	cnt+=("1101111") #  1    _
-	cnt+=("0001001") # 234  |_|
-	cnt+=("1011110") # 567  |_|
-	cnt+=("1011011")
-	cnt+=("0111001")
-	cnt+=("1110011")
-	cnt+=("1110111")
-	cnt+=("1001001")
-	cnt+=("1111111")
-	cnt+=("1111001")
-	
-	local clr=("${BBLK}" "${GRN}")
-	
-	echo -en "\033[1C"
-	echo -en "${clr[${cnt[$1]:0:1}]}__\033[3D\033[1B"
-	echo -en "${clr[${cnt[$1]:1:1}]}|"
-	echo -en "${clr[${cnt[$1]:2:1}]}__"
-	echo -en "${clr[${cnt[$1]:3:1}]}|\033[4D\033[1B"
-	echo -en "${clr[${cnt[$1]:4:1}]}|"
-	echo -en "${clr[${cnt[$1]:5:1}]}__"
-	echo -en "${clr[${cnt[$1]:6:1}]}|\033[4D\033[1B"
-}
-
-#+=============================================================================
-dumpHi() {
-	CSdrawBackdropReveal 0
-
-	local mode=0
-	echo -en "$GRN"
-	
-	STATUS=
-	STATUSupdate
-
-	GOTO 1 1
-	
-	local off=7
-
-	echo -e  "\033[${off}C${BLU}╔════════════╦"
-    echo -e  "\033[${off}C║${CYN} Ranking    ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} Initials   ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} Score      ${BLU}║"
-    echo -e  "\033[${off}C╟─----------─╫"
-    echo -e  "\033[${off}C║${CYN} Lines      ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} Best Mult. ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} Best Piece ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} Play Time  ${BLU}║"
-    echo -e  "\033[${off}C╟─----------─╫"
-    echo -e  "\033[${off}C║${BWHT} Silver     ${BLU}║"
-    echo -e  "\033[${off}C║${YEL} Gold       ${BLU}║"
-    echo -e  "\033[${off}C╟─----------─╫"
-    echo -e  "\033[${off}C║${tetL[4]}     L-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetJ[4]}     J-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetS[4]}     S-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetZ[4]}     Z-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetT[4]}     T-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetO[4]}     O-tets ${BLU}║"
-    echo -e  "\033[${off}C║${tetI[4]}     I-tets ${BLU}║"
-    echo -e  "\033[${off}C╟─----------─╫"
-    echo -e  "\033[${off}C║${CYN} Total Tets ${BLU}║"
-    echo -e  "\033[${off}C║${CYN} PRNG Seed  ${BLU}║"
-    echo -e  "\033[${off}C╚════════════╩"
-#    echo -en "\033[${off}C ${BBLK}▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀"
-
-	local ly=2
-	local lx=63                                                                            
-										   
-    echo -e  "\033[$(($ly+0));${lx}H${MAG}┌──────────┐"
-    echo -e  "\033[$(($ly+1));${lx}H${MAG}│          │" #${BBLK}█"
-    echo -e  "\033[$(($ly+2));${lx}H${MAG}│          │" #${BBLK}█"
-    echo -e  "\033[$(($ly+3));${lx}H${MAG}│          │" #${BBLK}█"
-    echo -e  "\033[$(($ly+4));${lx}H${MAG}│          │" #${BBLK}█"                 
-    echo -e  "\033[$(($ly+5));${lx}H${MAG}├──────────┤" #${BBLK}█"              
-	
-    echo -en "\033[$(($ly+6));${lx}H${MAG}│ "
-    echo -en "${atPFX}${fgBLU};${bgBLK}${atSFX}▐${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}←${atPFX}${fgBLU};${bgBLK}${atSFX}▌"
-    echo -en "  " #\033[4C"
-    echo -en "${atPFX}${fgBLU};${bgBLK}${atSFX}▐${atPFX}${atBLD};${fgYEL};${bgBLU}${atSFX}→${atPFX}${fgBLU};${bgBLK}${atSFX}▌"
-	echo -en "${MAG} │" #${BBLK}█"
-
-    echo -e  "\033[$(($ly+7));${lx}H${MAG}└──────────┘" #${BBLK}█"
-#    echo -en "\033[$(($ly+8));$(($lx+1))H${BBLK}°╓─╖║ °╓─╖║ "
-
-	local pos=("1st" "2nd" "3rd")  
-	local tr=("${BLU}╤" "${BLU}╤" "${BLU}╗")            
-	local jr=("${BLU}┼" "${BLU}┼" "${BLU}╢") #${BBLK}█")            
-	local rt=("${BLU}│" "${BLU}│" "${BLU}║") #${BBLK}█")            
-	local br=("${BLU}╧" "${BLU}╧" "${BLU}╝") #${BBLK}█")            
-	
-	LEVEL=0                        
-	while true ; do
-		showHi 0
-		GOTO $(($ly+1)) $(($lx+2))
-		segment $(($LEVEL/10))
-		GOTO $(($ly+1)) $(($lx+6))
-		segment $(($LEVEL%10))                                 
-		for ((y = 1;  y <= 24;  y++)); do                      
-			for ((h = 0;  h <= 2;  h++)); do
-				GOTO $y $((${off} +15 + $h*13))
-				local hi=
-				eval hi=('$'{HI${h}[@]})
-				case $y in
-					 1 )  printf  "${BLU}════════════${tr[$h]}"                ;;
-					 2 )  printf  "${WHT}    %3s     ${rt[$h]}" "${pos[${h}]}" ;;
-					 3 )  printf  "${WHT}    %3s     ${rt[$h]}" "${hi[2]}"     ;;
-					 4 )  printf       "${WHT} %'10d ${rt[$h]}" "${hi[3]}"     ;;
-					 5 )  printf  "${BLU}─----------─${jr[$h]}"                ;;
-					 6 )  printf   "${WHT} [%4d]     ${rt[$h]}" "${hi[4]}"     ;;
-					 7 )  printf  "${WHT} [x%3d]     ${rt[$h]}" "${hi[5]}"     ;; 
-					 8 )  printf   "${WHT} [%4d]     ${rt[$h]}" "${hi[6]}"     ;;
-					 9 )  local t="$(date -u -d @${hi[7]} +"%T")"
-					      printf       "${WHT}   %8s ${rt[$h]}" "${t}"         ;;
-					10 )  printf  "${BLU}─----------─${jr[$h]}"                ;;
-					11 )  printf  "${WHT} [%3d]      ${rt[$h]}" "${hi[17]}"    ;;
-					12 )  printf  "${WHT} [%3d]      ${rt[$h]}" "${hi[18]}"    ;;
-					13 )  printf  "${BLU}─----------─${jr[$h]}"                ;;
-					14 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[9]}"     ;;
-					15 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[10]}"    ;;
-					16 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[11]}"    ;;
-					17 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[12]}"    ;;
-					18 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[13]}"    ;;
-					19 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[14]}"    ;;
-					20 )  printf  "${WHT}     %3d    ${rt[$h]}" "${hi[15]}"    ;;
-					21 )  printf  "${BLU}─----------─${jr[$h]}"                ;;
-					22 )  printf    "${WHT}   %5d    ${rt[$h]}" "${hi[16]}"    ;;
-					23 )  printf    "${WHT}   %5d    ${rt[$h]}" "${hi[8]}"     ;;
-					24 )  printf  "${BLU}════════════${br[$h]}"                ;;
-				esac      
+	offi=0
+	while : ; do
+		CbLast=""
+		off=$((${COFF[$offi]} -1))
+		for ((y = 1;  y <= 25;  y++)); do
+			s=""
+			for ((x = 0;  x < 80;  x++)); do
+				helpCbGet $y $x $off
+				s="${s}${CbClr}${CbCh}"
 			done
+			PAT $y 1 "${s}"
+			if [[ $y -eq  2  &&  $offi -ne 0 ]]; then
+				PAT  2 77 "${keyL}↑${keyR}"
+				CbLast="void"
+			fi
+			if [[ $y -eq 24  &&  $offi -ne $((${#COFF[@]} -1)) ]]; then
+				PAT 24 77 "${keyL}↓${keyR}"
+				CbLast="void"
+			fi
 		done
-		
-		while ! keyGet ; do sleep 0.1 ; done
-		case $KEY in
-			LEFT  | [aA]   )  [[ $LEVEL -gt  0 ]] && ((LEVEL--)) ;;
-			RIGHT | [dD]   )  [[ $LEVEL -lt 20 ]] && ((LEVEL++)) ;;
-		    BKSP  | [pPqQ] )  break ;;
-		esac
-	done
-}
 
-#+=============================================================================
-BAShTris() {
-	start
-	
-	if [[ ($LEVEL -lt 3) && ($DEBUG -eq 0) && ($STYLE == NORM) ]]; then
-		introduce
-	else
-		TETdrawSh  # draw shoulder piece
-		TETadd 0  # 0 = do NOT update stats
-		TETadd 0  # 0 = do NOT update stats
-		TETadd 0  # 0 = do NOT update stats
-		TETadd 1  # 0 = do NOT update stats
-		TETdrawBs  # redraw basket tets
-		TETdraw
-	fi
-		
-	SPEEDset
-	SPEEDstamp
-	
-	[ "$USEED" == "X" ] && SEED=$RANDOM || SEED=$USEED
-	RND seed $SEED
-	STATUS="Round $RNDs: Fight!"
-	
-	TIMEstart
-	
-#----------------------------------------------------------
-# Main game loop
-#
-	RUN=1
-	while [[ $RUN -eq 1 ]]; do
-		TIMEshow
-		speedNow=$(date +%s%N | sed -e 's/\(.*\)....../\1/')
-		if [ $speedNow -ge $speedNext ]; then
-			(($FREEZE)) || {
-				# auto drop
-				KEY=DOWN
-				auto=1
-			}
-			SPEEDstamp
-		else
-			# get keystroke
+
+		keyFlush
+		while : ; do
+			sleep 0.05
 			keyGet
-			auto=0
-		fi
-		
-		act=0
-		if [ ! -z "$KEY" ] ; then
-			tety=$tetY
-			tetx=$tetX
-			trot=$rot
-		
-			#------------------------------
-			# DEBUG KEYS
-			#
-			(($DEBUG)) && case $KEY in
-				[qQ] | DEL )  TETswap ;;  # shoulder swap
-		
-				6 | ^ ) # move piece UP!!
-					act=1
-					tety=$(($tetY -1))
-					SPEEDstamp
-					;;
-		
-				0 ) # (un)Freeze auto-drop
-					(($FREEZE)) && FREEZE=0 || FREEZE=1
-					;;
-		
-				INS ) # place the piece where it is
-					TETplace
-					PFdrawGrid
-					TETadd 1 ; TETdrawBs ; TETdraw
-					SPEEDstamp
-					;;
-		
-				END ) # discard tetromino
-					TETundraw
-					TETadd 1 ; TETdrawBs ; TETdraw
-					SPEEDstamp
-					;;
-		
-				PGUP ) # advance 1 level (score 10 lines)
-					TETscore 10
-					TETundraw
-					TETadd 1 ; TETdrawBs ; TETdraw
-					SPEEDstamp
-					;;
-		
-				* )  # unknown keystroke
-					;;
+			case ${KEY^^} in
+				[pP]   )  break 2 ;;
+				"BKSP" )  quit 0 ;;
+
+				"DOWN" )
+					if [[ $offi -lt $((${#COFF[@]} -1)) ]]; then
+						((offi++))
+						break
+					fi ;;
+
+				"UP" )
+					if [[ $offi -gt 0 ]]; then
+						((offi--))
+						break
+					fi ;;
 			esac
-		
-			case $KEY in
-				LEFT  | [aA] )  act=1 ; ((tetx--)) ;;
-				RIGHT | [dD] )  act=1 ; ((tetx++)) ;;
-		
-				[zZ,]        )  act=1 ; trot=$((x = $rot +3,  x %4)) ;; # rot left
-				[xX.]        )  act=1 ; trot=$((x = $rot +1,  x %4)) ;; # rot right
-		
-				[qQ] | DEL   ) [ $tetSwap -eq 0 ] && TETswap ;;  # shoulder swap
-		
-				[pP]         )
-					Pause
-					;;
-		
-				F1 | "?" )
-					hideGame
-					Help
-					CSdrawBackdropReveal 0
-					Redraw 2 # 1=fast, 2=don't redraw backdrop
-					Pause
-					;;
-				
-				F12 )
-					hideGame
-					rigGame
-					CSdrawBackdropReveal 0
-					Redraw 2 # 1=fast, 2=don't redraw backdrop
-					TETdrawSh
-					TETdrawBs
-					;;
-				
-				DOWN | [sS] )
-					act=1
-					((tety++))
-#					SPEEDstamp  # restart timer
-					[ $auto -eq 0 ] && ((tetVal += 1))  # speed bonus
-					KEY=DOWN # known name
-					;;
-		
-				[wW] | UP )  # drop
-					KEY=DOWN  # stop shadow redraw
-					for ((y = $tetY;  y < $shadY;  y++)); do
-						TETundraw
-						((tetY++))
-						((tetVal++))
-						TETdraw
-					done
-					((tetVal += 10))
-					TETplace
-					# next please
-					TETadd 1 ; TETdrawBs ; TETdraw
-					SPEEDstamp
-					;;
-		
-				"\`" )
-					Redraw 1
-					TETdraw
-					TETdrawSh
-					TETdrawBs
-					;;
-		
-				BKSP )
-					hideGame
-					STATUS="> CONFIRM SHUT-DOWN?  ${keyL}Y${keyR}/${keyL}N${keyR}"
-					STATUSupdate
-					local timeSt=$(date -u +%s)
-					while true ; do
-						keyGet
-						case $KEY in
-							[yY]   ) 
-								RUN=0  
-								break ;;
-							[nNpP] ) 
-								Redraw 2 # 1=fast, 2=don't redraw backdrop
-								break ;;
-						esac
-						sleep .05
-					done
-					STATUS=""
-					STATUSupdate
-					local timeNd=$(date -u +%s)
-					((timePause += timeNd - timeSt))
-					;;
-
-				* ) ;;
-			esac
-		fi
-		
-		# Collision detection
-		(($act)) && {
-			TETcollide  $tety $tetx ${tet0[$trot]}
-			if ((!$?)); then  # No collision
-				TETundraw
-				tetX=$tetx
-				tetY=$tety
-				rot=$trot
-				TETdraw
-			else  # collision
-#				if                    [ "$KEY" == "DOWN" ]; then  # user can place
-				if [ $auto -eq 1 ] || [ "$KEY" == "DOWN" ]; then  # place only on auto-drop
-					TETplace
-					TETadd 1 ; TETdrawBs ; TETdraw
-					SPEEDstamp
-				fi
-			fi
-		}
-		
-		STATUSupdate
-
-	done  # while(run)
+		done
+	done
 }
+# -MAKE:help.s
+# +MAKE:gameover.dat - gameover sprites
+#!/bin/bash
 
-#==============================================================================
-checkHi() {
-	showHi 0
-	[[ $score -gt ${HI0[3]} ]] && return 1
-	[[ $score -gt ${HI1[3]} ]] && return 2
-	[[ $score -gt ${HI2[3]} ]] && return 3
-	return 0
-}
-
-#==============================================================================
-# MAIN
-#==============================================================================
-#----------------------------------------------------------
-# Parse CLI
-#
-DEBUG=0
-SKIP=0
-FAST=0
-MSG=
-SEED=
-USEED=X
-ADROP=1
-FREEZE=0
-MONITOR=0
-KEYDRV=v2
-
-for i in $@ ; do
-	[ "${i:0:1}" == "+" ] && {
-		USEED=${i:1}
-		continue
-	}
-	case $i in
-		"-d"  | "--debug"   )  DEBUG=1     ;;
-		"-m"  | "--monitor" )  MONITOR=1   ;;
-		"-s"  | "--skip"    )  SKIP=1      ;;
-		"-f"  | "--fast"    )  SKIP=1      
-		                       FAST=1      ;;
-		"-r"  | "--records" )  MSG=RECORDS ;;
-		"-h"  | "--help"    )  MSG=HELP    ;;
-		"-v"  | "--version" )  MSG=VER     ;;
-		"-k1" | "--kdbv1"   )  KEYDRV=v1   ;;
-		* )  ;;
-	esac
-done
-
-if [ "$MSG" == "HELP" ] ; then
-	echo -e "${NAME} v${VER}"
-#	echo "  -d  --debug   : debug mode (extra keys)"
-#	echo "  -m  --monitor : monitor debug messages"
-	echo "  -r  --records : dump hi score records"
-	echo "  -s  --skip    : skip intro sequence"
-	echo "  -f  --fast    : fast startup"
-	echo "  -h  --help    : this info"
-	echo "  -v  --version : show version number"
-	echo "  -k1 --kbdv1   : use v1 keyboard driver (supports WSL)"
-	echo "  +N            : seed(N)"
-	echo ""
-	required
-	echo ""
-	Quit 0 q
-fi
-
-[ "$MSG" == "VER" ] && {
-	echo -e "${NAME} v${VER}"
-	Quit 0 q
-}
-
-[ "$MSG" == "RECORDS" ] && {
-	checkSys
-	keyStart
-	tput civis
-	dumpHi
-	keyStop
-#	tput cnorm
-	echo ""
-	Quit 0 
-}
-
-(($MONITOR)) && DBGmonitor  # will not return!
-
-#----------------------------------------------------------
-# Set up the system
-#
-checkSys
-
-ctrlC_init ctrlC_quit  # trap ^C
-keyStart ctrlC_quit    # init key scanner (incl. `stty -echo`)
-tput civis             # cursor invisible
-
-#----------------------------------------------------------
-# Intro screens
-#
-!(($SKIP)) && Intro
-
-#----------------------------------------------------------
-# Initialise the playfield
-#
-PFinit
-Redraw $FAST
-statSpeed=$statFast
-LEVEL=0
-boredCnt=0
-
-# Run the game
-RUN=1
-while (($RUN)); do
-	BAShTris
-	
-	# Game over?
-	if [[ $RUN -eq 2 ]]; then
-		STATUS="All your base are belong to us!"
-		STATUSupdate
-		brickout
-		sleep 1
-		
-		checkHi
-		hs=$?
-		if [[ $hs -gt 0 ]]; then
-			rktReveal 
-			if [[ ($hs -eq 1) && (${LEVEL} -ge 10) ]]; then
-				teleport
-				takeoff
-			fi
-			getInitials $hs
-		fi
-		FAST=1
-		cleanup &
-		scrollIn
-		PFinit
-		TETscoreShow
-	fi
-done
-
-Quit 0
-
-# People craving social approval may edit the hi-score table by hand
-cat <<EOT
-0  : ~hs:${LEVEL},                     level
-1  : ${hs}                             position
-2  : ${name[0]}${name[1]}${name[2]},   initials
-3  : ${score},                         final score
-4  : ${scoreLin},                      lines made
-5  : ${scoreMulMax},                   maximum multiplier
-6  : ${scoreBest},                     best piece score
-7  : ${timeTotal},                     game time (excluding pauses)
-8  : ${SEED}                           game seed
-9  : ${tetL[8]}                        L-tet count
-10 : ${tetJ[8]}                        J-tet count
-11 : ${tetS[8]}                        S-tet count
-12 : ${tetZ[8]}                        Z-tet count
-13 : ${tetT[8]}                        T-tet count
-14 : ${tetO[8]}                        O-tet count
-15 : ${tetI[8]}                        I-tet count
-16 : ${tot}                            total tet's
-17 : ${tetSilv}                        silver combos
-18 : ${tetGold}                        gold combos
-~hs:0,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:0,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:0,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:1,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:1,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:1,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:2,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:2,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:2,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:3,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:3,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:3,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:4,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:4,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:4,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:5,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:5,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:5,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:6,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:6,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:6,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:7,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:7,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:7,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:8,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:8,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:8,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:9,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:9,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:9,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:10,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:10,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:10,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:11,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:11,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:11,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:12,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:12,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:12,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:13,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:13,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:13,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:14,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:14,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:14,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:15,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:15,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:15,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:16,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:16,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:16,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:17,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:17,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:17,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:18,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:18,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:18,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:19,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:19,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:19,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:20,1,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:20,2,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-~hs:20,3,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-
-# debug test arenas
-
-tc~0~titl="Clear grid"
-tc~0~tetY=$tetSty
-tc~0~tetX=$tetStx
-tc~0~rot=0
-tc~0~tet0=("${tetI[@]}")
-tc~0~tet1=("${tetI[@]}")
-tc~0~tet2=("${tetI[@]}")
-tc~0~tet3=("${tetI[@]}")
-tc~0~tet4=("${tetI[@]}")
-tc~0~PF[ 0]="F880808080808080808080F1"
-tc~0~PF[ 1]="F880808080808080808080F1"
-tc~0~PF[ 2]="F880808080808080808080F1"
-tc~0~PF[ 3]="F880808080808080808080F1"
-tc~0~PF[ 4]="F880808080808080808080F1"
-tc~0~PF[ 5]="F880808080808080808080F1"
-tc~0~PF[ 6]="F880808080808080808080F1"
-tc~0~PF[ 7]="F880808080808080808080F1"
-tc~0~PF[ 8]="F880808080808080808080F1"
-tc~0~PF[ 9]="F880808080808080808080F1"
-tc~0~PF[10]="F880808080808080808080F1"
-tc~0~PF[11]="F880808080808080808080F1"
-tc~0~PF[12]="F880808080808080808080F1"
-tc~0~PF[13]="F880808080808080808080F1"
-tc~0~PF[14]="F880808080808080808080F1"
-tc~0~PF[15]="F880808080808080808080F1"
-tc~0~PF[16]="F880808080808080808080F1"
-tc~0~PF[17]="F880808080808080808080F1"
-tc~0~PF[18]="F880808080808080808080F1"
-tc~0~PF[19]="F880808080808080808080F1"
-tc~0~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~1~titl="Add O for Perfect"
-tc~1~tetY=$(($tetSty+7))
-tc~1~tetX=$tetStx
-tc~1~rot=1
-tc~1~tet0=("${tetO[@]}")
-tc~1~tet1=("${tetO[@]}")
-tc~1~tet2=("${tetO[@]}")
-tc~1~tet3=("${tetO[@]}")
-tc~1~tet4=("${tetO[@]}")
-tc~1~PF[ 0]="F880808080808080808080F1"
-tc~1~PF[ 1]="F880808080808080808080F1"
-tc~1~PF[ 2]="F880808080808080808080F1"
-tc~1~PF[ 3]="F880808080808080808080F1"
-tc~1~PF[ 4]="F880808080808080808080F1"
-tc~1~PF[ 5]="F880808080808080808080F1"
-tc~1~PF[ 6]="F880808080808080808080F1"
-tc~1~PF[ 7]="F880808080808080808080F1"
-tc~1~PF[ 8]="F880808080808080808080F1"
-tc~1~PF[ 9]="F880808080808080808080F1"
-tc~1~PF[10]="F880808080808080808080F1"
-tc~1~PF[11]="F880808080808080808080F1"
-tc~1~PF[12]="F880808080808080808080F1"
-tc~1~PF[13]="F880808080808080808080F1"
-tc~1~PF[14]="F880808080808080808080F1"
-tc~1~PF[15]="F880808080808080808080F1"
-tc~1~PF[16]="F880808080808080808080F1"
-tc~1~PF[17]="F880808080808080808080F1"
-tc~1~PF[18]="F821292928808021292928F1"
-tc~1~PF[19]="F821292928808021292928F1"
-tc~1~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~2~titl="Add I for Perfect Tetris"
-tc~2~tetY=$(($tetSty+5))
-tc~2~tetX=$tetStx
-tc~2~rot=1
-tc~2~tet0=("${tetI[@]}")
-tc~2~tet1=("${tetI[@]}")
-tc~2~tet2=("${tetI[@]}")
-tc~2~tet3=("${tetI[@]}")
-tc~2~tet4=("${tetI[@]}")
-tc~2~PF[ 0]="F880808080808080808080F1"
-tc~2~PF[ 1]="F880808080808080808080F1"
-tc~2~PF[ 2]="F880808080808080808080F1"
-tc~2~PF[ 3]="F880808080808080808080F1"
-tc~2~PF[ 4]="F880808080808080808080F1"
-tc~2~PF[ 5]="F880808080808080808080F1"
-tc~2~PF[ 6]="F880808080808080808080F1"
-tc~2~PF[ 7]="F880808080808080808080F1"
-tc~2~PF[ 8]="F880808080808080808080F1"
-tc~2~PF[ 9]="F880808080808080808080F1"
-tc~2~PF[10]="F880808080808080808080F1"
-tc~2~PF[11]="F880808080808080808080F1"
-tc~2~PF[12]="F880808080808080808080F1"
-tc~2~PF[13]="F880808080808080808080F1"
-tc~2~PF[14]="F880808080808080808080F1"
-tc~2~PF[15]="F880808080808080808080F1"
-tc~2~PF[16]="F89199999C8024A1A9A9ACF1"
-tc~2~PF[17]="F89599999A8026A5A9A9AAF1"
-tc~2~PF[18]="F89399999C8026A3A9A9ACF1"
-tc~2~PF[19]="F89199999A8022A1A9A9AAF1"
-tc~2~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~3~titl="Test Frag+Combo"
-tc~3~tetY=$(($tetSty+8))
-tc~3~tetX=$(($tetStx+5))
-tc~3~rot=1
-tc~3~tet0=("${tetT[@]}")
-tc~3~tet1=("${tetI[@]}")
-tc~3~tet2=("${tetI[@]}")
-tc~3~tet3=("${tetI[@]}")
-tc~3~tet4=("${tetI[@]}")
-tc~3~PF[ 0]="F880808080808080808080F1"
-tc~3~PF[ 1]="F880808080808080808080F1"
-tc~3~PF[ 2]="F880808080808080808080F1"
-tc~3~PF[ 3]="F880808080808080808080F1"
-tc~3~PF[ 4]="F880808080808080808080F1"
-tc~3~PF[ 5]="F880808080808080808080F1"
-tc~3~PF[ 6]="F880808080808080808080F1"
-tc~3~PF[ 7]="F880808080808080808080F1"
-tc~3~PF[ 8]="F880808080808080808080F1"
-tc~3~PF[ 9]="F880808080808080808080F1"
-tc~3~PF[10]="F880808080808080808080F1"
-tc~3~PF[11]="F880808080808080808080F1"
-tc~3~PF[12]="F880808080808080808080F1"
-tc~3~PF[13]="F880808080808080808080F1"
-tc~3~PF[14]="F880808080808080808080F1"
-tc~3~PF[15]="F880808080808080808080F1"
-tc~3~PF[16]="F834808080808080808080F1"
-tc~3~PF[17]="F837388080808080808080F1"
-tc~3~PF[18]="F8326568151c151c717c80F1"
-tc~3~PF[19]="F8616a80131a131a807378F1"
-tc~3~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~4~titl="Add J for DOUBLE Combo"
-tc~4~tetY=$(($tetSty+3))
-tc~4~tetX=$tetStx
-tc~4~rot=3
-tc~4~tet0=("${tetJ[@]}")
-tc~4~tet1=("${tetJ[@]}")
-tc~4~tet2=("${tetI[@]}")
-tc~4~tet3=("${tetI[@]}")
-tc~4~tet4=("${tetI[@]}")
-tc~4~PF[ 0]="F880808080808080808080F1"
-tc~4~PF[ 1]="F880808080808080808080F1"
-tc~4~PF[ 2]="F880808080808080808080F1"
-tc~4~PF[ 3]="F880808080808080808080F1"
-tc~4~PF[ 4]="F880808080808080808080F1"
-tc~4~PF[ 5]="F880808080808080808080F1"
-tc~4~PF[ 6]="F880808080808080808080F1"
-tc~4~PF[ 7]="F880808080808080808080F1"
-tc~4~PF[ 8]="F880808080808080808080F1"
-tc~4~PF[ 9]="F880808080808080808080F1"
-tc~4~PF[10]="F880808080808080808080F1"
-tc~4~PF[11]="F880808080808080808080F1"
-tc~4~PF[12]="F880808080808080808080F1"
-tc~4~PF[13]="F8151c151c8080151c151cF1"
-tc~4~PF[14]="F8131a131a8080131a131aF1"
-tc~4~PF[15]="F84451595c808045494854F1"
-tc~4~PF[16]="F846717c52802442656856F1"
-tc~4~PF[17]="F8434873788026616a515aF1"
-tc~4~PF[18]="F8151c151c8026151c151cF1"
-tc~4~PF[19]="F8131a131a8022131a131aF1"
-tc~4~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~5~titl="Add 2x4 for Super Combo"
-tc~5~tetY=$tetSty
-tc~5~tetX=$tetStx
-tc~5~rot=0
-tc~5~tet0=("${tetO[@]}")
-tc~5~tet1=("${tetO[@]}")
-tc~5~tet2=("${tetI[@]}")
-tc~5~tet3=("${tetI[@]}")
-tc~5~tet4=("${tetO[@]}")
-tc~5~PF[ 0]="F880808080808080808080F1"
-tc~5~PF[ 1]="F880808080808080808080F1"
-tc~5~PF[ 2]="F880808080808080808080F1"
-tc~5~PF[ 3]="F880808080808080808080F1"
-tc~5~PF[ 4]="F880808080808080808080F1"
-tc~5~PF[ 5]="F880808080808080808080F1"
-tc~5~PF[ 6]="F880808080808080808080F1"
-tc~5~PF[ 7]="F880808080808080808080F1"
-tc~5~PF[ 8]="F880808080808080808080F1"
-tc~5~PF[ 9]="F880808080808080808080F1"
-tc~5~PF[10]="F880808080808080808080F1"
-tc~5~PF[11]="F880808080808080808080F1"
-tc~5~PF[12]="F8A1A9A9AC151c80808080F1"
-tc~5~PF[13]="F8A5A9A9AA131a80808080F1"
-tc~5~PF[14]="F8A3A9A9AC151c80808080F1"
-tc~5~PF[15]="F8A1A9A9AA131a80808080F1"
-tc~5~PF[16]="F8A1A9A9ACA1A9A9AC8080F1"
-tc~5~PF[17]="F8A5A9A9AAA5A9A9AA8080F1"
-tc~5~PF[18]="F8A3A9A9ACA3A9A9AC8080F1"
-tc~5~PF[19]="F8A1A9A9AAA1A9A9AA8080F1"
-tc~5~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-tc~6~titl="Add T for T Spin"
-tc~6~tetY=$tetSty
-tc~6~tetX=$(($tetStx-1))
-tc~6~rot=3
-tc~6~tet0=("${tetT[@]}")
-tc~6~tet1=("${tetT[@]}")
-tc~6~tet2=("${tetT[@]}")
-tc~6~tet3=("${tetT[@]}")
-tc~6~tet4=("${tetT[@]}")
-tc~6~PF[ 0]="F880808080808080808080F1"
-tc~6~PF[ 1]="F880808080808080808080F1"
-tc~6~PF[ 2]="F880808080808080808080F1"
-tc~6~PF[ 3]="F880808080808080808080F1"
-tc~6~PF[ 4]="F880808080808080808080F1"
-tc~6~PF[ 5]="F880808080808080808080F1"
-tc~6~PF[ 6]="F880808080808080808080F1"
-tc~6~PF[ 7]="F880808080808080808080F1"
-tc~6~PF[ 8]="F880808080808080808080F1"
-tc~6~PF[ 9]="F880808080808080808080F1"
-tc~6~PF[10]="F880808080808080808080F1"
-tc~6~PF[11]="F880808080808080808080F1"
-tc~6~PF[12]="F880808080808080808080F1"
-tc~6~PF[13]="F845494880808080808080F1"
-tc~6~PF[14]="F842656880808080808080F1"
-tc~6~PF[15]="F8616a3480808080808080F1"
-tc~6~PF[16]="F864313E80808080808080F1"
-tc~6~PF[17]="F8636c328080151c51595cF1"
-tc~6~PF[18]="F85462808080131a717c52F1"
-tc~6~PF[19]="F853595880212929287378F1"
-tc~6~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
-
-# rocket sprite (by jgs/spunk)
+# we'll just wrap this in a heredoc for sanity
+: << 'EOT'
 
 #
 #  ,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
@@ -5120,8 +3075,10 @@ tc~6~PF[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
 #  |H`==================================='h|
 #  |H To The End of The Universe And Back h|
 #  `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-# 
+#
 # ...A framed copy of the original artwork :)
+#
+# @jgs: Your ASCII art will forever be the best there ever was!
 #
 
 rocket:¬¬¬¬¬¬¬/\¬¬¬¬¬¬¬$
@@ -5172,7 +3129,7 @@ rktstar:XXXXXXXXXXXX$
 rktstar:XX☼XXXXX.XXX$
 rktstar:XXXXXXXXXXXX$
 rktstar:XXXXX.∞XXXXX$
-rktstar:XXXX'XXXXXXX$
+rktstar:XXXX°XXXXXXX$
 rktstar:XXXXXXXXXXXXXXXXXXXX$
 rktstar:XXX.XXXX∙XXXXXXXXXXX$
 rktstar:XXXXXXXXXXXXXXXX+XXX$
@@ -5183,14 +3140,4256 @@ rktmoon:¬¬¬¬¬¬¬¬¬¬¬¬|X|XXXXX$
 rktmoon:¬¬¬¬¬¬¬¬¬¬¬¬X\X\__,X$
 rktmoon:¬¬¬¬¬¬¬¬¬¬¬¬XX'--'XX$
 
-gold          Золото
-silver        Серебро
-Developed by  Разработано 
-GAME OVER!    КОНЕЦ ИГРЫ! Конец игры! 
-Score         Счёт
-Level         Уровень
-Pause         Пауза
-Sound         Звук 
-High score    Рекорд
+EOT
+# -MAKE:gameover.dat
+# +MAKE:gameover.s - gameover process
+#!/bin/bash
+
+#+=============================================================================
+goLoadSprites() {
+	# load rocket sprites
+	RKT=()  ; while read -r l ; do RKT+=("${l:7:-1}")  ; done <<< $(grep "^rocket:"  ${CMDgo})
+	X1A=()  ; while read -r l ; do X1A+=("${l:7:-1}")  ; done <<< $(grep "^rx1a_.:"  ${CMDgo})
+	X1B=()  ; while read -r l ; do X1B+=("${l:7:-1}")  ; done <<< $(grep "^rx1b_.:"  ${CMDgo})
+	X2A=()  ; while read -r l ; do X2A+=("${l:7:-1}")  ; done <<< $(grep "^rx2a_.:"  ${CMDgo})
+	X2B=()  ; while read -r l ; do X2B+=("${l:7:-1}")  ; done <<< $(grep "^rx2b_.:"  ${CMDgo})
+	X3A=()  ; while read -r l ; do X3A+=("${l:7:-1}")  ; done <<< $(grep "^rx3a_.:"  ${CMDgo})
+	X3B=()  ; while read -r l ; do X3B+=("${l:7:-1}")  ; done <<< $(grep "^rx3b_.:"  ${CMDgo})
+	X4A=()  ; while read -r l ; do X4A+=("${l:7:-1}")  ; done <<< $(grep "^rx4a_.:"  ${CMDgo})
+	X4B=()  ; while read -r l ; do X4B+=("${l:7:-1}")  ; done <<< $(grep "^rx4b_.:"  ${CMDgo})
+	GND=()  ; while read -r l ; do GND+=("${l:7:-1}")  ; done <<< $(grep "^rktgnd:"  ${CMDgo})
+	STAR=() ; while read -r l ; do STAR+=("${l:8:-1}") ; done <<< $(grep "^rktstar:" ${CMDgo})
+	MOON=() ; while read -r l ; do MOON+=("${l:8:-1}") ; done <<< $(grep "^rktmoon:" ${CMDgo})
+	GOSPRITES=1
+}
+
+#+=============================================================================
+goDrawSprite() {
+	local y  x  exc  ch
+
+	local aty=$1
+	local atx=$2
+	local clr=$3  # 99: exhaust
+	shift
+	shift
+	shift
+	local ink=$clr
+
+	exc=("${RED}" "${BRED}" "${YEL}")  # exhaust colours
+	y=0
+	while [[ ! -z $1 ]]; do
+		if [[ $((aty +y)) -ge 1 ]]; then
+			for ((x = 0;  x < ${#1};  x++)); do
+				[[ "$clr" == "99" ]]  &&  ink="${exc[$((RANDOM % ${#exc[@]}))]}"
+				ch=${1:$x:1}
+				case "$ch" in
+					"¬" )  continue ;;
+					"X" )  PAT $((aty +y)) $((atx +x)) "${atOFF} " ;;
+					*   )  PAT $((aty +y)) $((atx +x)) "${ink}${ch}" ;;
+				esac
+			done
+		fi
+		((y++))
+		shift
+	done
+
+}
+
+#+=============================================================================
+goDrawPit() {
+	[[ "$GOSPRITES" != "1" ]]  &&  goLoadSprites
+
+	local y
+	for ((y = 0;  y <= 18;  y++)); do
+		if [[ $y -lt 5 ]]; then
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${CYN}" "${STAR[$y]}"
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${BWHT}" "${MOON[$y]}"
+		elif [[ $y -lt 7 ]]; then
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${CYN}" "${STAR[$y]}"
+		elif [[ $y -le 8 ]]; then
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${BMAG}" "                    "
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${CYN}" "${STAR[$y]}"
+#			[[ ! -z $1 ]] && goDrawSprite $((PITy +y)) $((PITx +3)) "${BMAG}" "${RKT[$(($y-7))]}"
+		elif [[ $y -lt 18 ]]; then
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${BMAG}" "                    "
+#			[[ ! -z $1 ]] && goDrawSprite $((PITy +y)) $((PITx +3)) "${BMAG}" "${RKT[$(($y-7))]}"
+		else
+			goDrawSprite $((PITy +y)) $((PITx +1)) "${GRN}" "${GND[@]}"
+		fi
+		[[ $((y %3)) -ne 1 ]]  &&  sleep 0.12
+	done
+}
+
+#+=============================================================================
+goRktTeleport() {
+	local y  x  hit  w  s  n  mch  clr  ch
+
+	local MASK=("${RKT[@]}")
+	local d=$((${#MASK[@]} -1))
+
+	for ((y = 0;  y < d;  y++)); do
+		MASK[$y]=${MASK[$y]// /S}
+		MASK[$y]=${MASK[$y]//X/¬}
+		MASK[$y]=${MASK[$y]//[^¬S]/G}
+	done
+
+	while
+		hit=0
+		for ((y = 0;  y < d;  y++)); do
+			 w=${#MASK[$y]}
+			for ((x = 0;  x < $w;  x++)); do
+				mch="${MASK[$y]:$x:1}"
+				case "$mch" in
+					"¬" ) continue ;;
+					"S" )
+						s=" \`\'.,;:"
+						n=$((RANDOM % ${#s}))
+						if [[ $n -eq 0 ]]; then
+							clr="${atOFF}"
+							ch=" "
+							MASK[$y]="${MASK[$y]:0:$x}${ch}${MASK[$y]:$((x +1))}"
+						else
+							clr=("${GRY}" "${WHT}" "${BLU}")
+							clr=${clr[$((RANDOM % 3))]}
+							ch="${s:$n:1}"
+							hit=1
+						fi ;;
+					"G" )
+						s=" \\/{}[]()"
+						n=$((RANDOM % ${#s}))
+						if [[ $n -eq 0 ]]; then
+							clr="${BMAG}"
+							ch="${RKT[$y]:$x:1}"
+							MASK[$y]="${MASK[$y]:0:$x}${ch}${MASK[$y]:$(($x+1))}"
+						else
+							clr=("${GRY}" "${WHT}" "${BLU}")
+							clr=${clr[$((RANDOM % 3))]}
+							ch="${s:$n:1}"
+							hit=1
+						fi ;;
+					*)
+						clr="${BMAG}"
+						ch=${mch}
+						;;
+				esac
+				PAT $((PITy +y +7)) $((PITx +x +3)) "${clr}${ch}"
+			done
+			sleep 0.007
+		done
+		((hit == 1))
+	do : ; done
+}
+
+#+=============================================================================
+goRktTakeoff() {
+	local i  n  z
+
+	local tly=$PITy
+	local tlx=$PITx
+
+	local ry=$((tly +7))
+	local rx=$((tlx +3))
+	local tx=$((rx  -2))
+	local spd=100
+	local step=2
+
+#	# picture
+#	goDrawSprite $(($tly)) $(($tlx+1)) "${fgCYN}" "${STAR[@]}"
+#	goDrawSprite $(($tly)) $(($tlx+1)) "${atBLD};${fgWHT}" "${MOON[@]}"
+#	goDrawSprite $(($ry)) $(($rx)) "${atBLD};${fgMAG}" "${RKT[@]}"
+#	goDrawSprite $(($tly+18)) $(($tx)) "${fgGRN}" "${GND[@]}"
+#	sleep 1
+
+	# start engines
+	n=19
+	for ((i = 0 ;  i < n;  i++)); do
+		if ((i & 1)); then goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X1A[@]}"
+		else               goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X1B[@]}" ; fi
+		sleep 0.$spd
+	done
+
+	# lift off
+	((ry--))
+	goDrawSprite $((tly)) $((tlx +1)) "${CYN}"  "${STAR[@]}"
+	goDrawSprite $((tly)) $((tlx +1)) "${BWHT}" "${MOON[@]}"
+	goDrawSprite $((ry))  $((rx    )) "${BMAG}" "${RKT[@]}"
+
+	for ((n += step;  i < n;  i++)); do
+		if ((i & 1)); then goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X2A[@]}"
+		else               goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X2B[@]}" ; fi
+		sleep 0.$spd
+	done
+
+	# 3
+	((ry--))
+#	goDrawSprite $((tly)) $((tlx +1)) "${CYN}"  "${STAR[@]}"
+#	goDrawSprite $((tly)) $((tlx +1)) "${BWHT}" "${MOON[@]}"
+	goDrawSprite $((ry))  $((rx    )) "${BMAG}" "${RKT[@]}"
+
+	for ((n += step;  i < n;  i++)); do
+		if ((i & 1)); then goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X3A[@]}"
+		else               goDrawSprite $((ry +${#RKT[@]} -2)) $((rx +2)) 99 "${X3B[@]}" ; fi
+		sleep 0.$spd
+	done
+
+	# fly away
+	for ((z = 1;  z < 25;  z++)); do
+		((ry--))
+		goDrawSprite $((tly)) $((tlx +1)) "${CYN}"  "${STAR[@]}"
+		goDrawSprite $((tly)) $((tlx +1)) "${BWHT}" "${MOON[@]}"
+		goDrawSprite $((ry )) $((rx    )) "${BMAG}" "${RKT[@]}"
+
+		for ((n += step;  i < n;  i++)); do
+			if ((i & 1)); then goDrawSprite $((ry  +${#RKT[@]} -2)) $((rx +2)) 99 "${X4A[@]}"
+			else               goDrawSprite $((ry  +${#RKT[@]} -2)) $((rx +2)) 99 "${X4B[@]}" ; fi
+			[[ $z -eq 1 ]]  &&  goDrawSprite $((tly +18)) $((tx)) "${GRN}" "${GND[@]}"
+			sleep 0.$spd
+		done
+		# accelerate
+#		printf -v spd "%03d" $((1$spd -1003))
+		#DBG $spd
+	done
+}
+
+#+=============================================================================
+# ooohhh, this is dirty!
+#
+goRktCleanup() {
+	local y  l
+
+	local cs=("")
+		cs+=("──╖╓────╖╓────╖╓")
+		cs+=("╓─╖║ °╓─╖║ °╓─╖║")
+		cs+=("╙─╖║  ╙─╖║  ╙─╖║")
+
+	for ((y = 1;  y <= 3;  y++)); do
+		PAT $y $((PITx +3)) "${clrCsMini}${cs[$y]}"
+	done
+	pfDrawDebug
+
+	# unbrick shoulder and basket
+	for ((y = 0;  y <= 11;  y++)); do
+		((l = y %3))
+
+		PAT $((BSy +y)) $((BSx +1)) "${atOFF}          "
+
+		[[ $y -ge 0  &&  $y -le 3 ]]  &&  PAT $((SHy +y +1)) $((SHx +1)) "${atOFF}          "
+
+		[[ $l -ne 1 ]]  &&  sleep 0.12
+	done
+
+}
+
+#+=============================================================================
+goChalScore() {
+	local clr  ch  i
+
+	clrSCOREvI="${atPFX}${fgBWHT};${bgBLK};${atSFX}"  # inverse
+
+	printf -v ch "%'10d" $score
+
+	case "$1" in
+		"blk" )  clr=(${clrSCOREvI} ${clrSCOREv}) ;;
+		"wht" )  clr=(${clrSCOREv} ${clrSCOREvI}) ;;
+		"num" )
+			PAT $((SCy +2)) $((SCx +2)) "${clrSCOREvI}${ch}"
+			return ;;
+		* )  return ;;
+	esac
+
+	for ((i = 0;  i < 5;  i++)); do
+		PAT $((SCy +2)) $((SCx +2)) "${clr[$((i &1))]}${ch}"
+		sleep 0.2
+	done
+}
+
+#+=============================================================================
+goChalClrCube() {
+	local i
+
+	local y=$((PITy -1 +$1))
+	local x=$((PITx +1 +$2 * 2))
+	local t=$(($3 & maskT))
+
+	for ((i = 1;  i <= 3;  i++)); do
+		(($i & 1))  &&  ch="░░"  ||  ch="▒▒"
+		case $t in
+			"${tetiO}" )  PAT $y $x "${tetO[4]}${ch}" ;;
+			"${tetiI}" )  PAT $y $x "${tetI[4]}${ch}" ;;
+			"${tetiT}" )  PAT $y $x "${tetT[4]}${ch}" ;;
+			"${tetiL}" )  PAT $y $x "${tetL[4]}${ch}" ;;
+			"${tetiJ}" )  PAT $y $x "${tetJ[4]}${ch}" ;;
+			"${tetiS}" )  PAT $y $x "${tetS[4]}${ch}" ;;
+			"${tetiZ}" )  PAT $y $x "${tetZ[4]}${ch}" ;;
+		esac
+		sleep 0.025
+	done
+
+	((DEBUG && ! NDRAW))  &&  ch="${GRY}∙∙"  ||  ch="${atOFF}  "
+	PAT $y $x "${ch}"
+}
+
+#+=============================================================================
+goChalClrPit() {
+	local y  x  t
+
+	goChalScore blk
+	for ((y = 0;  y < PITh -1;  y++)); do
+		for ((x = 0;  x < PITw;  x++)); do
+			t=$((0x${PIT[$y]:$((x*2 +2)):2}))
+			if ((t != tetiB)); then
+				goChalClrCube $y $x $t
+				((score -= 1))
+				goChalScore num
+			fi
+		done
+	done
+	goChalScore wht
+}
+
+#+=============================================================================
+gameover() {
+	local his
+
+	case "$STYLE" in
+		"NVIS" )
+			STYLE="xxxx"
+			tetDrawPit
+			tetDraw
+			STYLE="NVIS"
+
+			HIDE=0
+			pfDrawBasket
+			tetDrawBs
+
+			countdown 5
+			;;
+
+		"NORM" )
+			countdown 2
+			statusSet "All your base are belong to us!"
+			;;
+
+		"CHAL" )
+			countdown 3
+			if [[ $RUN -eq 2 ]]; then  # 2: died
+				statusSet "Death to all treasure seekers!"
+			else                       # 3: won
+				statusSet "The cake was a lie!"
+				goChalClrPit
+			fi
+			;;
+	esac
+
+	pfBrickout
+	sleep 1
+
+	hisCheck $score $LEVEL $STYLE
+	his=$?
+	if [[ $his -gt 0 ]]; then
+		goDrawPit
+		if (( (DEBUG && NDRAW) || \
+		      (his == 1  &&  LEVEL >= 10  &&  ${HI2[3]}) )); then
+			sleep 0.8
+			goRktTeleport
+			sleep 1.1
+			goRktTakeoff
+		fi
+		hisGetInitials $his
+	fi
+	goRktCleanup &
+	FAST=0
+}
+# -MAKE:gameover.s
+# +MAKE:hiscore.s - high score system
+#!/bin/bash
+
+#+=============================================================================
+#  1    _       _   _       _   _   _   _   _   _       _       _   _
+# 234  | |   |  _|  _| |_| |_  |_    | |_| |_| |_| |_  |    _| |_  |_
+# 567  |_|   | |_   _|   |  _| |_|   | |_|   | | | |_| |_  |_| |_  |
+#      ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~ ~~~
+#
+segment() {  # (y, x, val)
+	local cnt=()
+		#      1234567
+		cnt+=("1101111")  # 0
+		cnt+=("0001001")  # 1
+		cnt+=("1011110")  # 2
+		cnt+=("1011011")  # 3
+		cnt+=("0111001")  # 4
+		cnt+=("1110011")  # 5
+		cnt+=("1110111")  # 6
+		cnt+=("1001001")  # 7
+		cnt+=("1111111")  # 8
+		cnt+=("1111001")  # 9
+#		cnt+=("1111101")  # 10/A
+#		cnt+=("0110111")  # 11/b
+#		cnt+=("1100110")  # 12/C
+#		cnt+=("0011111")  # 13/d
+#		cnt+=("1110110")  # 14/E
+#		cnt+=("1110100")  # 15/F
+
+	local clr=("${GRY}" "${BGRN}")  # off/on
+
+	local ch="\033[1C"                                # skip
+	ch="${ch}${clr[${cnt[$3]:0:1}]}__\033[3D\033[1B"  # 1 / newline
+	ch="${ch}${clr[${cnt[$3]:1:1}]}|"                 # 2
+	ch="${ch}${clr[${cnt[$3]:2:1}]}__"                # 3
+	ch="${ch}${clr[${cnt[$3]:3:1}]}|\033[4D\033[1B"   # 4 / newline
+	ch="${ch}${clr[${cnt[$3]:4:1}]}|"                 # 5
+	ch="${ch}${clr[${cnt[$3]:5:1}]}__"                # 6
+	ch="${ch}${clr[${cnt[$3]:6:1}]}|"                 # 7
+
+	PAT $1 $2 "${ch}"
+}
+
+#+=============================================================================
+hisStats() {
+	local y  x  h  hi  ly  lx  sy  sx  style  si
+
+	statusClear
+	csDrawBackdropReveal 0
+
+	y=1
+	PAT $((y++)) 7 "${BLU}╔════════════╦"
+	PAT $((y++)) 7 "║${CYN} ${txtHsRank} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsInit} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsScor} ${BLU}║"
+	PAT $((y++)) 7 "╟─----------─╫"
+	PAT $((y++)) 7 "║${CYN} ${txtHsLine} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsMult} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsPiec} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsTime} ${BLU}║"
+	PAT $((y++)) 7 "╟─----------─╫"
+	PAT $((y++)) 7 "║${BWHT} ${txtHsSilv} ${BLU}║"
+	PAT $((y++)) 7 "║${YEL} ${txtHsGold} ${BLU}║"
+	PAT $((y++)) 7 "╟─----------─╫"
+	PAT $((y++)) 7 "║${tetL[4]} ${txtHsLtet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetJ[4]} ${txtHsJtet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetS[4]} ${txtHsStet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetZ[4]} ${txtHsZtet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetT[4]} ${txtHsTtet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetO[4]} ${txtHsOtet} ${BLU}║"
+	PAT $((y++)) 7 "║${tetI[4]} ${txtHsItet} ${BLU}║"
+	PAT $((y++)) 7 "╟─----------─╫"
+	PAT $((y++)) 7 "║${CYN} ${txtHsTotl} ${BLU}║"
+	PAT $((y++)) 7 "║${CYN} ${txtHsSeed} ${BLU}║"
+	PAT $((y++)) 7 "╚════════════╩"
+
+	y=2
+	ly=$y
+	lx=63
+	PAT $((y++)) $lx "${MAG}┌──────────┐"
+	PAT $((y++)) $lx "${MAG}│          │"
+	PAT $((y++)) $lx "${MAG}│          │"
+	PAT $((y++)) $lx "${MAG}│          │"
+	PAT $((y++)) $lx "${MAG}│          │"
+	PAT $((y++)) $lx "${MAG}├──────────┤"
+	PAT $((y++)) $lx "${MAG}│ ${keyL}←${keyR}  ${keyL}→${keyR}${MAG} │"
+	PAT $((y++)) $lx "${MAG}└──────────┘"
+
+	((y++))
+	PAT $((y++)) $lx "${MAG}┌──────────┐"
+
+	style=($(grep '^hs_....~0,1' ${CMDhs} | sed 's/...\(....\).*/\1/'))
+	sy=$y
+	sx=$lx
+	si="${style[0]}"
+	PAT $((y++)) $sx "${MAG}│ ${BGRN}${txtOptStyle[$si]}  ${keyL}↑${keyR}${MAG}│"
+	for ((i = 1;  i < $((${#style[@]} -1));  i++)); do
+		si="${style[$i]}"
+		PAT $((y++)) $sx "${MAG}│ ${BGRN}${txtOptStyle[$si]}     ${MAG}│"
+	done
+	si="${style[$i]}"
+	PAT $((y++)) $sx "${MAG}│ ${BGRN}${txtOptStyle[$si]}  ${keyL}↓${keyR}${MAG}│"
+	PAT $((y++)) $sx "${MAG}└──────────┘"
+
+	local pos=("1st" "2nd" "3rd")
+	local tr=("${BLU}╤" "${BLU}╤" "${BLU}╗")
+	local jr=("${BLU}┼" "${BLU}┼" "${BLU}╢")
+	local rt=("${BLU}│" "${BLU}│" "${BLU}║")
+	local br=("${BLU}╧" "${BLU}╧" "${BLU}╝")
+
+	local lvl=0
+	local sty=0
+	while : ; do
+		hisLoad $lvl ${style[$sty]}
+
+		segment $((ly +1)) $((lx +2)) $((lvl /10))
+		segment $((ly +1)) $((lx +6)) $((lvl %10))
+
+		si="${style[$sty]}"
+		PAT $((sy +sty)) $((sx +1)) "${GRN}▐${atPFX}${fgBLK};${bgGRN}${atSFX}${txtOptStyle[$si]}${GRN}▌"
+
+		for ((y = 1;  y <= 24;  y++)); do
+			for ((h = 0;  h <= 2;  h++)); do
+				eval hi=('$'{HI${h}[@]})
+				PAT $y $((7 +14 + h*13))
+				case $y in
+					1 )   printf "${BLU}════════════${tr[$h]}"                ;;
+					2 )   printf "${YEL}    %3s     ${rt[$h]}" "${pos[${h}]}" ;;  # ranking
+					3 )   printf "${BWHT}    %3s     ${rt[$h]}" "${hi[2]}"     ;;  # initials
+					4 )   printf      "${BWHT} %'10d ${rt[$h]}" "${hi[3]}"     ;;  # score
+					5 )   printf "${BLU}─----------─${jr[$h]}"                ;;
+					6 )   printf  "${WHT}   [%4d]   ${rt[$h]}" "${hi[4]}"     ;;  # Lines
+					7 )   printf "${WHT}   [x%3d]   ${rt[$h]}" "${hi[5]}"     ;;  # Best Mult.
+					8 )   printf  "${WHT}   [%4d]   ${rt[$h]}" "${hi[6]}"     ;;  # Best Piece
+					9 )   local t="--:--:--"
+						  [[ ! -z ${hi[7]} ]]  &&  t="$(date -u -d @$((${hi[7]} /1000)) +"%T")"  # Play Time
+						  printf      "${GRN}  %8s  ${rt[$h]}" "${t}"         ;;
+					10 )  printf "${BLU}─----------─${jr[$h]}"                ;;
+					11 )  printf "${BWHT}    [%3d]   ${rt[$h]}" "${hi[17]}"    ;;  # Silver
+					12 )  printf "${YEL}    [%3d]   ${rt[$h]}" "${hi[18]}"    ;;  # Gold
+					13 )  printf "${BLU}─----------─${jr[$h]}"                ;;
+					14 )  printf "${tetL[4]}     %3d    ${rt[$h]}" "${hi[9]}"     ;;  # L-tets
+					15 )  printf "${tetJ[4]}     %3d    ${rt[$h]}" "${hi[10]}"    ;;  # J-tets
+					16 )  printf "${tetS[4]}     %3d    ${rt[$h]}" "${hi[11]}"    ;;  # S-tets
+					17 )  printf "${tetZ[4]}     %3d    ${rt[$h]}" "${hi[12]}"    ;;  # Z-tets
+					18 )  printf "${tetT[4]}     %3d    ${rt[$h]}" "${hi[13]}"    ;;  # T-tets
+					19 )  printf "${tetO[4]}     %3d    ${rt[$h]}" "${hi[14]}"    ;;  # O-tets
+					20 )  printf "${tetI[4]}     %3d    ${rt[$h]}" "${hi[15]}"    ;;  # I-tets
+					21 )  printf "${BLU}─----------─${jr[$h]}"                ;;
+					22 )  printf   "${BCYN}   %5d    ${rt[$h]}" "${hi[16]}"    ;;  # Total Tets
+					23 )  printf   "${WHT}   %5d    ${rt[$h]}" "${hi[8]}"     ;;  # PRNG SEED
+					24 )  printf "${BLU}════════════${br[$h]}"                ;;
+				esac
+			done
+		done
+
+		while : ; do
+			while ! keyGet ; do sleep 0.1 ; done
+			case ${KEY^^} in
+				"BKSP" )  quit 0 ;;
+
+				"DEL" | [PQ] )
+					hisLoad $LEVEL $STYLE
+					break 2
+					;;
+
+				"LEFT" | [A] )
+					if [[ $lvl -gt 0 ]]; then
+						((lvl--))
+						break
+					fi ;;
+
+				"RIGHT" | [D] )
+					if [[ $lvl -lt 20 ]]; then
+						((lvl++))
+						break
+					fi ;;
+
+				"UP" | [W] )
+					if [[ $sty -gt  0 ]]; then
+						si="${style[$sty]}"
+						PAT $((sy +sty)) $((sx +1)) "${GRN} ${txtOptStyle[$si]} "
+						((sty--))
+						break
+					fi ;;
+
+				"DOWN" | [S] )
+					if [[ $sty -lt  $((${#style[@]} -1)) ]]; then
+						si="${style[$sty]}"
+						PAT $((sy +sty)) $((sx +1)) "${GRN} ${txtOptStyle[$si]} "
+						((sty++))
+						break
+					fi ;;
+			esac
+		done
+	done
+}
+
+
+#+=============================================================================
+hisShow() {  # (left|right, old-level, old-style, new-level, new-style
+	local tmp  x  y  ch
+
+
+	# no scrolling requested (initial display)
+	if [[ -z $1 ]]; then
+		hisLoad $LEVEL $STYLE
+		for ((i = 0;  i < 3;  i++)); do
+			eval tmp=(\${HI$i[@]})
+			printf -v ch " %3s │ %'10d" "${tmp[2]}" "${tmp[3]}"
+			PAT $((PITy +15 +i)) $((PITx +2)) "${clrHi[$i]}${ch}"
+		done
+
+	else
+		hisLoad $4 $5
+
+		local OLD0  OLD1  OLD2
+		local old=($(grep "^hs_${2}~${3}" ${CMDhs}))
+		IFS=',' read -r -a OLD0 <<< "${old[0]}"
+		IFS=',' read -r -a OLD1 <<< "${old[1]}"
+		IFS=',' read -r -a OLD2 <<< "${old[2]}"
+
+		# Macs can't printf in to an array
+		local old=()
+		printf -v tmp " %3s │ %'10d " "${OLD0[2]}" "${OLD0[3]}"
+		old+=("$tmp")
+		printf -v tmp " %3s │ %'10d " "${OLD1[2]}" "${OLD1[3]}"
+		old+=("$tmp")
+		printf -v tmp " %3s │ %'10d " "${OLD2[2]}" "${OLD2[3]}"
+		old+=("$tmp")
+
+		local new=()
+		printf -v tmp " %3s │ %'10d " "${HI0[2]}" "${HI0[3]}"
+		new+=("$tmp")
+		printf -v tmp " %3s │ %'10d " "${HI1[2]}" "${HI1[3]}"
+		new+=("$tmp")
+		printf -v tmp " %3s │ %'10d " "${HI2[2]}" "${HI2[3]}"
+		new+=("$tmp")
+
+		local l=${#old[0]}  # all elements are the same size
+
+		if [[ "$1" == "left" ]]; then  # coming from the left
+			for ((x = 1;  x < $l;  x++)); do
+				for ((y = 0;  y < 3;  y++)); do
+					ch="${new[$y]:$(($l -$x))}│${old[$y]:0:$((0-x-1))}"
+					PAT $((PITy +15 +y)) $((PITx +2)) "${clrHi[$y]}${ch}"
+				done
+				sleep 0.02
+			done
+
+		else  # coming from the right
+			for ((x = 1;  x <= $l;  x++)); do
+				for ((y =0;  y < 3;  y++)); do
+					ch=${old[$y]:$x}│${new[$y]:0:$(($x -1))}
+					PAT $((PITy +15 +y)) $((PITx +2)) "${clrHi[$y]}${ch}"
+				done
+				sleep 0.02
+			done
+		fi
+
+		for ((y =0;  y < 3;  y++)); do
+			PAT $((PITy +15 +y)) $((PITx +2)) "${clrHi[$y]}${new[$y]}"
+		done
+
+	fi
+}
+
+#+=============================================================================
+hisLoad() {  # (level, style)
+	HIA=($(grep "^hs_$2~$1" ${CMDhs}))   # get the three score for this level
+	IFS=',' read -r -d '' -a HI0 <<< "${HIA[0]}"  # stick them in global arrays
+	IFS=',' read -r -d '' -a HI1 <<< "${HIA[1]}"
+	IFS=',' read -r -d '' -a HI2 <<< "${HIA[2]}"
+}
+
+#==============================================================================
+hisCheck() {  # (score, level, style)
+	[[ "$4" != "noload" ]]  &&  hisLoad $2 $3
+	[[ $1 -gt ${HI0[3]} ]]  &&  return 1
+	[[ $1 -gt ${HI1[3]} ]]  &&  return 2
+	[[ $1 -gt ${HI2[3]} ]]  &&  return 3
+	return 0
+}
+
+
+#+=============================================================================
+hisGetInitials() {
+	local sc  cur  chr  name  nchr  clr  now  next  old  hsl  tot
+
+	local clrNAME="${atPFX}${fgBLK};${bgWHT}${atSFX}"
+	local clrNAMEc="${atPFX}${atREV};${fgBLK:2};${bgWHT}${atSFX}"
+
+	PAT $((PITy + 10)) $((PITx + 2)) "${BBLK}-${WHT}-${YEL}- ${txtHIGHSCORE} ${YEL}-${WHT}-${BBLK}-"
+
+	printf -v sc "%'10d" $score
+	PAT $((PITy + 12)) $((PITx + 5)) "${WHT}▐${clrSCOREv}${sc}${WHT}▌"
+
+	PAT $((PITy + 14)) $((PITx + 4)) "${MAG}${txtINITIALS}: ${clrNAME}▌   ▐"
+
+	cur=0
+	chr=0
+	name=("${nbsp}" "${nbsp}" "${nbsp}")
+	nchr=(0 0 0)
+	name[$cur]="${AZ:$chr:1}"
+
+	statusSet "${txtIdentify}"
+
+	clr=${clrNAME}
+	timeGet next
+	keyFlush
+	while : ; do
+		timeGet now
+		if [[ $now -gt $next ]]; then
+			((next = now +300))
+			[[ "$clr" == "${clrNAME}" ]]  &&  clr=${clrNAMEc}  ||  clr=${clrNAME}
+		fi
+		PAT $((PITy +14)) $((PITx +15 +cur)) "${clr}${name[$cur]}"
+		keyGet
+		case "${KEY^^}" in
+			"DEL" | [Q] )  # change language
+				if   [[ "${AZ:2:1}" == "B" ]]; then  AZ="$AZRU"
+				elif [[ "${AZ:2:1}" == "Б" ]]; then  AZ="≡ßÇ" ; chr=0
+				else                                 AZ="$AZEN"
+				fi
+				[[ $chr -ge ${#AZ} ]]  &&  chr=$((${#AZ} -1))
+				name[$cur]="${AZ:$chr:1}"
+				;;
+
+			"RIGHT" | [dD] | [xX.] )
+				if [[ $cur -lt 2 ]]; then
+					nchr[$cur]=$chr
+					PAT $((PITy +14)) $((PITx +15 +cur)) "${clrNAME}${name[$cur]}"
+					((cur++))
+					if [[ "${name[$cur]}" == "${nbsp}" ]]; then
+						name[$cur]="${AZ:$chr:1}"
+					else
+						chr=${nchr[$cur]}
+					fi
+				fi ;;
+
+			"LEFT"  | [aA] )
+				if [[ $cur -gt 0 ]]; then
+					nchr[$cur]=$chr
+					PAT $((PITy +14)) $((PITx +15 +cur)) "${clrNAME}${name[$cur]}"
+					((cur--))
+					chr=${nchr[$cur]}
+				fi ;;
+
+			[Z,] )
+				name[$cur]="${nbsp}"
+				if [[ $cur -gt 0 ]]; then
+					nchr[$cur]=0
+					PAT $((PITy +14)) $((PITx +15 +cur)) "${clrNAME}${name[$cur]}"
+					((cur--))
+					chr=${nchr[$cur]}
+				fi ;;
+
+			"DOWN" | [S] )
+				chr=$(((chr +${#AZ} -1) % ${#AZ}))
+				name[$cur]="${AZ:$chr:1}"
+				;;
+
+			"UP" | [W] )
+				chr=$(( (chr +1) % ${#AZ} ))
+				name[$cur]="${AZ:$chr:1}"
+				;;
+
+			[pP] ) break ;;
+		esac
+		sleep 0.05
+#		statusUpdate
+	done
+	langSet $LANG  # reset language
+	statusClear
+
+	# don't put spaces in the high score file!
+	[[ "${name[0]}" == " " ]]  &&  name[0]="${nbsp}"
+	[[ "${name[1]}" == " " ]]  &&  name[1]="${nbsp}"
+	[[ "${name[2]}" == " " ]]  &&  name[2]="${nbsp}"
+	
+	# Running debug mode?
+	((DEBUG)) && {
+		# Empty name? ...Just don't add the score
+		[[ "${name[0]}${name[1]}${name[2]}" == "${nbsp}${nbsp}${nbsp}" ]]  &&  return
+
+		# otherwise, we will replace the name with a tet
+		case $((RANDOM %5)) in
+			0 ) chr="${tetT[7]}" ;;
+			1 ) chr="${tetL[7]}" ;;
+			2 ) chr="${tetJ[7]}" ;;
+			3 ) chr="${tetS[7]}" ;;
+			4 ) chr="${tetZ[7]}" ;;
+		esac
+		name[0]="${chr:1:1}"
+		name[1]="${chr:2:1}"
+		name[2]="${chr:3:1}"
+	}
+
+	if [[ $1 -le 2 ]]; then  # move 2nd -> 3rd
+		old=$(grep "^hs_${STYLE}~${LEVEL},2," ${CMDhs} | sed "s/\([^,],\).\(.*\)/\13\2/")
+		#                               -v^--------------------------------------^-
+		sed -i "s/^hs_${STYLE}~${LEVEL},3,.*/${old}/" ${CMDhs}
+	fi
+	if [[ $1 -eq 1 ]]; then # move 1st -> 2nd
+		old=$(grep "^hs_${STYLE}~${LEVEL},1," ${CMDhs} | sed "s/\([^,],\).\(.*\)/\12\2/")
+		sed -i "s/^hs_${STYLE}~${LEVEL},2,.*/${old}/" ${CMDhs}
+	fi
+
+	hsl="${name[0]}${name[1]}${name[2]},${score}"
+	hsl="${hsl},${scoreLin},${scoreMulMax},${scoreBest},${timeTotal},${SEED}"
+	tot=0
+	for i in L J S Z T O I ; do
+		eval tet=('$'{tet$i[@]})
+		hsl="${hsl},${tet[8]}"
+		((tot += ${tet[8]}))
+	done
+	hsl="${hsl},${tot}"
+	hsl="${hsl},${tetSilv},${tetGold}"
+	sed -i "s/^\(hs_${STYLE}~${LEVEL},$1,\).*/\1${hsl}/" ${CMDhs}
+}
+
+#+=============================================================================
+hisExport() {
+	if ! grep '^# MAKE-COOKIE' ${CMD} 2>&1 >/dev/null ; then
+		echo "! Export disabled in 'break' mode"
+		return
+	fi
+
+	local re='/^# +MAKE:hiscore.dat/,/^# -MAKE:hiscore.dat/'
+
+	if [[ ! -z "$1" ]]; then
+		echo "# Export high scores..."
+#		sed -n "${re}p" ${CMD}  |  sed -e '1d' -e '$d' >$1
+		sed -n "${re}p" ${CMD} >$1
+		echo "* Success: |$1|"
+	else
+#		sed -n "${re}p" ${CMD}  |  sed -e '1d' -e '$d'
+		sed -n "${re}p" ${CMD}
+	fi
+
+	return 0
+}
+
+#+=============================================================================
+hisImport() {
+	if ! grep '^# MAKE-COOKIE' ${CMD} 2>&1 >/dev/null ; then
+		echo "! Import disabled in 'break' mode"
+		return
+	fi
+
+	local re='/^# +MAKE:hiscore.dat/,/^# -MAKE:hiscore.dat/'
+
+	echo "# Import high scores..."
+
+	# import file exists
+	if [[ ! -f $1 ]]; then
+		echo "! Import file not found: |$1|"
+		exit 81
+	fi
+
+	# temp file available (input scores)
+	local itmp="${CMD}.itmp"
+	if [[ -e $itmp ]]; then
+		echo "! Temporary filename in use: |$itmp|"
+		exit 87
+	fi
+
+	# extract hiscores from input file
+	sed -n "${re}p" $1 >$itmp
+
+	# entry count match
+	local cntNew=$(grep '^_hs' ${itmp} | wc -l)
+	local cntCur=$(grep '^_hs' ${CMD}  | wc -l)
+	if [[ $cntNew -ne $cntCur ]]; then
+		echo "! Entry count mismatch ($cntNew != $cntCur) ...try merge"
+		exit 82
+	fi
+
+	# styles match
+	local styNew=($(grep '^hs_....~0,1' ${itmp} | sed 's/...\(....\).*/\1/'))
+	local styCur=($(grep '^hs_....~0,1' ${CMD}  | sed 's/...\(....\).*/\1/'))
+	for s in ${styNew[@]} ; do
+		if [[ ! ${styCur[@]} =~ $s ]]; then
+			echo "! Unmatched style: |$s| ...try merge"
+			exit 83
+		fi
+	done
+
+	# temp file available (new bashtris)
+	local ftmp="${CMD}.new"
+	if [[ -e $ftmp ]]; then
+		echo "! Temporary filename in use: |$ftmp|"
+		exit 84
+	fi
+
+	# temp file available (rename script)
+	local xtmp="${CMD}.ren.sh"
+	if [[ -e $xtmp ]]; then
+		echo "! Temporary filename in use: |$xtmp|"
+		exit 85
+	fi
+
+	# build file
+	>$ftmp  sed "${re}d" ${CMD}
+	[[ -f $ftmp ]] || {
+		echo "! Creation failed: |$ftmp|"
+		exit 86
+	}
+	>>$ftmp  cat $itmp
+	rm "${itmp}"
+
+	# rename the files
+	>$xtmp  echo "#!/bin/bash"
+	>>$xtmp  echo "sleep 1"
+#	>>$xtmp  echo "mv ${CMD} ${CMD}.bak"
+	>>$xtmp  echo "mv ${ftmp} ${CMD}"
+	>>$xtmp  echo "rm ${xtmp}"
+	>>$xtmp  echo "chmod +x ${CMD}"
+	chmod +x $xtmp
+	$xtmp &
+
+	echo "* Success |$1|"
+
+	return 0
+}
+
+#+=============================================================================
+hisMerge() {
+	local i  j
+
+	if ! grep '^# MAKE-COOKIE' ${CMD} 2>&1 >/dev/null ; then
+		echo "! Merge disabled in 'break' mode"
+		return
+	fi
+
+	echo "# Merge high scores..."
+
+	# import file exists
+	if [[ ! -f $1 ]]; then
+		echo "! Import file not found: |$1|"
+		exit 91
+	fi
+
+	local new=()
+	local ign=0
+	local got=0
+	local rej=0
+	local imp=0
+	IFS=$'\n' read -r -d '' -a new < <(grep '^hs_....~' $1 && printf "\0")
+	for ((i = 0;  i < ${#new[@]};  i++)); do
+		local re='^hs_(....)~([0-9]+),([1-3]),(...),([0-9]*),(.*)'
+		if [[ ${new[$i]} =~ ${re} ]]; then
+			local sty=${BASH_REMATCH[1]}
+			local lvl=${BASH_REMATCH[2]}
+			local pos=${BASH_REMATCH[3]}
+			local int=${BASH_REMATCH[4]}
+			local scr=${BASH_REMATCH[5]}
+			local tet=${BASH_REMATCH[6]}
+
+#			echo "--------"
+#			echo "sty: |$sty|"
+#			echo "lvl: |$lvl|"
+#			echo "pos: |$pos|"
+#			echo "int: |$int|"
+#			echo "scr: |$scr|"
+#			echo "tet: |$tet|"
+
+			# ignore 0 scores
+			((scr == 0))  &&  ((++ign))  &&  continue
+
+			# load scores for this level
+			hisLoad $lvl $sty
+
+			# don't reimport matching games
+			for ((j = 0;  j < ${#HIA[@]};  j++)); do
+				[[ "${HIA[$j]#*,*,}" == "${new[$i]#*,*,}" ]]  &&  ((++got))  &&  continue 2
+			done
+
+			# Work out where to put it
+			hisCheck $scr $lvl $sty noload
+			local pos=$?
+
+			# ignore 0 scores
+			((pos == 0))  &&  ((++rej))  &&  continue
+
+			# move existing entries
+			if [[ $pos -le 2 ]]; then  # move 2nd -> 3rd
+				old=$(grep "^hs_${sty}~${lvl},2," ${CMD} | sed "s/\([^,],\).\(.*\)/\13\2/")
+				#                          -v-^----------------------------^---------^-
+				sed -i "s/^hs_${sty}~${lvl},3,.*/${old}/" ${CMD}
+			fi
+
+			if [[ $pos -eq 1 ]]; then  # move 1st -> 2nd
+				old=$(grep "^hs_${sty}~${lvl},1," ${CMD} | sed "s/\([^,],\).\(.*\)/\12\2/")
+				#                          -v-^----------------------------^---------^-
+				sed -i "s/^hs_${sty}~${lvl},2,.*/${old}/" ${CMD}
+			fi
+
+			# insert new entry
+			sed -i "s/^\(hs_${sty}~${lvl},${pos},\).*/\1${int},${scr},${tet}/" ${CMD}
+			printf "# Imported: %s/%-2d @%d  : %s = %d\n" "${sty}" "${lvl}" "${pos}" "${int}" "${scr}"
+			((++imp))
+		fi
+	done
+
+	echo "# IMPORTED: New Entries : $imp"
+	echo "# eschewed: Score == 0  : $ign"
+	echo "# eschewed: Game exists : $got"
+	echo "# eschewed: Weak Score  : $rej"
+	echo "#   Total records found : $((ign +got +rej +imp))"
+
+	return 0
+}
+# -MAKE:hiscore.s
+# +MAKE:start.s - start menu
+#!/bin/bash
+
+#------------------------------------------------------------------------------ ----------------------------------------
+STYLE=NORM  # = NORM/CHAL/NVIS
+LEVEL=00    # ^ 00..20
+SOUND=BEL   # < OFF/BEL
+
+clrHi=()
+clrHi+=("${atPFX}${atUSC};${fgYEL};${bgGRN}${atSFX}")
+clrHi+=("${atPFX}${atUSC};${fgBGRN};${bgBLK}${atSFX}")
+clrHi+=("${GRN}")
+
+#+=============================================================================
+stPitLang() {  # (lang)
+	STRT=()
+
+	if [[ "$LANG" == "RU" ]]; then
+		#                1         2
+		#       12345678901234567890
+		STRT+=(".╔═╕.....╒═╤═╕......")  #  1
+		STRT+=(".║─╖┌┐┬.┬┌┐│┌┐┬.┬┌┐.")  #  2
+		STRT+=(".║.║┌┤││││││├┘│/││..")  #  3
+		STRT+=(".╙─╜└┘└┴┘└┘┴┴.┴.┴└┘.")  #  4
+
+		STMAP=()
+		STMAP+=(".ttt.....ttttt......")  #  1
+		STMAP+=(".tttlji.iootjji.iss.")  #  2
+		STMAP+=(".t.tjtitiootojiiis..")  #  3
+		STMAP+=(".tttjjtttootj.i.iss.")  #  4
+
+	else
+		#                1         2
+		#       12345678901234567890
+		STRT+=("..╔═╕....╒═╤═╕.♦....")  #  1
+		STRT+=("..║─┤╒╕╒╕┬.│┌─┐┬┌┐..")  #  2
+		STRT+=("..║.││╡╘╕├┐││┌┘│└┐..")  #  3
+		STRT+=("..╙─┘┴┴└┘┴┴┴┴└.┴└┘..")  #  4
+
+		STMAP=()
+		STMAP+=("..ttt....ttttt.o....")  #  1
+		STMAP+=("..tttllsso.tjjjiss..")  #  2
+		STMAP+=("..t.tlissoitijjiss..")  #  3
+		STMAP+=("..tttllssoitjj.iss..")  #  4
+	fi
+
+	#                1         2
+	#       12345678901234567890
+	STRT+=("....................")  #  5
+	STRT+=("..${txtStyle// /.}:▐====▌......")  #  6  NORM/CHAL/NVIS
+	STRT+=("....................")  #  7
+	STRT+=("..${txtLevel// /.}:▐^^▌........")  #  8  00..20
+	STRT+=("....................")  #  9
+	STRT+=("..${txtSound// /.}:▐<<<▌.......")  # 10  OFF/BEL
+	STRT+=("....................")  # 11
+	STRT+=("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄")  # 12
+	STRT+=("▐_~-▐${txtHighScore// /:}▌-~_▌")  # 13
+	STRT+=("▐..................▌")  # 14
+	STRT+=("▐..................▌")  # 15
+	STRT+=("▐..................▌")  # 16
+	STRT+=("▐..................▌")  # 17
+	STRT+=("▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌")  # 18
+}
+
+#+=============================================================================
+stShowLang() {  # (0|1:updateLogo)
+	local ch
+
+	[[ "$LANG" == "RU" ]]  &&  ch="▌${langRU}▐"  ||  ch="▌${langEN}▐"
+	PAT $((SHy +2)) $((SHx +1)) "${clrLang1}${ch}"
+
+	[[ "$LANG" != "RU" ]]  &&  ch=" ${langRU} "  ||  ch=" ${langEN} "
+	PAT $((SHy +3)) $((SHx +2)) "${clrLang2}${ch}"
+
+	# redraw screen, if requested
+	if (($1)); then
+		stShow
+		stDrawSel 1 $2 0
+
+		FAST=1
+		pfDrawLevel
+		pfDrawScore
+		pfShowScore
+
+		pfDrawDebug
+
+		statusSet "${txtStatsHelp}"
+	fi
+}
+
+#+=============================================================================
+stPressStart() {
+	local press  start  x  fg
+
+	((CTRLC))  &&  trap "" INT  # disable ^C
+
+	local fgc=(37 33 36 32 35 31 34 30)  # W,Y,C,G,M,R,B,K [8]
+	local fgi=0
+	while : ; do
+		[[ $((++fgi)) -eq 7 ]]  &&  fgi=0
+		fg=${fgc[$fgi]}
+		for ((x = 0;  x < ${#txtPress};  x++)); do
+			PAT $((BSy +4)) $((BSx +3 +x)) "${atPFX}${atBLD};${fg};${bgBLK}${atSFX}${txtPress:$x:1}"
+			[[ $((++fg)) -eq 38 ]]  &&  fg=31
+			sleep 0.001
+		done
+
+		for ((x = 0;  x < ${#txtStart};  x++)); do
+			PAT $((BSy +5)) $((BSx +4 +x)) "${atPFX}${atBLD};${fg};${bgBLK}${atSFX}${txtStart:$x:1}"
+			[[ $((++fg)) -eq 38 ]]  &&  fg=31
+			sleep 0.001
+		done
+	done
+}
+
+#+=============================================================================
+stKillPressStart() {
+	if [[ $StPid -ne 0 ]]; then
+		kill -13 $StPid  # silent death!
+		StPid=0
+		PAT $((BSy +4)) $((BSx +3)) "${atOFF}       "
+		PAT $((BSy +5)) $((BSx +4)) "${atOFF}     "
+	fi
+}
+
+#+=============================================================================
+stScrollPut() {  # (ss, sy))
+	local  c  clr  l  ch  x  xx
+
+	l=$((${2} +${1} -18))
+	for ((x = 0;  x < ${#STRT[$l]};  x++)); do
+		xx=$x
+		ch="${STRT[$l]:$x:1}"
+		[[ "$ch" == "." ]] && ch=" "
+
+		if [[ $l -lt 4 ]]; then  # logo
+			c="${STMAP[$l]:$x:1}"
+			case $c in
+				[ljsztoi] )  eval clr=\$clr${c^^}  ;;
+				*         )  clr="$atOFF"          ;;
+			esac
+
+		elif [[ $l -lt 11 ]]; then  # options
+			case "$ch" in
+				"▐" | "▌" )  clr=${WHT}   ;;
+				"="  )
+					ch=${txtOptStyle[${STYLE}]}
+					clr="${clrVal}"
+					((x+=3))
+					;;
+				"^"  )
+					printf -v ch "%02d" $LEVEL
+					clr="${clrVal}"
+					((x+=1))
+					;;
+				"<"  )
+					ch=${txtOptSound[${SOUND}]}
+					clr="${clrVal}"
+					((x+=2))
+					;;
+				*   )  clr="${BGRN}"  ;;
+			esac
+
+		elif [[ $l -eq 11 || $l -eq 17 ]]; then  # box top & bottom
+			clr="${YEL}"
+
+		elif [[ $l -eq 12 ]]; then  # title
+			if [[ $x -eq 0 || $x -eq 19 ]]; then
+				clr="${YEL}"
+			else
+				case "$ch" in
+					"," | "_" | "-" )  clr="${BGRN}"  ;;
+					"~" )  clr="${BGRN}"
+					       ch="."
+					       ;;
+					"▐" | "▌" )  clr="${GRN}"   ;;
+					":"       )  clr="${atPFX}${fgBWHT};${bgGRN}${atSFX}"
+					             ch=" "
+					             ;;
+					[^\ ]     )  clr="${atPFX}${fgBWHT};${bgGRN}${atSFX}"   ;;
+					*         )  clr="${atOFF}"  ;;
+				esac
+			fi
+
+		elif [[ $l -eq 13 ]]; then  # pre 1st place
+			if [[ "$ch" == " " ]]; then
+				clr="${atPFX}${atUSC};${fgYEL};${bgBLK}${atSFX}"
+			else
+				clr="${YEL}"
+			fi
+
+		elif [[ $l -ge 14 && $l -le 16 ]]; then                   # 1st place
+			if [[ $x -eq 0 || $x -eq 19 ]]; then     # box
+				clr="${YEL}"
+			elif [[ $x -eq 1 ]]; then
+				local tmp
+				local i=$((l -14))
+				eval tmp=(\${HI$i[@]})
+				printf -v ch " %3s │ %'10d" "${tmp[2]}" "${tmp[3]}"
+				clr="${clrHi[$i]}"
+				((x += 16))
+			fi
+		fi
+
+		PAT $((PITy +$2)) $((PITx +xx +1)) "${clr}${ch}"
+	done
+}
+
+#+=============================================================================
+stScrollIn() {
+	local ss  sy  s
+
+	for ((ss = 0;  ss < ${#STRT[@]};  ss++)); do
+		for ((sy = $((18 -$ss));  sy <= 18;  sy++)); do
+			stScrollPut $ss $sy
+		done
+		sleep 0.01
+	done
+
+	printf -v s "%*s" ${#STRT[$l]} ""
+	PAT $PITy $((PITx +1)) "${atOFF}${s}"
+}
+
+#+=============================================================================
+stScrollOut() {
+	local ss  sy  s
+
+	printf -v s "%*s" ${#STRT[$l]} ""
+	for ((ss = ((${#STRT[@]} -1));  ss >= 0;  ss--)); do
+		for ((sy = 18;  sy >= $((18 -$ss));  sy--)); do
+			stScrollPut $ss $sy
+		done
+		PAT $((PITy +sy)) $((PITx +1)) "${atOFF}${s}"
+		sleep 0.01
+	done
+
+	PAT $((PITy +sy +1)) $((PITx +1)) "${atOFF}${s}"
+}
+
+#+=============================================================================
+stShow() {
+	local ss  sy  s
+
+	ss=$((${#STRT[@]} -1))
+	for ((sy = $((18 -$ss));  sy <= 18;  sy++)); do
+		stScrollPut $ss $sy
+	done
+
+	printf -v s "%*s" ${#STRT[$l]} ""
+	PAT $PITy $((PITx +1)) "${atOFF}${s}"
+}
+
+#+=============================================================================
+stDrawSel() {  # (0:clear/1:draw, sel{0..2}, offsetY)
+	local ch
+	(($1))  &&  ch="◄▬▬"  ||  ch="    "
+	PAT $((PITy +${2}*2 +6 +${3})) $((PITx +16)) "${BGRN}${ch}"
+}
+
+#+=============================================================================
+stOptPan() {  # (y, x, clr, L|R, old, new)
+	local  l  x  ch  old  new
+
+	l=$((${#5} +1))
+
+	if [[ $4 == L ]]; then  # left
+		for (( x = 1;  x <= $l;  x++)); do
+			[[ $x -eq 1         ]]  &&  new=""  ||  new="${6:$((l -x))}"
+			[[ $x -eq $l        ]]  &&  ch=""   ||  ch="║"
+			[[ $x -ge $((l -1)) ]]  &&  old=""  ||  old="${5:0:$((l -x -1))}"
+			PAT $1 $2 "${3}${new}${ch}${old}"
+			sleep 0.05
+		done
+
+	else  # right
+		for (( x = 1;  x <= $l;  x++)); do
+			[[ $x -eq $((l -1)) ]]  &&  old=""  ||  old="${5:$x}"
+			[[ $x -eq $l        ]]  &&  ch=""   ||  ch="║"
+			[[ $x -eq 1         ]]  &&  new=""  ||  new="${6:0:$((x -1))}"
+			PAT $1 $2 "${3}${old}${ch}${new}"
+			sleep 0.05
+		done
+	fi
+}
+
+#+=============================================================================
+# Handle the STYLE prams
+#
+startPrams() {
+	pfDrawLevel start
+
+	GARBAGE=0
+	CLEVEL=
+	scoreDrp=
+	scoreLvl=$LEVEL
+	scoreLin=0
+	LPL=10  # lines per level
+	if [[ "$STYLE" == "CHAL" ]]; then
+		#  Lvl Spd Grb Pcs   Lvl Spd Grb Pcs   Lvl Spd Grb Pcs   Lvl Spd Grb Pcs
+		#   0   3   4  107    5   4   6  125    10  5   8  143    15  6   10 161
+		#   1   4   4  109    6   5   6  127    11  6   8  145    16  7   10 163
+		#   2   5   4  111    7   6   6  129    12  7   8  147    17  8   10 165
+		#   3   6   4  113    8   7   6  131    13  8   8  149    18  9   10 167
+		#   4   7   4  115    9   8   6  133    14  9   8  151    19  10  10 169
+		#                                                         20  10  12 182
+		CLEVEL=$(( ((LEVEL /5) +3) +(LEVEL %5) +((LEVEL /20) *3) ))  # spd
+		GARBAGE=$(( ((LEVEL /5) *2) +4))  # 4,6,8,10,12
+		scoreDrp=$((100 +GARBAGE +CLEVEL +LEVEL +((LEVEL/5)*10)))
+		LPL=6
+
+		if ((DEBUG)); then
+			#             10    cubes/line   [PITw]
+			#              4    cubes/piece
+			# (10/4)    =  2.5  pieces/line
+			#              6    lines/level  [LPL]
+			# (6*10)    = 60    cubes/level
+			# (6*2.5)   = 15    pieces/level
+			# ((6*5)/2) = 15    pieces/level (integer maths)
+			local ppl=$(( (LPL *5) /2 ))                     # piece per level
+			local top=$(( CLEVEL +(scoreDrp /ppl) ))         # theoretical top level
+			local max=$top
+			((max > 20))  &&  max=20                         # maxes out at 20 anyway
+			local pcs=$(( scoreDrp -((max -CLEVEL) *ppl) ))  # pieces that will drop at max level
+			DBG "LPL=$LPL ; Level=$LEVEL ; Speed=$CLEVEL ; Junk=$GARBAGE ; Pieces=$scoreDrp , @$max=$pcs"
+		fi
+
+		scoreLvl=$CLEVEL
+		scoreLin=$GARBAGE
+	fi
+
+	score=0
+	scoreMul=0
+	scoreLast=0
+	scoreBest=0
+	pfShowScore start
+}
+
+#+=============================================================================
+start() {
+	local old  update
+
+	local SEL=0
+
+	hisLoad $LEVEL $STYLE
+	((FAST))  &&  stShow  ||  stScrollIn
+
+	wait  # wait for UNbrickout to complete
+
+	stShowLang 0
+
+	# animated "press start"
+	stPressStart &
+	StPid=$!
+
+	statusSet "${txtStatsHelp}"
+
+	keyFlush
+	stDrawSel 1 $SEL 0
+	vercnt=1
+	while : ; do
+		statusUpdate
+
+		sleep 0.05  # 20 reads/sec
+		keyGet
+
+		case ${KEY^^} in
+			[Z,] )
+				[[ $SEL -eq 2 ]]  &&  sound test
+				;;
+
+			[P] )
+				startPrams
+				stScrollOut &
+				pfDrawShoulder 0 0 j &
+
+				HIDE=0  # hide basket pieces
+				if [[ "$STYLE" == "NVIS" ]]; then
+					if   [[ $LEVEL -ge 15 ]]; then HIDE=2
+					elif [[ $LEVEL -ge 10 ]]; then HIDE=1
+					fi
+				fi
+				stKillPressStart
+				pfBsHide &
+
+				statusClear
+
+				wait
+				return
+				;;
+
+			"BKSP" )
+				stKillPressStart
+				quit 0
+				;;
+
+			"DEL" | [Q] )
+				[[ "$LANG" == "RU" ]]  &&  langSet EN  ||  langSet RU
+				stShowLang 1 $SEL
+
+				stKillPressStart
+				stPressStart &
+				StPid=$!
+				;;
+
+			"DOWN" | [S] )
+				if [[ $SEL -ne 2 ]]; then
+					stDrawSel 0 $SEL 0
+					stDrawSel 1 $SEL 1
+					sleep 0.02
+					stDrawSel 0 $SEL 1
+					((SEL = ++SEL %3))
+					stDrawSel 1 $SEL 0
+				fi
+				;;
+
+			"UP" | [W] )
+				if [[ $SEL -ne 0 ]]; then
+					stDrawSel 0 $SEL 0
+					stDrawSel 1 $SEL -1
+					sleep 0.02
+					stDrawSel 0 $SEL -1
+					((SEL = ($SEL +2) % 3))
+					stDrawSel 1 $SEL 0
+				fi
+				;;
+
+			"LEFT" | [A] )
+				case $SEL in
+					0 ) old=$STYLE
+						case $STYLE in
+							NVIS )  STYLE=CHAL ;;
+							CHAL )  STYLE=NORM ;;
+						esac
+						if [[ $old != $STYLE ]]; then
+							hisShow left $LEVEL $old $LEVEL $STYLE &
+							stOptPan $((PITy +SEL*2 +6)) $((PITx +10)) ${clrVal} "L" \
+							         "${txtOptStyle[$old]}" "${txtOptStyle[$STYLE]}" &
+						fi
+						startPrams
+						;;
+
+					1 ) if [[ $LEVEL -gt 0 ]]; then
+							old=$LEVEL
+							((LEVEL--))
+							printf -v ch "%02d" $LEVEL
+							PAT $((PITy +SEL*2 +6)) $((PITx +10)) "${clrVal}${ch}"
+							hisShow left $old $STYLE $LEVEL $STYLE &
+						fi
+						startPrams
+						;;
+
+					2 ) old=$SOUND
+						SOUND=OFF
+						if [[ $old != $SOUND ]]; then
+							stOptPan $((PITy +SEL*2 +6)) $((PITx +10)) ${clrVal} "L" \
+							         "${txtOptSound[$old]}" "${txtOptSound[$SOUND]}" &
+						fi ;;
+				esac
+				;;
+
+			"RIGHT" | [D] )
+				case $SEL in
+					0 ) old=$STYLE
+						case $STYLE in
+							NORM )  STYLE=CHAL ;;
+							CHAL )  STYLE=NVIS ;;
+						esac
+						if [[ $old != $STYLE ]]; then
+							hisShow right $LEVEL $old $LEVEL $STYLE &
+							stOptPan $((PITy +SEL*2 +6)) $((PITx +10)) ${clrVal} "R" \
+							         "${txtOptStyle[$old]}" "${txtOptStyle[$STYLE]}" &
+						fi
+						startPrams
+						;;
+
+					1 ) if [[ $LEVEL -lt 20 ]]; then
+							old=$LEVEL
+							((LEVEL++))
+							printf -v ch "%02d" $LEVEL
+							PAT $((PITy +SEL*2 +6)) $((PITx +10)) "${clrVal}${ch}"
+							hisShow right $old $STYLE $LEVEL $STYLE &
+						fi
+						startPrams
+						;;
+
+					2 ) old=$SOUND
+						SOUND=BEL
+						if [[ $old != $SOUND ]]; then
+							stOptPan $((PITy +SEL*2 +6)) $((PITx +10)) ${clrVal} "R" \
+							         "${txtOptSound[$old]}" "${txtOptSound[$SOUND]}" &
+						fi ;;
+				esac
+				;;
+
+			"F1" | "?" | "F2" | "F10" )
+				stKillPressStart
+
+				case "${KEY^^}" in
+					"F1" | "?" )  helpCtrl ;;
+					"F2"       )  helpCombo ;;
+					"F10"      )  hisStats ;;
+				esac
+
+				csDrawBackdropReveal 0
+				pfDrawAll 2 # 1=fast, 2=don't redraw backdrop
+				stShowLang 0
+				stShow
+				stDrawSel 1 $SEL 0
+
+				pfDrawLevel start
+				pfShowScore start
+
+				stPressStart &
+				StPid=$!
+				;;
+
+			"F4" )
+				case $vercnt in
+					1 )  statusSet "${NAME} v${VER} |${DBGpipe}|" ;;
+					2 )  statusSet "DbgPipe: |${DBGpipe}|" ;;
+					3 )  statusSet "\`uname -v\`: |$(uname -v 2>/dev/null)|" ;;
+					4 )  statusSet "Distro: |${DISTRO}|  Bash: |${BASHVER}|  KbdDrv: |${KEYDRV}|" ;;
+					5 )  statusSet "CLI: |${CMD} ${ARGS}|" ;;
+					6 )  statusSet "HS.dat: |${CMDhs}|" ;;
+					7 )  statusSet "RIG.dat: |${CMDrig}|" ;;
+					8 )  statusSet "GO.dat: |${CMDgo}|"
+					     vercnt=0
+					     ;;
+				esac
+				((vercnt++))
+				;;
+		esac
+
+	done
+}
+
+# -MAKE:start.s
+# +MAKE:pause.s - pause screen
+#!/bin/bash
+
+#+=============================================================================
+PauseTwinkle() {
+	local i
+	local clr=("$GRY" "$BLU" "$BBLU" "$CYN" "$BCYN" "$WHT" "$BWHT")
+	for ((i = 1;  i < ${#clr[@]};  i++)); do
+		PAT $1 $2 "${clr[$i]}◘"
+		sleep .01
+	done
+	for ((i = ${#clr[@]} -2;  i >= 0;  i--)); do
+		PAT $1 $2 "${clr[$i]}◘"
+		sleep .01
+	done
+}
+
+#+=============================================================================
+Pause() {
+	local y  x  i  n  now  timeSt
+
+	local timeBored=0
+	local boredDelay=18000 # mS
+	timeGet timeSt
+
+	pfHideGame
+
+	local PAUSE=()
+		PAUSE+=("TTLTLLBJBJBJBIBBBIBTTTBTZLZZBZ")
+		PAUSE+=("TJBJLBIIBLJLIIBBIIJJBJBJLLBLBB")
+		PAUSE+=("JJBBBBIIBBLLITTTITBLBLLLJJBJBJ")
+
+	for ((y = 0;  y < PSh;  y++)); do
+		for ((x = 0;  x < PSw;  x++)); do
+			local ct  cb  clrt  clrb
+			ct=${PAUSE[$y]:$((x*2   )):1}
+			cb=${PAUSE[$y]:$((x*2 +1)):1}
+			eval clrt='$'{clrFg$ct:2}
+			eval clrb='$'{clrFg$cb:2}
+			((clrb += 10))
+			PAT $((PITy +PSy +y)) $((PITx +PSx +x +1)) "${atPFX}${clrt};${clrb}${atSFX}▀"
+		done
+	done
+
+	# be bored until we restart
+	local csuits="♠♣♥♦"
+	local csuit=${csuits:$(($RANDOM %4)):1}
+	local cvalues="A23456789JQK"
+	local cvalue=${cvalues:$(($RANDOM %12)):1}
+
+	local boredMsg=()
+		boredMsg+=("Press${keyL}P${keyR}to un-pause.")
+		boredMsg+=("You can redraw the screen at any time by pressing${keyL}\`${keyR}")
+		boredMsg+=("Алексей Пажитнов wrote Тетрис the year ${GROUP}${clrStatus} was formed.")
+		boredMsg+=("Two sugars please...")
+		boredMsg+=("E != mc²  ...  E² = m²(c^4) + p²c²")
+		boredMsg+=("Tell them you're busy!")
+		boredMsg+=("\"Bored Now\"")
+		boredMsg+=("one-two ... one-two ... Is this thing on?")
+		boredMsg+=("The array you're looking for is boredMsg[]")
+		boredMsg+=("The QBit was named by Benjamin Schumacher.")
+		boredMsg+=("\"You'll go blind doing that!\" [Conker T Squirrel]")
+		boredMsg+=("Come back, or I'll start ticking your score down!")
+		boredMsg+=("Were you thinking of the${keyL}${cvalue}${csuit}${keyR}?")
+		boredMsg+=("That's it, you're only getting Z-tets from now on >:-(")
+		boredMsg+=("Seriously: \`grep boredMsg ${NAME}\`")
+		boredMsg+=("WW91IGp1c3QgbG9zdCBUaGUgR2FtZQ==")
+		boredMsg+=("Did you know you can cheat by running \`${NAME} -d\` ?")
+		boredMsg+=("··· ·~ ~~ ··~ · ·~·· / ~~ ~~~ ·~· ··· · / ~·· ·· ~·· ·· ~ ~·~·~~")
+		boredMsg+=("My dad told me that last one ☺")
+		boredMsg+=("OK, I'm bored of being bored now...")
+	StatTime=$statSlow
+
+	keyFlush
+	n=0
+	while : ; do
+		keyGet
+		sleep 0.05
+		if [[ "$KEY" == "BKSP" ]]; then
+			RUN=0
+			return
+		fi
+		[[ "${KEY^^}" == "P" ]]  &&  break
+
+		timeGet now
+		if [[ $now -gt $((timeBored +boredDelay)) ]]; then
+			statusSet "${boredMsg[$boredCnt]}"
+#			[[ $((++boredCnt)) -ge ${#boredMsg[@]} ]]  &&  boredCnt=0
+			i=$boredCnt
+			while [[ $i -eq $boredCnt ]]; do
+				boredCnt=$((RANDOM %${#boredMsg[@]}))
+			done
+			timeGet timeBored
+		fi
+		statusUpdate
+
+		y=$((RANDOM %PITh +PITy))
+		i=$((BSx +BSw -2))
+		x=$((RANDOM %i +1))
+
+		if [[ \
+			( ( $((y & 1)) -eq 0  &&  $((x & 1)) -eq 1 ) || \
+			  ( $((y & 1)) -eq 1  &&  $((x & 1)) -eq 0 ) \
+			) && \
+			( \
+				( ($y -ge $((SHy +1))  &&  $y -le $((SHy +SHh -2)) ) && \
+				  ($x -ge $((SHx +1))  &&  $x -le $((SHx +SHw -2)) ) \
+				) || \
+				( ( ($y -ge   $PITy      ) && ($y -le $((PITy +PSy -1)) ) ) && \
+				  ( ($x -ge $((PITx +1)) ) && ($x -le $((PITx + PITw*2)) ) ) \
+				) || \
+				( ( ($y -ge $((PITy +PSy)) ) && ($y -le $((PITy +PSy +PSh -1)) ) ) && \
+				  ( ($x -ge $((PITx +1          ))  &&  $x -le $((PITx +PSx   )) ) || \
+					($x -ge $((PITx +PSx +PSw +1))  &&  $x -le $((PITx + PITw*2)) ) \
+				  ) \
+				) || \
+				( ($y -ge $((PITy +PSy +PSh))  &&  $y -le $((PITy +PITd   )) ) && \
+				  ($x -ge $((PITx +1       ))  &&  $x -le $((PITx + PITw*2)) ) \
+				) || \
+				($y -ge   $BSy       &&  $y -le $((BSy +BSh -2)) && \
+				 $x -ge $((BSx +1))  &&  $x -le $((BSx +BSw -2)) \
+				) \
+			) \
+		]]; then
+			((n++))
+			((n %3))  ||  PauseTwinkle $y $x &
+		fi
+
+	done
+	statusClear
+	StatTime=$statNorm
+
+	wait
+	pfUnhideGame
+	tetDraw
+
+	timeGet mow
+	((timePause += now -timeSt))
+}
+
+# -MAKE:pause.s
+# +MAKE:rig.dat - rig-game setups
+#!/bin/bash
+
+# we'll just wrap this in a heredoc for sanity
+: << 'EOT'
+
+# Test rigs
+# Each line is essentially a line of code which is eval'ed
+# - Run the game in debug mode
+# - Set up the pit you want to test
+# - Capture the PlayField from the debug monitor
+# - tet0 is the tet in play
+# - tet1 is the next tet in play
+# - tet4 is the shoulder tet
+# - rot is the rotation {0..3} [moving clockwise]
+# - tetY|X are the starting pit coords
+# - tetStY|X are the default starting values {top, middle}
+# The character between the ~'s is the selection key
+# The box will auto-centre, but it will not scroll!
+# ...So you're limited to ~23 test rigs [ironically, untested]
+
+rig~0~titl="Clear Pit"
+rig~0~tetY=$tetStY
+rig~0~tetX=$tetStX
+rig~0~rot=0
+rig~0~tet0=("${tetI[@]}")
+rig~0~tet1=("${tetI[@]}")
+rig~0~tet2=("${tetI[@]}")
+rig~0~tet3=("${tetI[@]}")
+rig~0~tet4=("${tetI[@]}")
+rig~0~PIT[ 0]="F880808080808080808080F1"
+rig~0~PIT[ 1]="F880808080808080808080F1"
+rig~0~PIT[ 2]="F880808080808080808080F1"
+rig~0~PIT[ 3]="F880808080808080808080F1"
+rig~0~PIT[ 4]="F880808080808080808080F1"
+rig~0~PIT[ 5]="F880808080808080808080F1"
+rig~0~PIT[ 6]="F880808080808080808080F1"
+rig~0~PIT[ 7]="F880808080808080808080F1"
+rig~0~PIT[ 8]="F880808080808080808080F1"
+rig~0~PIT[ 9]="F880808080808080808080F1"
+rig~0~PIT[10]="F880808080808080808080F1"
+rig~0~PIT[11]="F880808080808080808080F1"
+rig~0~PIT[12]="F880808080808080808080F1"
+rig~0~PIT[13]="F880808080808080808080F1"
+rig~0~PIT[14]="F880808080808080808080F1"
+rig~0~PIT[15]="F880808080808080808080F1"
+rig~0~PIT[16]="F880808080808080808080F1"
+rig~0~PIT[17]="F880808080808080808080F1"
+rig~0~PIT[18]="F880808080808080808080F1"
+rig~0~PIT[19]="F880808080808080808080F1"
+rig~0~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~1~titl="Add O for Perfect"
+rig~1~tetY=$(($tetStY+7))
+rig~1~tetX=$tetStX
+rig~1~rot=1
+rig~1~tet0=("${tetO[@]}")
+rig~1~tet1=("${tetO[@]}")
+rig~1~tet2=("${tetO[@]}")
+rig~1~tet3=("${tetO[@]}")
+rig~1~tet4=("${tetO[@]}")
+rig~1~PIT[ 0]="F880808080808080808080F1"
+rig~1~PIT[ 1]="F880808080808080808080F1"
+rig~1~PIT[ 2]="F880808080808080808080F1"
+rig~1~PIT[ 3]="F880808080808080808080F1"
+rig~1~PIT[ 4]="F880808080808080808080F1"
+rig~1~PIT[ 5]="F880808080808080808080F1"
+rig~1~PIT[ 6]="F880808080808080808080F1"
+rig~1~PIT[ 7]="F880808080808080808080F1"
+rig~1~PIT[ 8]="F880808080808080808080F1"
+rig~1~PIT[ 9]="F880808080808080808080F1"
+rig~1~PIT[10]="F880808080808080808080F1"
+rig~1~PIT[11]="F880808080808080808080F1"
+rig~1~PIT[12]="F880808080808080808080F1"
+rig~1~PIT[13]="F880808080808080808080F1"
+rig~1~PIT[14]="F880808080808080808080F1"
+rig~1~PIT[15]="F880808080808080808080F1"
+rig~1~PIT[16]="F880808080808080808080F1"
+rig~1~PIT[17]="F880808080808080808080F1"
+rig~1~PIT[18]="F821292928808021292928F1"
+rig~1~PIT[19]="F821292928808021292928F1"
+rig~1~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~2~titl="Add I for Perfect Tetris"
+rig~2~tetY=$(($tetStY+5))
+rig~2~tetX=$tetStX
+rig~2~rot=1
+rig~2~tet0=("${tetI[@]}")
+rig~2~tet1=("${tetI[@]}")
+rig~2~tet2=("${tetI[@]}")
+rig~2~tet3=("${tetI[@]}")
+rig~2~tet4=("${tetI[@]}")
+rig~2~PIT[ 0]="F880808080808080808080F1"
+rig~2~PIT[ 1]="F880808080808080808080F1"
+rig~2~PIT[ 2]="F880808080808080808080F1"
+rig~2~PIT[ 3]="F880808080808080808080F1"
+rig~2~PIT[ 4]="F880808080808080808080F1"
+rig~2~PIT[ 5]="F880808080808080808080F1"
+rig~2~PIT[ 6]="F880808080808080808080F1"
+rig~2~PIT[ 7]="F880808080808080808080F1"
+rig~2~PIT[ 8]="F880808080808080808080F1"
+rig~2~PIT[ 9]="F880808080808080808080F1"
+rig~2~PIT[10]="F880808080808080808080F1"
+rig~2~PIT[11]="F880808080808080808080F1"
+rig~2~PIT[12]="F880808080808080808080F1"
+rig~2~PIT[13]="F880808080808080808080F1"
+rig~2~PIT[14]="F880808080808080808080F1"
+rig~2~PIT[15]="F880808080808080808080F1"
+rig~2~PIT[16]="F89199999C8024A1A9A9ACF1"
+rig~2~PIT[17]="F89599999A8026A5A9A9AAF1"
+rig~2~PIT[18]="F89399999C8026A3A9A9ACF1"
+rig~2~PIT[19]="F89199999A8022A1A9A9AAF1"
+rig~2~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~3~titl="Test Frag+Combo"
+rig~3~tetY=$(($tetStY+8))
+rig~3~tetX=$(($tetStX+5))
+rig~3~rot=1
+rig~3~tet0=("${tetT[@]}")
+rig~3~tet1=("${tetI[@]}")
+rig~3~tet2=("${tetI[@]}")
+rig~3~tet3=("${tetI[@]}")
+rig~3~tet4=("${tetI[@]}")
+rig~3~PIT[ 0]="F880808080808080808080F1"
+rig~3~PIT[ 1]="F880808080808080808080F1"
+rig~3~PIT[ 2]="F880808080808080808080F1"
+rig~3~PIT[ 3]="F880808080808080808080F1"
+rig~3~PIT[ 4]="F880808080808080808080F1"
+rig~3~PIT[ 5]="F880808080808080808080F1"
+rig~3~PIT[ 6]="F880808080808080808080F1"
+rig~3~PIT[ 7]="F880808080808080808080F1"
+rig~3~PIT[ 8]="F880808080808080808080F1"
+rig~3~PIT[ 9]="F880808080808080808080F1"
+rig~3~PIT[10]="F880808080808080808080F1"
+rig~3~PIT[11]="F880808080808080808080F1"
+rig~3~PIT[12]="F880808080808080808080F1"
+rig~3~PIT[13]="F880808080808080808080F1"
+rig~3~PIT[14]="F880808080808080808080F1"
+rig~3~PIT[15]="F880808080808080808080F1"
+rig~3~PIT[16]="F834808080808080808080F1"
+rig~3~PIT[17]="F837388080808080808080F1"
+rig~3~PIT[18]="F8326568151c151c717c80F1"
+rig~3~PIT[19]="F8616a80131a131a807378F1"
+rig~3~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~4~titl="Add J for DOUBLE Combo"
+rig~4~tetY=$(($tetStY+3))
+rig~4~tetX=$tetStX
+rig~4~rot=3
+rig~4~tet0=("${tetJ[@]}")
+rig~4~tet1=("${tetJ[@]}")
+rig~4~tet2=("${tetI[@]}")
+rig~4~tet3=("${tetI[@]}")
+rig~4~tet4=("${tetO[@]}")
+rig~4~PIT[ 0]="F880808080808080808080F1"
+rig~4~PIT[ 1]="F880808080808080808080F1"
+rig~4~PIT[ 2]="F880808080808080808080F1"
+rig~4~PIT[ 3]="F880808080808080808080F1"
+rig~4~PIT[ 4]="F880808080808080808080F1"
+rig~4~PIT[ 5]="F880808080808080808080F1"
+rig~4~PIT[ 6]="F880808080808080808080F1"
+rig~4~PIT[ 7]="F880808080808080808080F1"
+rig~4~PIT[ 8]="F880808080808080808080F1"
+rig~4~PIT[ 9]="F880808080808080808080F1"
+rig~4~PIT[10]="F880808080808080808080F1"
+rig~4~PIT[11]="F880808080808080808080F1"
+rig~4~PIT[12]="F880808080808080808080F1"
+rig~4~PIT[13]="F8151c151c8080151c151cF1"
+rig~4~PIT[14]="F8131a131a8080131a131aF1"
+rig~4~PIT[15]="F84451595c808045494854F1"
+rig~4~PIT[16]="F846717c52802442656856F1"
+rig~4~PIT[17]="F8434873788026616a515aF1"
+rig~4~PIT[18]="F8151c151c8026151c151cF1"
+rig~4~PIT[19]="F8131a131a8022131a131aF1"
+rig~4~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~5~titl="Add 2x4 for Super Combo"
+rig~5~tetY=$tetStY
+rig~5~tetX=$tetStX
+rig~5~rot=0
+rig~5~tet0=("${tetO[@]}")
+rig~5~tet1=("${tetO[@]}")
+rig~5~tet2=("${tetI[@]}")
+rig~5~tet3=("${tetI[@]}")
+rig~5~tet4=("${tetO[@]}")
+rig~5~PIT[ 0]="F880808080808080808080F1"
+rig~5~PIT[ 1]="F880808080808080808080F1"
+rig~5~PIT[ 2]="F880808080808080808080F1"
+rig~5~PIT[ 3]="F880808080808080808080F1"
+rig~5~PIT[ 4]="F880808080808080808080F1"
+rig~5~PIT[ 5]="F880808080808080808080F1"
+rig~5~PIT[ 6]="F880808080808080808080F1"
+rig~5~PIT[ 7]="F880808080808080808080F1"
+rig~5~PIT[ 8]="F880808080808080808080F1"
+rig~5~PIT[ 9]="F880808080808080808080F1"
+rig~5~PIT[10]="F880808080808080808080F1"
+rig~5~PIT[11]="F880808080808080808080F1"
+rig~5~PIT[12]="F8A1A9A9AC151c80808080F1"
+rig~5~PIT[13]="F8A5A9A9AA131a80808080F1"
+rig~5~PIT[14]="F8A3A9A9AC151c80808080F1"
+rig~5~PIT[15]="F8A1A9A9AA131a80808080F1"
+rig~5~PIT[16]="F8A1A9A9ACA1A9A9AC8080F1"
+rig~5~PIT[17]="F8A5A9A9AAA5A9A9AA8080F1"
+rig~5~PIT[18]="F8A3A9A9ACA3A9A9AC8080F1"
+rig~5~PIT[19]="F8A1A9A9AAA1A9A9AA8080F1"
+rig~5~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
+
+rig~6~titl="Add T for T Spin"
+rig~6~tetY=$tetStY
+rig~6~tetX=$(($tetStX-1))
+rig~6~rot=3
+rig~6~tet0=("${tetT[@]}")
+rig~6~tet1=("${tetT[@]}")
+rig~6~tet2=("${tetT[@]}")
+rig~6~tet3=("${tetT[@]}")
+rig~6~tet4=("${tetT[@]}")
+rig~6~PIT[ 0]="F880808080808080808080F1"
+rig~6~PIT[ 1]="F880808080808080808080F1"
+rig~6~PIT[ 2]="F880808080808080808080F1"
+rig~6~PIT[ 3]="F880808080808080808080F1"
+rig~6~PIT[ 4]="F880808080808080808080F1"
+rig~6~PIT[ 5]="F880808080808080808080F1"
+rig~6~PIT[ 6]="F880808080808080808080F1"
+rig~6~PIT[ 7]="F880808080808080808080F1"
+rig~6~PIT[ 8]="F880808080808080808080F1"
+rig~6~PIT[ 9]="F880808080808080808080F1"
+rig~6~PIT[10]="F880808080808080808080F1"
+rig~6~PIT[11]="F880808080808080808080F1"
+rig~6~PIT[12]="F880808080808080808080F1"
+rig~6~PIT[13]="F845494880808080808080F1"
+rig~6~PIT[14]="F842656880808080808080F1"
+rig~6~PIT[15]="F8616a3480808080808080F1"
+rig~6~PIT[16]="F864313E80808080808080F1"
+rig~6~PIT[17]="F8636c328080151c51595cF1"
+rig~6~PIT[18]="F85462808080131a717c52F1"
+rig~6~PIT[19]="F853595880212929287378F1"
+rig~6~PIT[20]="FCF4F4F4F4F4F4F4F4F4F4F5"
 
 EOT
+# -MAKE:rig.dat
+# +MAKE:rig.s - rig-game menu & system
+#!/bin/bash
+
+#+=============================================================================
+rigGame() {
+	local tlx  tly  x  y  n  t  w  i  valid  s  item
+
+	# get titles
+	local list=($(
+		grep '^rig~[0-9]*~titl=' ${CMDrig} | \
+		sed -e 's/rig~\([0-9]*\)~titl="\([^"]*\).*/\1:\2/' \
+			-e 's/ /_/g' \
+	))
+
+	w=0
+	for ((i = 0;  i < ${#list[@]};  i++)); do
+		t="${list[$i]//*:/}"
+		n=${#t}
+		[[ $n -gt $w ]]  &&  w=$n
+	done
+	((w += 8))
+	tly=$(($((24 -${#list[@]})) /2))
+	tlx=$((PITx +PITw -w/2 +1))
+	[[ $tlx -lt 1 ]]  &&  tlx=1
+
+	# Display menu
+	PAT $tly $tlx "${BRED}╔"
+	for ((x = 1;  x < $((w -1));  x++)); do
+		PAT $tly $((tlx +x)) "${BRED}═"
+	done
+	PAT $tly $((tlx +x)) "${BRED}╗"
+
+	# show titles
+	valid=
+	for ((y = 0;  y < ${#list[@]};  y++)); do
+		n=${list[$y]//:*/}
+		t=${list[$y]//*:/}
+		printf -v s "${BRED}║ ${BGRN}%c ${BBLK}- ${BWHT}%-*s ${BRED}║" $n $((w -8)) "${t//_/ }"
+		PAT $((tly +y +1))  $tlx "${s}${BBLK}▒"
+		valid="${valid}${n}"
+	done
+
+	PAT $((tly +y +1)) $tlx "${BRED}╚"
+	for ((x = 1;  x < $((w -1));  x++)); do
+		PAT $((tly +y +1)) $((tlx +x)) "${BRED}═"
+	done
+	PAT $((tly +y +1)) $((tlx +x)) "${BRED}╝${BBLK}▒"
+
+	for ((x = 1;  x <= $w;  x++)); do
+		PAT $((tly +${#list[@]} +2))  $((tlx +x)) "${BBLK}▒"
+	done
+
+	# get selection
+	while : ; do
+		keyGet
+		if [[ ! -z $KEY  &&  "$valid" =~ "$KEY" ]] ; then
+			# load selection
+			item=($(
+				grep -E "^rig~$KEY~(rot|tet|PIT)" ${CMDrig} | \
+				sed -e 's/rig~[0-9]*~//' \
+					-e 's/\[ /\[/' \
+					-e 's/ /_/g' \
+			))
+
+			for ((i = 0;  i < ${#item[@]};  i++)); do
+				eval ${item[$i]}
+			done
+			return
+		fi
+
+		# abort
+		[[ "$KEY" =~ ^(BKSP|ESC)$ ]]  &&  return
+
+		sleep 0.05
+	done
+}
+# -MAKE:rig.s
+# +MAKE:sound.s - event sounds
+#!/bin/bash
+
+#+============================================================================= ========================================
+sound() {
+	if   [[ "$SOUND" == "OFF" ]]; then  return
+	elif [[ "$SOUND" == "BEL" ]]; then
+		case "$1" in
+			"test"    )  echo -en "\a"  ;;  # rotate-L on Sound select
+			"levelup" )  echo -en "\a"  ;;  # speed increase
+			"comboS"  )  echo -en "\a"  ;;  # silver combo
+			"comboG"  )  echo -en "\a"  ;;  # gold combo
+			"perfect" )  echo -en "\a"  ;;  # pit emptied
+			"tetris"  )  echo -en "\a"  ;;  # tetris
+			*) DBG "Missing sound: |$SOUND|$1|"
+			   ;;
+		esac
+	else
+	   DBG "Missing sound: |$SOUND|$1|"
+	fi
+}
+# -MAKE:sound.s
+# +MAKE:g_gfx.s - game graphics
+#!/bin/bash
+
+#+============================================================================= ========================================
+tetSetGr() {  # (val, 0:BlankTab|1:BlankSpace|2:shadow)
+	local cc  bgc
+
+	if [[ $2 -eq 2 ]]; then
+		c=9
+		gr="░░"
+	else
+		c=4
+		gr="▒▒"
+	fi
+
+	printf -v cc "%d" $(($1 & maskT))
+	case "$cc" in
+		"${tetiB}"  )  [[ $2 -eq 1 ]]  &&  TGR="${tetB[4]}  "  ||  TGR="\033[2C" ;;
+
+		"${tetiO}"  )  TGR="${tetO[$c]}${gr}"   ; bgc="$((${clrFgO:2} +10))" ;;
+		"${tetiI}"  )  TGR="${tetI[$c]}${gr}"   ; bgc="$((${clrFgI:2} +10))" ;;
+		"${tetiT}"  )  TGR="${tetT[$c]}${gr}"   ; bgc="$((${clrFgT:2} +10))" ;;
+		"${tetiL}"  )  TGR="${tetL[$c]}${gr}"   ; bgc="$((${clrFgL:2} +10))" ;;
+		"${tetiJ}"  )  TGR="${tetJ[$c]}${gr}"   ; bgc="$((${clrFgJ:2} +10))" ;;
+		"${tetiS}"  )  TGR="${tetS[$c]}${gr}"   ; bgc="$((${clrFgS:2} +10))" ;;
+		"${tetiZ}"  )  TGR="${tetZ[$c]}${gr}"   ; bgc="$((${clrFgZ:2} +10))" ;;
+
+		"${tetiV}"  )  TGR="${clrCBsilv}▓▓" ; bgc="$((${clrFgV:2} +10))" ;;
+		"${tetiG}"  )  TGR="${clrCBgold}▓▓" ; bgc="$((${clrFgG:2} +10))" ;;
+	esac
+
+	if [[ $DEBUG -eq 1  &&  $2 -ne 2  &&  $NDRAW -eq 0 ]]; then
+		printf -v cc "%d" $((${1} & maskC))
+		case $cc in
+			"$maskB"    )  (($2))  &&  TGR="${GRY}∙∙" ;;
+
+			"$maskL"    )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}═-"  ;;
+			"$maskD"    )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╓╖"  ;;
+			"$maskU"    )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╙╜"  ;;
+			"$maskR"    )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}-═"  ;;
+
+			"$maskLD"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╦╗"  ;;
+			"$maskLU"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╩╝"  ;;
+			"$maskLR"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}══"  ;;
+			"$maskDU"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}║║"  ;;
+			"$maskDR"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╔╦"  ;;
+			"$maskUR"   )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╚╩"  ;;
+
+			"$maskUDL"  )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╬╣"  ;;
+			"$maskLRD"  )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╦╦"  ;;
+			"$maskLRU"  )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╩╩"  ;;
+			"$maskUDR"  )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}╠╬"  ;;
+
+			"$maskLDUR" )  TGR="${atPFX};${fgBLK};${bgc}${atSFX}XX"  ;; #╬╬"  ;;
+		esac
+	fi
+}
+
+#+============================================================================= ========================================
+tetDrawPit() {
+	local y  x
+
+	if [[ "$STYLE" == "NVIS" ]]; then
+		((DEBUG))  &&  TGR="${GRY}∙∙"  ||  TGR="${atOFF}  "
+		for ((y = $((${#PIT[@]} -2));  y >= 1;  y--)); do
+			for ((x = 0;  x < PITw;  x++)); do
+				PAT $((PITy +y -1))  $((PITx +1 +x*2)) "${TGR}"
+			done
+		done
+	else
+		for ((y = $((${#PIT[@]} -2));  y >= 1;  y--)); do
+			for ((x = 0;  x < PITw;  x++)); do
+				tetSetGr $((0x${PIT[$y]:$((x*2 +2)):2})) 1
+				PAT $((PITy +y -1))  $((PITx +1 +x*2)) "${TGR}"
+			done
+		done
+	fi
+
+	((DEBUG)) && {
+		for ((y = 0;  y < PITh;  y++)); do
+			DBGF "PIT[%2d]=\"%s\"\n" $y ${PIT[$y]}
+		done
+	}
+}
+
+#+=============================================================================
+# y,x
+# off = use aligment offsets (for basket & shoulder)
+# 0=undraw|1=draw
+# rotation
+# tetromino .. needs to be last
+#
+tetDrawTet() {  # (y, x, off, 0|1|2=un|draw|shadow, rot, tet)
+	local h  w  offy  offx  s  z  cc
+
+	local y=$1   ; shift
+	local x=$1   ; shift
+	local off=$1 ; shift
+	local drw=$1 ; shift
+	local rot=$1 ; shift
+	local tet=("$@")
+
+	if (($off)); then
+		offy=${tet[6]}
+		offx=${tet[5]}
+	else
+		offy=0
+		offx=0
+	fi
+
+	for ((h = 0;  h < tetH;  h++)); do
+		[[ $((y +h)) -lt $PITy ]]  &&  continue  # && ((PITx < x <= PITx+PITw*2))
+		s=
+		for ((w = 0;  w < tetW;  w++)); do
+			z=$((h*tetW +w))
+			cc=$((0x${tet[$rot]:$((z *2)):2}))
+			if [[ $drw -eq 0 ]]; then
+				if [[ $cc -eq $tetiB ]]; then
+					TGR="\033[2C"
+				elif [[ $DEBUG -ne 0  && $NDRAW -eq 0  &&  \
+				        $x -gt $((PITx -2))  &&  $x -le $((PITx +PITw*2)) ]]; then
+					TGR="${GRY}∙∙"
+				else
+					TGR="${atOFF}${nbsp}${nbsp}"
+				fi
+			elif [[ $drw -eq 2 ]]; then
+				tetSetGr $cc 2
+			else
+				tetSetGr $cc 0
+			fi
+			s="${s}${TGR}"
+		done
+		PAT $((y +h +offy)) $((x +offx)) "${s}"
+	done
+}
+
+#+=========================================================
+# Redraw the basket - after adding a new piece
+#
+#!! a nice little scrolling up animation wouldn't go amiss here!
+#
+tetDrawBs() {
+	local i
+
+	# undraw the old ones
+	for ((i = 0;  i <= 2 -HIDE;  i++)); do
+		eval tet='$'{tet$i[@]}
+		tetDrawTet $((BSy -1 +i*4)) $((BSx +3)) 1 0 0 ${tet[@]}
+	done
+
+	# draw the new ones
+	for ((i = 1;  i <= 3 -HIDE;  i++)); do
+		eval tet='$'{tet$i[@]}
+		tetDrawTet $((BSy -5 +i*4)) $((BSx +3)) 1 1 0 ${tet[@]}
+	done
+}
+
+#+=========================================================
+# Draw the shoulder tet
+#
+tetDrawSh() {
+	tetDrawTet $SHy $((SHx +3)) 1 1 0 ${tet4[@]}
+}
+
+#+=========================================================
+# UN-Draw the shoulder tet
+#
+tetUndrawSh() {
+	tetDrawTet $SHy $((SHx +3)) 1 0 0 ${tet4[@]}
+}
+
+#+=========================================================
+# Work out where the shadow should be and draw it
+#
+tetDrawShadow() {
+	shadY=$tetY
+	while tetCollide $shadY $tetX ${tet0[$rot]} ; do ((shadY++)) ; done
+	[[ $((--shadY)) -le $tetY ]] && return
+
+	shadX=$tetX
+
+	tetDrawTet $((PITy +shadY -1)) $((PITx +1 +shadX*2)) 0 2 $rot ${tet0[@]}
+}
+
+#+=========================================================
+# UN-DRAW the shadow
+#
+tetUndrawShadow() {
+	[[ $shadY -le $tetY ]] && return
+	tetDrawTet $((PITy +shadY -1)) $((PITx +1 +shadX*2)) 0 0 $rot ${tet0[@]}
+}
+
+#+=============================================================================
+# DRAW a tet in the pit
+#
+tetDraw() {
+	tetDrawShadow
+	tetDrawTet $((PITy +tetY -1)) $((PITx +1 +tetX*2)) 0 1 $rot ${tet0[@]}
+}
+
+#+=============================================================================
+# UN-DRAW a tet in the pit
+#
+tetUndraw() {
+	[[ "$KEY" != "DOWN" ]]  &&  tetUndrawShadow
+	tetDrawTet $((PITy +tetY -1)) $((PITx +1 +tetX*2)) 0 0 $rot ${tet0[@]}
+}
+
+#+=============================================================================
+introduce() {
+	local slp=0.2
+	local i=
+
+	tetDrawSh
+	sleep $slp
+	tetUndrawSh
+	sleep $slp
+	tetDrawSh
+	sleep $slp
+
+	for ((i = 1;  i <= 3;  i++)); do
+		tetAdd 0   # 0 = do NOT update stats
+		tetDrawBs  # redraw basket tets
+		sleep $slp
+		tetDrawTet $(($BSy -1 +2*4)) $(($BSx +3)) 1 0 0 ${tet3[@]}
+		sleep $slp
+		tetDrawTet $(($BSy -1 +2*4)) $(($BSx +3)) 1 1 0 ${tet3[@]}
+		sleep $slp
+	done
+
+	tetAdd 1   # 0 = do NOT update stats
+	tetDrawBs  # redraw basket tets
+	tetDraw
+	sleep $slp
+	tetUndraw
+	sleep $slp
+	tetDraw
+}
+
+#+============================================================================= ========================================
+# Special bonus if the board is cleared
+#
+tetPerfect100() {
+	local y  x  i  c  ch
+
+	((DEBUG & ! NDRAW))  &&  ch="${GRY}∙∙∙∙"  ||  ch="${atOFF}    "
+	c=(37 33 36 32 35 31 34)  # W,Y,C,G,M,R,B - what an interesting pattern!?
+	x=$((PITx +9))
+	for ((i = 0;  i < ${#c[@]};  i++)); do
+		y=$((PITy +PITh -3 -i/2))
+		PAT $y $x "${atPFX}${atBLD};${c[$i]}${atSFX}+100"
+		sleep 0.06
+		PAT $y $x "${ch}"
+	done
+}
+
+#+=============================================================================
+tetPerfect() {
+	local i  j
+
+	tetPerfect100 &  # +100 animation
+
+	sound perfect
+
+	# baloon - threads need to do things atomically
+	PAT $((PITy +6)) $((PITx +5)) "${YEL},---------."
+	PAT $((PITy +7)) $((PITx +4)) "${YEL}( ${txtPerfect} )"
+	PAT $((PITy +8)) $((PITx +5)) "${YEL}\`---------'"
+
+	# flashing "PERFECT"
+	local sl=${#txtPerfect}
+	local fg=31  # 31--> R,G,Y,B,M,C,W <--37
+	for ((i = 0;  i < 6;  i++)); do
+		for ((j = 0;  j < sl;  j++)); do
+			PAT $((PITy +7)) $((PITx +6 +j)) "${atPFX}${atBLD};${fg}${atSFX}${txtPerfect:$j:1}"
+			[[ $((++fg)) -eq 37 ]]  &&  fg=31
+			sleep 0.02
+		done
+	done
+
+	# clean up
+	((DEBUG & ! NDRAW))  &&  ch="${GRY}∙∙∙∙∙∙∙∙∙∙∙∙∙"  ||  ch="${atOFF}             "  # 13
+	PAT $((PITy +6)) $((PITx +4)) "${ch}"
+	PAT $((PITy +7)) $((PITx +4)) "${ch}"
+	PAT $((PITy +8)) $((PITx +4)) "${ch}"
+
+	wait
+}
+
+#+=============================================================================
+tetFlashCombo() {
+	local i  h  w
+	local y=$1
+	local x=$2
+	local c=$3
+
+	for ((i = 0;  i < 4;  i++)); do
+		for ((h = 0;  h < 4;  h++)); do
+			for ((w = 0;  w < 4;  w++)); do
+				local aty=$(($PITy +$y +$h -1))
+				local atx=$(($PITx +$(($x +$w))*2 +1))
+				local v=$((0x${PIT[$((y +h))]:$(($((x +w))*2 +2)):2}))  # I'm getting good at this :)
+				local t=$((v &maskT))
+				(($i & 1))  &&  ch="▒▒"  ||  ch="▓▓"
+				case $t in
+					"${tetiO}" )  PAT $aty $atx "${tetO[4]}${ch}" ;;
+					"${tetiI}" )  PAT $aty $atx "${tetI[4]}${ch}" ;;
+					"${tetiT}" )  PAT $aty $atx "${tetT[4]}${ch}" ;;
+					"${tetiL}" )  PAT $aty $atx "${tetL[4]}${ch}" ;;
+					"${tetiJ}" )  PAT $aty $atx "${tetJ[4]}${ch}" ;;
+					"${tetiS}" )  PAT $aty $atx "${tetS[4]}${ch}" ;;
+					"${tetiZ}" )  PAT $aty $atx "${tetZ[4]}${ch}" ;;
+				esac
+			done
+		done
+		sleep 0.16
+	done
+}
+
+#+=============================================================================
+# not thread safe
+#
+tetFlashLines() {
+	local i  l  x
+
+	local cnt=$1
+	shift
+	local list=("$@")
+
+	if [[ $cnt -eq 4 ]]; then
+		sound tetris
+	fi
+
+	# fancy animation goes here!
+	for ((i = 0;  i < 3;  i++)); do
+		for l in ${list[@]} ; do
+			PAT $((PITy +l -1)) $((PITx +1)) "▓▓"
+			for ((x = 1;  x < PITw;  x++)); do  echo -en "▓▓" ;  done
+		done
+		sleep 0.2
+		for l in ${list[@]} ; do
+			PAT $((PITy +l -1)) $((PITx +1)) "░░"
+			for ((x = 1;  x < PITw; x++)); do  echo -en "░░" ;  done
+		done
+		sleep 0.1
+	done
+}
+
+# -MAKE:g_gfx.s
+# +MAKE:g_logic.s - game logic
+#!/bin/bash
+
+#------------------------------------------------------------------------------ ----------------------------------------
+# the lo nybble defines the directions of contact
+# LDUR is an illegal condition used to indicate a tet fragment
+
+maskC=$((0x0F))
+
+maskB=$((0x00))
+maskL=$((0x08))
+maskD=$((0x04))
+maskU=$((0x02))
+maskR=$((0x01))
+maskLD=$((maskL |maskD))
+maskLU=$((maskL |maskU))
+maskLR=$((maskL |maskR))
+maskDU=$((maskD |maskU))
+maskDR=$((maskD |maskR))
+maskUR=$((maskU |maskR))
+
+maskLRU=$((maskL |maskR |maskU))
+maskLRD=$((maskL |maskR |maskD))
+maskUDL=$((maskU |maskD |maskL))
+maskUDR=$((maskU |maskD |maskR))
+
+maskLDUR=$((maskL |maskD |maskU |maskR))
+
+# the hi nybble indicates the tet type
+# 0    RESERVED
+# 1..7 normal tets
+# 8    empty space
+# 9..A combo tets
+# B..E not used
+# F    pit wall
+maskT=$((0xF0))
+
+tetiO=$((0x10))
+tetiI=$((0x20))
+tetiT=$((0x30))
+tetiL=$((0x40))
+tetiJ=$((0x50))
+tetiS=$((0x60))
+tetiZ=$((0x70))
+tetiB=$((0x80)) # empty space
+
+tetiV=$((0x90))
+tetiG=$((0xA0))
+
+tetiW=$((0xF0))  # pit wall
+
+pitWl=$((tetiW |maskL))
+pitWbl=$((tetiW |maskD |maskL))
+pitWb=$((tetiW |maskD))
+pitWbr=$((tetiW |maskD |maskR))
+pitWr=$((tetiW |maskR))
+
+# tet colours
+clrFgB="${fgBLK}"
+clrFgO="${fgBWHT}"
+clrFgI="${fgBCYN}"
+clrFgT="${fgYEL}"
+clrFgL="${fgBMAG}"
+clrFgJ="${fgBRED}"
+clrFgS="${fgBGRN}"
+clrFgZ="${fgBBLU}"
+
+# game tet
+clrB="${atPFX}${clrFgB};${bgBLK}${atSFX}"
+clrI="${atPFX}${clrFgI};${bgBLK}${atSFX}"
+clrO="${atPFX}${clrFgO};${bgBLK}${atSFX}"
+clrT="${atPFX}${clrFgT};${bgBLK}${atSFX}"
+clrL="${atPFX}${clrFgL};${bgBLK}${atSFX}"
+clrJ="${atPFX}${clrFgJ};${bgBLK}${atSFX}"
+clrS="${atPFX}${clrFgS};${bgBLK}${atSFX}"
+clrZ="${atPFX}${clrFgZ};${bgBLK}${atSFX}"
+
+# mini tet (stats)
+clrBm="${atPFX}${clrFgB:2};${bgBLK}${atSFX}"
+clrIm="${atPFX}${clrFgI:2};${bgBLK}${atSFX}"
+clrOm="${atPFX}${clrFgO:2};${bgBLK}${atSFX}"
+clrTm="${atPFX}${clrFgT:2};${bgBLK}${atSFX}"
+clrLm="${atPFX}${clrFgL:2};${bgBLK}${atSFX}"
+clrJm="${atPFX}${clrFgJ:2};${bgBLK}${atSFX}"
+clrSm="${atPFX}${clrFgS:2};${bgBLK}${atSFX}"
+clrZm="${atPFX}${clrFgZ:2};${bgBLK}${atSFX}"
+
+# tet definitions
+tetName="BOITLJSZ"  # for the random selector
+tetCnt=7
+tetW=4
+tetH=4
+
+tetB=("80808080808080808080808080808080"  # 0    : rot_0
+      "80808080808080808080808080808080"  # 1    : rot_1
+      "80808080808080808080808080808080"  # 2    : rot_2
+      "80808080808080808080808080808080"  # 3    : rot_3
+      ${clrB} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      "...." 0 ${clrBm}                   # 7,8,9: MTet, cnt, colour
+      "B")                                # 10   : Name
+
+tetO=("808080808080808080151c8080131a80"  # 0    : rot_0
+      "808080808080808080151c8080131a80"  # 1    : rot_1
+      "808080808080808080151c8080131a80"  # 2    : rot_2
+      "808080808080808080151c8080131a80"  # 3    : rot_3
+      ${clrO} -1 0                        # 4,5,6: colour, Xoffs, Yoffs
+      "..██" 0 ${clrOm}                   # 7,8,9: MTet, cnt, colour
+      "O")                                # 10   : Name
+
+tetI=("80808080808080802129292880808080"  # 0    : rot_0
+      "80248080802680808026808080228080"  # 1    : rot_1
+      "80808080808080802129292880808080"  # 2    : rot_2
+      "80248080802680808026808080228080"  # 3    : rot_3
+      ${clrI} -1 1                        # 4,5,6: colour, Xoffs, Yoffs
+      "▄▄▄▄" 0 ${clrIm}                   # 7,8,9: MTet, cnt, colour
+      "I")                                # 10   : Name
+
+tetT=("8080808080808080313D388080328080"  # 0    : rot_0
+      "8080808080348080313E808080328080"  # 1    : rot_1
+      "8080808080348080313B388080808080"  # 2    : rot_2
+      "80808080803480808037388080328080"  # 3    : rot_3
+      ${clrT} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      ".▀█▀" 0 ${clrTm}                   # 7,8,9: MTet, cnt, colour
+      "T")                                # 10   : Name
+
+tetL=("80808080808080804549488042808080"  # 0    : rot_0
+      "80808080414c80808046808080428080"  # 1    : rot_1
+      "808080808080448041494a8080808080"  # 2    : rot_2
+      "80808080804480808046808080434880"  # 3    : rot_3
+      ${clrL} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      ".█▀▀" 0 ${clrLm}                   # 7,8,9: MTet, cnt, colour
+      "L")                                # 10   : Name
+
+tetJ=("808080808080808051595c8080805280"  # 0    : rot_0
+      "808080808054808080568080515a8080"  # 1    : rot_1
+      "80808080548080805359588080808080"  # 2    : rot_2
+      "80808080805558808056808080528080"  # 3    : rot_3
+      ${clrJ} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      ".▀▀█" 0 ${clrJm}                   # 7,8,9: MTet, cnt, colour
+      "J")                                # 10   : Name
+
+tetS=("808080808080808080656880616a8080"  # 0    : rot_0
+      "8080808064808080636c808080628080"  # 1    : rot_1
+      "808080808080808080656880616a8080"  # 2    : rot_2
+      "8080808064808080636c808080628080"  # 3    : rot_3
+      ${clrS} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      ".▄█▀" 0 ${clrSm}                   # 7,8,9: MTet, cnt, colour
+      "S")                                # 10   : Name
+
+tetZ=("8080808080808080717c808080737880"  # 0    : rot_0
+      "808080808080748080757a8080728080"  # 1    : rot_1
+      "8080808080808080717c808080737880"  # 2    : rot_2
+      "808080808080748080757a8080728080"  # 3    : rot_3
+      ${clrZ} 0 0                         # 4,5,6: colour, Xoffs, Yoffs
+      ".▀█▄" 0 ${clrZm}                   # 7,8,9: MTet, cnt, colour
+      "Z")                                # 10   : Name
+
+#+============================================================================= ========================================
+# Initialise most/all of the game logic
+#
+tetNew() {
+	local s  i  junk  n  j  tetiX
+
+	# empty the rows ...not the base
+	for ((i = 0; i < PITh -1 -GARBAGE; i++)); do
+		PIT[$i]="$EMPTY"
+	done
+
+	# build GARBAGE lines for CHAL'lenge mode
+	for (( i = i; i < PITh -1; i++)); do
+		while : ; do
+			n=0
+			junk=
+			for ((j = 0;  j < PITw;  j++)); do
+				RND
+				if ((RNDn &1)); then
+					RND ; while ((! RNDn)) ; do RND ; done
+					eval tetiX='$'teti${tetName:$RNDn:1}
+					((tetiX |= maskLDUR,  n++))
+					printf -v junk "%s%02X" "$junk" "$tetiX"
+				else
+					printf -v junk "%s%02X" "$junk" "$tetiB"
+				fi
+			done
+			((n >= 5  &&  n <= 8))  &&  break
+		done
+		printf -v junk "%02X%s%02X" "${pitWl}" "$junk" "${pitWr}"
+		PIT[$i]="$junk"
+	done
+
+	# clear all the tetrominoes
+	tet0=("${tetB[@]}")  # in play
+	tet1=("${tetB[@]}")  # next in play
+	tet2=("${tetB[@]}")
+	tet3=("${tetB[@]}")
+	tet4=("${tetB[@]}")  # shoulder
+
+	# start position for new tets
+	tetStY=0
+	tetStX=3
+	tetStR=0
+
+	# pick a starting shoulder piece
+	# be kind, always give a T or an I :)
+	RND
+	[[ $((RNDn &1)) -eq 0 ]]  &&  tet4=(${tetT[@]})  ||  tet4=(${tetI[@]})
+
+	# zero the piece counters
+#	for i in L J S Z T O I ; do
+	for ((i = 0;  i < ${#tetName};  i++)); do
+		eval tet${tetName:$i:1}[8]=0
+	done
+
+	# initialise score
+	score=0
+	scoreMul=1     # multiplier
+	scoreMulMax=1  # maximum multiplier achieved
+	scoreLin=0     # lines
+	scoreLast=0    # last line
+	scoreBest=0    # best line
+
+	[[ -z "$CLEVEL" ]]  &&  scoreLvl=$LEVEL  ||  scoreLvl=$CLEVEL
+
+	# combo counters
+	tetGold=0
+	tetSilv=0
+
+	# status bar
+	statusClear
+}
+
+#+=============================================================================
+# Grab tet #1 from the basket (to the pit tet #0)
+# Generate a new tet for the bottom of the basket
+#
+tetAdd() {  # (0|1:displayStats)
+	local i
+
+	# Start new piece at the top
+	tetY=$tetStY
+	tetX=$tetStX
+	rot=$tetStR
+
+	# shuffle everything up one
+	tet0=(${tet1[@]})
+	tet1=(${tet2[@]})
+	tet2=(${tet3[@]})
+
+	# create a new tet
+	if [[ ! -z "$scoreDrp"  &&  $scoreDrp -le 3 ]]; then
+		tet3=(${tetB[@]})
+	else
+		while : ; do
+			RND  # 0..7
+			[[ $RNDn -eq 0 ]]  &&  continue  # 1..7
+
+			i=${tetName:$RNDn:1}
+			eval tet3=('$'{tet$i[@]})
+
+			# new tet must not match:
+			#   tet0: tet in play
+			#   tet1: tet next in play
+			# although this biases the distribution, it makes the game "feel" better
+			[[ "${tet3[10]}" != "${tet0[10]}" && "${tet3[10]}" != "${tet1[10]}" ]]  &&  break
+		done
+	fi
+
+	# Add new/pit tet to the stats
+	i=${tet0[10]}
+	eval tmp='$'{tet$i[8]}
+	((tmp++))
+	eval tet$i[8]='$'{tmp}
+
+	[[ "$1" == "1" ]]  &&  pfShowMtet
+
+	if [[ ! -z "$scoreDrp" ]]; then
+		if [[ $scoreDrp -eq 0 ]]; then
+			RUN=3  # out of pieces
+		else
+			[[ "${tet0[10]}" != "B" ]]  &&  ((scoreDrp--))
+			pfShowScore
+		fi
+	fi
+
+	# check death
+	if ((RUN != 3)); then
+		tetCollide $tetY $tetX ${tet0[$rot]}
+		[[ $? -ne 0 ]]  &&  RUN=2  # death
+	fi
+
+	# Clear piece settings
+	tetVal=1
+	tetSwap=0
+
+	keyFlush
+}
+
+#+=============================================================================
+# Put the piece in the playfield
+#
+tetPlace() {
+	local h  w
+	local cnt=0
+	for ((h = 0;  h < tetH;  h++)); do
+		local y=$((tetY +h))
+		for ((w = 0;  w < tetW;  w++)); do
+			local x=$((tetX +w +1))
+			local z=$((tetW*h +w))
+			local ch=${tet0[$rot]:$((z *2)):2}
+			local chv=$((0x${ch}))
+			if [[ "$chv" != "$tetiB" ]]; then
+				PIT[$y]="${PIT[$y]:0:$((x *2))}"${ch}"${PIT[$y]:$((x*2 +2))}"
+				[[ $((++cnt)) -eq 4 ]]  &&  break 2
+			fi
+		done
+	done
+
+	tetCheckComboAll
+	tetCheckLines
+}
+
+#+============================================================================= ========================================
+# Swap active-tet with shoulder-tet
+#
+tetSwap() {
+	# undraw both
+	tetUndraw
+	tetUndrawSh
+
+	# swap them over
+	local tmp=("${tet4[@]}")
+	tet4=("${tet0[@]}")
+	tet0=("${tmp[@]}")
+
+	# position the new piece at the top
+	tetY=$tetStY
+	tetX=$tetStX
+	rot=$tetStR
+
+	# draw them back in
+	tetDraw
+	tetDrawSh
+
+	tetVal=1   # reset tet-value (score)
+	tetSwap=1  # can only do this once per drop (except debug mode)
+}
+
+#+=============================================================================
+# return:  1=Collision. 0=Not-Collision
+#
+tetCollide() {  # (y, x, tet[rot])
+	local h  y  w  x  z
+
+	for ((h = 0;  h < tetH;  h++)); do
+		y=$(($1 +h))
+		for ((w = 0;  w < tetW;  w++)); do
+			x=$(($2 +w +1))
+			z=$((h*tetW +w))
+			[[ ($((      0x${3:$((z *2)):2})) != $tetiB) &&
+			   ($((0x${PIT[$y]:$((x *2)):2})) != $tetiB) ]] && return 1
+		done
+	done
+	return 0
+}
+
+#+=============================================================================
+# ((speed = 1000 - $scoreLvl*46))
+#
+#         Auto-drop time
+# Factor  Lvl-0 .. Lvl-20
+#   45  : 1.000    0.100
+#   46  : 1.000    0.080
+#   47  : 1.000    0.060
+#
+#------------------------------------------------------------------------------
+#
+#	Drop Rate = (((100000 /((Speed +2) *5)) +5) /10) milliseconds
+#		,----------------------------------.
+#		| Level | Speed | Rate | lines/sec |
+#		|=======|=======|======|===========|
+#		|    0  |    0  | 1000 |    1      |
+#		|    1  |    1  |  667 |    1.5    |
+#		|    2  |    2  |  500 |    2      |
+#		|    3  |    3  |  400 |    2.5    |
+#		|    4  |    4  |  333 |    3      |
+#		|    5  |    5  |  286 |    3.5    |
+#		|    6  |    6  |  250 |    4      |
+#		|    7  |    7  |  222 |    4.5    |
+#		|    8  |    8  |  200 |    5      |
+#		|    9  |    9  |  181 |    5.5    |
+#		|   10  |   10  |  167 |    6      |
+#		|   11  |   11  |  153 |    6.5    |
+#		|   12  |   12  |  143 |    7      |
+#		|   13  |   13  |  133 |    7.5    |
+#		|   14  |   14  |  125 |    8      |
+#		|   15  |   15  |  118 |    8.5    |
+#		|   16  |   16  |  111 |    9      |
+#		|   17  |   17  |  102 |    9.5    |
+#		|   18  |   18  |  100 |   10      |
+#		|       |       |      |           |
+#		|   19  |   20  |   91 |   11      |
+#		|   20  |   22  |   84 |   12      |
+#		`----------------------------------'
+#		local spd
+#		case $scoreLvl in
+#			19 )  spd=$((scoreLvl +1)) ;;
+#			20 )  spd=$((scoreLvl +2)) ;;
+#			*  )  spd=$scoreLvl        ;;
+#		esac
+#		#                v-----------------vvvvvvv-------round off
+#		speed=$(( ((100000 /((spd +2) *5)) +5) /10 ))
+#		#               ^---^^^^^^^^^^^^^^-------------------speed
+#
+tetSpeedSet() {
+	# after MUCH *MUCH* playing - I'm back where I started <shrug>
+	((speed = 1000 - $scoreLvl*46))
+}
+
+#+============================================================================= ========================================
+# https://harddrop.com/wiki/Tetris_(Game_Boy)
+#
+gameboyRateCalc() {
+	GBHZ=59.73
+	FR=(53 49 45 41 37 33 28 22 17 11 10 9  8  7  6  6  5  5  4  4  3)
+	FUDGE=1
+	#rate=(887 820 753 686 619 552 469 368 285 184 167 151 134 117 100 100 84 84 67 67 50)
+	
+#	FR=(53 49 45 41 37 33 28 22 17 12 11 10 9  8  7  7  6  6  5  5  4)
+#	FUDGE=1.127
+	#rate=(1000 925 849 774 698 623 528 415 321 226 208 189 170 151 132 132 113 113 94 94 75)
+
+#	#     rate=( 887 820 753 686 619  552 469 368 285 184  167 151 134 117 100  100  84  84  67  67  50)  # gb
+#	#     rate=(1000 925 849 774 698  623 528 415 321 226  208 189 170 151 132  132 113 113  94  94  75)  # bc
+#	local rate=(1000 950 900 850 800  750 700 650 600 550  500 420 380 340 300  250 210 170 130 105  80)  # magic!
+#	speed=${rate[$scoreLvl]}
+	
+	arr="rate=("
+	for ((i = 0 ;  i < ${#FR[@]};  i++)); do
+		rate=$(bc <<< "scale=3; ((1000/${GBHZ}) *${FR[$i]}  *${FUDGE}) +0.5")
+		rate=${rate%.*}
+		echo $i: $rate
+		arr="${arr}${rate} "
+	done
+	arr="${arr::-1})"
+	echo $arr
+}
+
+#+============================================================================= ========================================
+# Update the score & score stats
+#
+tetScoreAdd() {
+	((scoreLast = tetVal *scoreMul))
+	[[ $scoreLast -gt $scoreBest ]]  &&  scoreBest=$scoreLast
+	((score += scoreLast))
+}
+
+#+============================================================================= ========================================
+# Score this tetromino
+#
+tetScore() {  # (cnt, silver, gold)
+	local i  j
+
+	local cnt=$1
+	local silv=$2
+	local gold=$3
+
+	# Basic score
+	if [[ $cnt -eq 0 ]]; then
+		tetScoreAdd
+		scoreMul=1
+		pfShowScore  # update scoreboard
+		return
+	fi
+
+	((scoreLin += $cnt))  # tally lines
+
+	# score ... lines*10; or lines*20 for a tetris
+	[[ $cnt -ne 4 ]]  &&  ((tetVal += cnt *10))  ||  ((tetVal += cnt *15))
+
+	# Check if board is cleared
+	j=1
+	for ((i = 0; i < $((PITh -1)); i++)); do  # -1 to avoid the pit floor
+		[[ "${PIT[$i]}" == "$EMPTY" ]]  &&  ((j++))
+	done
+	if [[ j -eq $PITh ]]; then
+		# an extra 100 points (pre-multiplier) for clearing :)
+		statusSet "${txtPerfect// /} +100"
+		((tetVal += 100))
+		tetPerfect  # animation
+	fi
+
+	# +5 for each silver slice, +10 for each gold slice ...(slice = cubes/4)
+	((tetval += (silv /4 *5) + (gold /4 *10)))
+
+	tetScoreAdd  # update score - does multiplier
+
+	((scoreMul++))  # enhance multiplier for next piece
+	[[ ${scoreMul} -gt ${scoreMulMax} ]]  &&  scoreMulMax=${scoreMul}
+
+	if [[ $scoreLvl -ne 20 ]]; then    # already at full speed
+		local tmp=$scoreLvl
+		if [[ -z "$CLEVEL" ]]; then
+			((scoreLvl = scoreLin/LPL +LEVEL))  # calculate level
+		else
+			((scoreLvl = scoreLin/LPL +CLEVEL))  # calculate level
+		fi
+		if [[ $tmp -ne $scoreLvl ]]; then
+			statusSet "Level Up!"
+			sound levelup
+		fi
+		tetSpeedSet
+	fi
+
+	pfShowScore  # update scoreboard
+
+	# all the animations may result in buffered keystrokes...
+	keyFlush
+}
+
+#+============================================================================= ========================================
+tetFragFrom() {
+	local old  new
+	local y=$1
+	local x=$2
+	local d=$3  # direction to parent
+
+	old=$((0x${PIT[$y]:$((x*2 +2)):2}))
+
+	[[ $((old &maskT)) -eq $tetiW    ]]  &&  return  # wall
+	[[ $((old &maskC)) -eq $maskLDUR ]]  &&  return  # fragment
+	[[ $((old &maskC)) -eq $maskB    ]]  &&  return  # blank
+
+	printf -v new "%02X" $((old | maskLDUR))  # new piece (fragment)
+	PIT[$y]="${PIT[$y]:0:$((x*2 +2))}"$new"${PIT[$y]:$((x*2 +4))}"
+
+	# recurse
+	[[ "$d" != "up"     &&  $((old &maskU)) -eq $maskU ]]  &&  tetFragFrom $((y -1))  $x         down
+	[[ "$d" != "down"   &&  $((old &maskD)) -eq $maskD ]]  &&  tetFragFrom $((y +1))  $x         up
+	[[ "$d" != "left"   &&  $((old &maskL)) -eq $maskL ]]  &&  tetFragFrom $y         $(($x -1)) right
+	[[ "$d" != "right"  &&  $((old &maskR)) -eq $maskR ]]  &&  tetFragFrom $y         $(($x +1)) left
+}
+
+#+============================================================================= ========================================
+tetFragDoit() {
+	local x  old  new
+	local y=$1
+
+	for ((x = 0;  x < PITw;  x++)); do
+		old=$((0x${PIT[$y]:$((x*2 +2)):2}))  # old piece
+		printf -v new "%02X" $((old | maskLDUR))  # new piece (fragment)
+		PIT[$y]="${PIT[$y]:0:$((x*2 +2))}"$new"${PIT[$y]:$((x*2 +4))}"
+
+		[[ $((old &maskC)) -eq $maskLDUR ]]  &&  continue
+		[[ $((old &maskU)) -eq $maskU    ]]  &&  tetFragFrom $((y -1))  $x  down
+		[[ $((old &maskD)) -eq $maskD    ]]  &&  tetFragFrom $((y +1))  $x  up
+	done
+}
+
+
+#+============================================================================= ========================================
+# Check for complete lines
+#
+tetCheckLines() {
+	local y  x  h  i  l  cnt  slv  gld
+	local lines=()
+	local silv=0
+	local gold=0
+
+	for ((h = tetH;  h > 0;  h--)); do
+		slv=0  # line tally = 0
+		gld=0  # ...
+
+		((y = tetY +h -1))
+		[[ $y -ge $((PITh -1)) ]]  &&  continue  # out of the pit
+
+		for ((x = 1;  x <= PITw;  x++)); do
+			case $((0x${PIT[$y]:$((x *2)):2} &maskT)) in
+				$tetiB )  continue 2 ;;  # incomplete line ...next!
+				$tetiV )  ((slv++))  ;;
+				$tetiG )  ((gld++))  ;;
+			esac
+		done
+
+		lines+=("$y")    # array of complete lines
+		((silv += slv))  # add tally to cube count
+		((gold += gld))  # ...
+	done
+
+	cnt=${#lines[@]}
+	if [[ $cnt -ne 0 ]]; then
+		tetFlashLines $cnt ${lines[@]}
+
+		# edit the pit
+		for ((i = 0;  i < $cnt;  i++)); do
+			local l=$((${lines[$i]} +i))  # +i as lines will be disappearing
+
+			tetFragDoit $l
+
+			for ((y = l;  y > 0;  y--)); do
+				PIT[$y]="${PIT[$((y -1))]}"
+			done
+		done
+
+		tetDrawPit
+
+		tetCheckComboAll
+	fi
+
+	tetScore $cnt $silv $gold  # ALWAYS called (for multiplier calculation)
+}
+
+#+=============================================================================
+tetMakeCombo() {
+	local cblk=()
+		cblk+=("0109090C") # >--.
+		cblk+=("0509090A") # ,--'
+		cblk+=("0309090C") # '--.
+		cblk+=("0109090A") # >--'
+
+	local y=$1
+	local x=$2
+	local t=$3
+
+	local h  w
+	for (( h = 0;  h < 4;  h++)); do
+		for (( w = 0;  w < 4;  w++)); do
+			local yy=$((y +h))
+			local xx=$(($((x +w))*2 +2))
+			local cv=$(($((0x${cblk[$h]:$((w *2)):2})) |$t))
+			printf -v ch "%02X" $cv
+			PIT[$yy]="${PIT[$yy]:0:$xx}"$ch"${PIT[$yy]:$((xx +2))}"
+		done
+	done
+}
+
+#+============================================================================= ========================================
+# Check for combo blocks
+#
+tetCheckCombo() {
+	local v  t  c  g
+
+	local y=$1
+	local x=$2
+
+	v=$((0x${PIT[$y]:$((x*2 +2)):2}))                                # note type of
+	((g = v &maskT))                                                 # first piece
+	for ((h = 0;  h < 4;  h++)); do
+		for ((w = 0;  w < 4;  w++)); do
+			v=$((0x${PIT[$((y +h))]:$(($((x +w))*2 +2)):2}))  # I'm getting good at this :)
+			((t = v &maskT))                                         # tet type
+			[[ $t -ge ${tetiB} ]]  &&  return 0                      # blank/combo
+			[[ $t -ne $g ]]  &&  g=0                                 # different from first? -> gold=0
+			((c = v &maskC))                                         # tet map
+			[[ $c -eq $maskB  ||  $c -eq $maskLDUR ]]  &&  return 0  # blank/fragment
+			[[ $h -eq 0  &&  $((c &maskU)) -gt 0 ]]    &&  return 0  # out of up
+			[[ $w -eq 0  &&  $((c &maskL)) -gt 0 ]]    &&  return 0  # out of left
+			[[ $w -eq 3  &&  $((c &maskR)) -gt 0 ]]    &&  return 0  # out of right
+			[[ $h -eq 3  &&  $((c &maskD)) -gt 0 ]]    &&  return 0  # out of down
+		done
+	done
+	[[ $g -eq 0 ]]  &&  return 1  ||  return 2  # 1=silver, 2=gold
+}
+
+
+#+=============================================================================
+tetCheckComboAll() {
+	local x  y  rv
+	local cntV=0
+	local cntG=0
+
+	# this checks the entire board every time
+	# would be nice to only check what we need :-/
+	for ((y = 2;  y < $((PITh -4)); y++)); do
+		for ((x = 0;  x < $((PITw -3)); x++)); do
+			tetCheckCombo $y $x
+			rv=$?
+			case $rv in
+				1)	sound comboS
+					statusSet "${BWHT}SILVER${atOFF} COMBO!"
+					tetFlashCombo $y $x &
+					tetMakeCombo $y $x "${tetiV}"
+					((tetSilv++))
+					((cntV++))
+					((tetVal += 16))
+					;;
+				2)	sound comboG
+					statusSet "${YEL}*GOLD*${atOFF} COMBO!"
+					tetFlashCombo $y $x &
+					tetMakeCombo $y $x "${tetiG}"
+					((tetGold++))
+					((cntG++))
+					((tetVal += 32))
+					;;
+			esac
+		done
+	done
+
+	if [[ $((cntV +cntG)) -gt 1 ]]; then
+		statusSet "${YEL}**${BWHT}D${BMAG}O${BGRN}U${BCYN}B${BMAG}L${BWHT}E${YEL}**${atOFF} COMBO!"
+		pfShowScore
+	fi
+	wait
+
+	tetDrawPit
+	pfShowMtet
+}
+
+#+=============================================================================
+# Timestamp last drop, and next drop
+#
+tetSpeedStamp() {
+	timeGet speedLast
+	((speedNext = speedLast +speed))
+}
+
+#+=============================================================================
+# on exit RUN=0 : quit,  RUN=2 : died
+tetPlay() {
+	start
+
+	[[ "$USEED" == "X" ]]  &&  SEED=$RANDOM  ||  SEED=$USEED
+	statusSet "Round $SEED: Fight!"
+	RND seed $((SEED +LEVEL))
+
+	tetNew  # creates shoulder piece
+	pfDrawLevel new
+	pfShowScore
+	tetDrawPit
+
+	if [[ $LEVEL -lt 3  &&  $DEBUG -eq 0  &&  $STYLE == NORM ]]; then
+		introduce
+	else
+		tetDrawSh  # draw shoulder piece - added in tetNew
+		tetAdd 0   # 0 = do NOT update stats
+		tetAdd 0   # 0 = do NOT update stats
+		tetAdd 0   # 0 = do NOT update stats
+		tetAdd 1   # 0 = do NOT update stats
+		tetDrawBs  # redraw basket tets
+		tetDraw
+	fi
+
+	tetSpeedSet
+	tetSpeedStamp
+
+	timeStart
+
+	#----------------------------------------------------------
+	# Main game loop
+	#
+	FREEZE=0  # debug mode can freeze autodrop
+	RUN=1
+	adj=0     # post-drop piece adjustment
+	while [[ $RUN -eq 1 ]]; do
+		local act   # 0/1 : action occurred
+		local auto  # 0/1 : autodrop fired
+
+		timeShow
+		timeGet speedNow
+		if [[ $speedNow -ge $speedNext ]]; then
+			if ((FREEZE)); then
+				KEY=
+			else
+				# auto drop
+				KEY=DOWN
+				auto=1
+			fi
+			tetSpeedStamp
+		else
+			# get keystroke
+			keyGet
+			auto=0
+		fi
+
+		act=0
+		if [[ ! -z "$KEY" ]]; then
+			local tety=$tetY  # these will become the target position
+			local tetx=$tetX  # ..
+			local trot=$rot   # ..
+
+			#------------------------------
+			# DEBUG KEYS
+			#
+			(($DEBUG))  &&  case ${KEY^^} in
+				"DEL" | [Q] )  tetSwap ;;  # shoulder swap
+
+				6 | "^" ) # move piece UP!!
+					act=1
+					tety=$(($tetY -1))
+					tetSpeedStamp
+					;;
+
+				0 ) # (un)Freeze auto-drop
+					(($FREEZE))  &&  FREEZE=0  ||  FREEZE=1
+					;;
+
+				"INS" ) # place the piece where it is
+					tetPlace
+					tetDrawPit
+					tetAdd 1 ; tetDrawBs ; tetDraw
+					tetSpeedStamp
+					;;
+
+				"END" ) # discard tetromino
+					tetUndraw
+					tetAdd 1 ; tetDrawBs ; tetDraw
+					tetSpeedStamp
+					;;
+
+				"PGUP" ) # advance 1 level (score '10' lines)
+					tetUndraw
+					tetScore $LPL 0 0
+					tetAdd 1 ; tetDrawBs ; tetDraw
+					tetSpeedStamp
+					;;
+
+				"F5" ) # toggle invisible/normal
+					if [[ "$STYLE" == "NVIS" ]]; then
+						STYLE="NORM"
+						tetDrawPit
+					else
+						STYLE="NVIS"
+						pfDrawPit
+					fi
+					tetDraw
+					;;
+
+				"F6" ) # toggle normal/grid draw
+					((NDRAW = ! NDRAW))
+					[[ "$STYLE" != "NVIS" ]]  &&  tetDrawPit
+					tetDraw
+					;;
+
+				"F12" )
+					pfHideGame
+					rigGame
+					csDrawBackdropReveal 0
+					pfDrawAll 1
+					tetDrawSh
+					tetDrawBs
+					tetDrawPit
+					;;
+
+			esac
+
+			case "${KEY^^}" in
+				"LEFT"  | [A] )  act=1 ; ((tetx--)) ;;
+				"RIGHT" | [D] )  act=1 ; ((tetx++)) ;;
+
+				[Z,] )  act=1 ; trot=$(((rot +3) %4)) ;; # rot left
+				[X.] )  act=1 ; trot=$(((rot +1) %4)) ;; # rot right
+
+				"DEL" | [Q] )  [[ $tetSwap -eq 0 ]]  &&  tetSwap ;;  # shoulder swap
+
+				[P] )
+					Pause
+					;;
+
+				"F1" | "?" | "F2" )
+					pfHideGame
+					[[ "${KEY}" == "F2" ]]  &&  helpCombo  ||  helpCtrl
+					csDrawBackdropReveal 0
+					pfDrawAll 1
+					Pause
+					;;
+
+				"DOWN" | [S] )
+					act=1
+					((tety++))
+#					tetSpeedStamp  # restart drop timer- the gameboy does NOT do this!
+					[[ $auto -eq 0 ]]  &&  ((tetVal += 1))  # speed bonus
+					KEY=DOWN # known name
+					;;
+
+				"UP" | [W] )  # drop
+					KEY="DOWN"  # stop shadow redraw
+					for ((y = tetY;  y < shadY;  y++)); do
+						tetUndraw
+						((tetY++))
+						((tetVal++))
+						tetDraw
+					done
+					if ((DEBUG && FREEZE)); then  # trigger a placement
+						tetx=$tetX
+						trot=$rot
+						tety=$((tetY +1))
+						act=1
+						KEY="DOWN"
+					else
+						((! adj)) && {
+							timeGet now     # allow lateral movement after drop
+							((speedNext = now +speed/8))  # ...
+							adj=1
+						}
+					fi
+					;;
+
+				"\`" )
+					pfDrawAll 1
+					tetDraw
+					tetDrawSh
+					tetDrawBs
+					tetDrawPit
+					;;
+
+				"BKSP" )
+					pfHideGame
+					statusSet "${txtQuitChk}"
+					local timeSt  timeNd
+					timeGet timeSt
+					while : ; do
+						keyGet
+						case ${KEY^^} in
+							[${txtKeyYes}] )
+								RUN=0
+								break ;;
+							[${txtKeyNo}P] )
+								pfUnhideGame
+								break ;;
+						esac
+						sleep .05
+					done
+					statusClear
+					timeGet timeNd
+					((timePause += timeNd -timeSt))
+					;;
+
+				* ) ;;
+			esac
+		fi
+
+		# Collision detection
+		(($act)) && {
+			tetCollide  $tety $tetx ${tet0[$trot]}
+			rv=$?
+			if ! (($rv)) ; then  # No collision
+				tetUndraw
+				tetX=$tetx
+				tetY=$tety
+				rot=$trot
+				tetDraw
+			else  # collision
+#				if [[ "$KEY" == "DOWN" ]]; then  # player can place
+				if [[ $auto -eq 1  ||  "$KEY" == "DOWN" ]]; then  # place only on auto-drop
+					tetPlace
+					tetAdd 1
+					if [[ $RUN -ne 3 ]]; then
+						tetDrawBs
+						tetDraw
+						tetSpeedStamp
+						adj=0
+					fi
+				fi
+			fi
+		}
+
+		statusUpdate
+
+	done  # while(run)
+}
+# -MAKE:g_logic.s
+# +MAKE:pf.s - playfield maintenance
+#!/bin/bash
+
+#------------------------------------------------------------------------------ ----------------------------------------
+clrPitV="${atPFX}${fgWHT};${bgBLU}${atSFX}"                        # main pit box (vert)
+clrPitH="${BLU}"                                                   # main pit box (horz)
+clrPitB="${BLK}"                                                   # main pit box (body)
+
+clrSH="${BBLU}"                                                    # shoulder box
+clrSHjoin="${BBLU}"                                                # join shoulder to pit
+
+clrBS="${BBLU}"                                                    # basket box
+clrBSjoin="${BBLU}"                                                # join basket to pit
+
+clrMT="${WHT}"                                                     # mini-tet box
+clrMTscore="${BWHT}"                                               # ...
+
+clrSCbox="${WHT}"                                                  # score box
+
+clrSCOREbg="${bgBLU}"                                              # Score
+clrSCOREh="${atPFX}${fgBWHT};${clrSCOREbg}${atSFX}"                # ..heading
+clrSCOREv="${atPFX}${fgBLK};${bgWHT}${atSFX}"                      # ..value
+
+clrMULTbg="${bgMAG}"                                               # Multiplier
+clrMULTh="${atPFX}${fgBWHT};${clrMULTbg}${atSFX}"                  # ..heading
+clrMULTv="${clrSCOREv}"                                            # ..value
+
+clrLINESbg="${bgRED}"                                              # Lines
+clrLINESh="${atPFX}${fgBWHT};${clrLINESbg}${atSFX}"                # ..heading
+clrLINESv="${clrSCOREv}"                                           # ..value
+
+clrLVLbg="${bgMAG}"                                                # Level
+clrLVLh="${atPFX}${fgBWHT};${clrLVLbg}${atSFX}"                    # ..heading
+clrLVLv="${clrSCOREv}"                                             # ..value
+
+clrLASTbg="${bgRED}"                                               # Last tet
+clrLASTh="${atPFX}${fgBWHT};${clrLASTbg}${atSFX}"                  # ..heading
+clrLASTv="${clrSCOREv}"                                            # ..value
+
+clrBESTbg="${bgGRN}"                                               # best tet
+clrBESTh="${atPFX}${fgBWHT};${clrBESTbg}${atSFX}"                  # ..heading
+clrBESTv="${clrSCOREv}"                                            # ..value
+
+clrScoreMult="${atPFX}${clrSCOREbg};$((clrMULTbg -10))${atSFX}"    # div: score-mult
+clrMultLast="${atPFX}${clrMULTbg};$((clrLASTbg -10))${atSFX}"      # div: mult-last
+clrLastBest="${atPFX}${clrLASTbg};$((clrBESTbg -10))${atSFX}"      # div: last-best
+clrBestEnd="${atPFX}${fgBLK};${clrBESTbg}${atSFX}"                 # div: best-none
+
+clrEndLines="${atPFX}${bgBLK};$((clrLINESbg -10))${atSFX}"         # div: start-lines
+clrLinesLvl="${atPFX}${clrLINESbg};$((clrLVLbg -10))${atSFX}"      # div: lines-level
+clrLvlEnd="${atPFX}${fgBLK};${clrLVLbg}${atSFX}"                   # div: level-none
+
+clrFgV="${fgWHT}"
+clrFgG="${fgYEL}"
+
+clrCBsilv="${atPFX}${atBLD};${clrFgV:2};${bgBLK}${atSFX}"          # ..silver
+clrCBgold="${atPFX}${atBLD};${clrFgG:2};${bgBLK}${atSFX}"          # ..gold
+
+clrCBbox="${BLU}"                                                  # combo box
+clrCBsep="${atPFX}${fgBLU};${bgWHT}${atSFX}"                       # ..separator
+clrCBv="${atPFX}${fgBLK};${bgWHT}${atSFX}"                         # ..value
+
+#+============================================================================= ========================================
+# Initialise most/all of the game logic
+#
+pfInit() {
+	local i  s
+
+	PITy=4
+	PITx=20
+
+	PITd=$((4*4 +2))          # depth of game pit (number of playable lines)
+	PITw=$((0    +10   +0 ))  #             left, pit, right
+	PITh=$((1 +1 +PITd +1 ))  # invisible, empty, pit, base
+
+	PSy=5  # offset from PITy
+	PSx=3  # offset from PITx
+	PSw=15
+	PSh=3
+
+	SHh=6
+	SHw=12
+	SHy=$((PITy -1))
+	SHx=$((PITx -SHw -3))
+
+	SCh=9
+	SCw=14
+	SCy=$((SHy +SHh +2))
+	SCx=$((SHx -1))
+
+	TMy=25
+	TMx=71
+
+	BSh=13
+	BSw=12
+	BSy=$((PITy))
+	BSx=$((PITx + PITw*2 +2 +3))
+
+	LVLy=$((BSy +BSh))
+	LVLx=$((BSx -1))
+	LVLh=4
+	LVLw=$((SCw))
+
+	MTh=17
+	MTw=12
+	MTy=$((BSy      -1))
+	MTx=$((BSx +BSw +5))
+
+	CBy=$((MTy +MTh))
+	CBx=$((MTx -1))
+
+	PIT=()
+
+	# build a blank line for the pit
+	# 'EMPTY' is used by the tetPerfect()
+	# ...the screen is kinda fixed now,
+	#    but no point in binning good code where timing is irrelevant
+	printf -v EMPTY "%02X" "${pitWl}"
+	for ((i = 0;  i < PITw;  i++)); do
+		printf -v EMPTY "%s%02X" "$EMPTY" "$tetiB"
+	done
+	printf -v EMPTY "%s%02X" "$EMPTY" "${pitWr}"
+
+	# add all the empty rows ...not the base
+	for ((i = 1; i < PITh; i++)); do
+		PIT+=("$EMPTY")
+	done
+
+	# create and add a base to the pit
+	printf -v s "%02X" "${pitWbl}"
+	for ((i = 0;  i < PITw;  i++)); do
+		printf -v s "%s%02X" "$s" "$pitWb"
+	done
+	printf -v s "%s%02X" "$s" "${pitWbr}"
+	PIT+=("$s")
+}
+
+#+============================================================================= ========================================
+pfDrawDebug() {
+	(($DEBUG)) &&  PAT 2 $((PITx +1 +PITw -((${#txtDebugMode} +6)/2) )) "${clrCsSlogan} - ${txtDebugMode} - "
+}
+
+#+============================================================================= ========================================
+pfDrawPit() {  # (slp)
+	local y  x  off
+
+	for ((y = $((${#PIT[@]} -1));  y >= 1;  y--)); do
+		off=0
+		for ((x = 0;  x < $((PITw +2));  x++)); do
+			case "$((0x${PIT[$y]:$((x *2)):2}))" in
+				"${pitWl}" | "${pitWr}" )
+					PAT $((PITy +y -1)) $((PITx +off)) "${clrPitV}∙"
+					((off++)) ;;
+				"${pitWbl}" | "${pitWbr}" )
+					PAT $((PITy +y -1)) $((PITx +off)) "${clrPitH}▀"
+					((off++)) ;;
+				"${pitWb}" )
+					PAT $((PITy +y -1)) $((PITx +off)) "${clrPitH}▀▀"
+					((off+=2)) ;;
+				* )
+					PAT $((PITy +y -1)) $((PITx +off)) "${clrPitB}  "
+					((off+=2)) ;;
+			esac
+		done
+		[[ ! -z $1 ]]  &&  sleep $1
+	done
+}
+
+#+============================================================================= ========================================
+# Draw shoulder
+#
+pfDrawShoulder() {  # (slp, hslp, [joints])
+	local y  x
+
+	local hslp=
+	[[ ! -z $2 ]] && [[ "$1" != "0" ]]  &&  hslp=$2
+
+	# join shoulder to pit
+	for ((x = $((PITx -1));  x >= $((PITx -3));  x--)); do
+		PAT ${PITy} ${x} "${clrSH}═\b\033[2B═"
+		[ ! -z $hslp ]  &&  sleep $1
+	done
+	PAT ${PITy} ${x} "${clrSH}╠\b\033[2B╠"
+
+	# right
+	PAT $((SHy +2)) $((SHx +SHw -1)) "${clrSH}║\b\033[2B║"
+	[[ ! -z $hslp ]]  &&  sleep $1
+
+	PAT ${SHy} $((SHx +SHw -1)) "${clrSH}╗\b\033[$((SHh -1))B╝"
+	[[ ! -z $hslp ]]  &&  sleep $1
+
+	# top & bottom
+	for ((x = $((SHx +SHw -2));  x >= $((SHx +1));  x--)); do
+		PAT ${SHy} ${x} "${clrSH}═\b\033[$((SHh -1))B═"
+		for ((y = $((SHy +1));  y < $((SHy +SHh -1));  y++)); do
+			PAT ${y} ${x} "${atOFF} "
+		done
+		[[ ! -z $hslp ]]  &&  sleep $hslp
+	done
+	PAT ${SHy} ${x} "${clrSH}╔\b\033[$((SHh -1))B╚"
+
+	[[ ! -z $3 ]] && {
+		PAT $((SHy +SHh -1)) $((SHx      +2)) "${clrSH}╤"
+		PAT $((SHy +SHh -1)) $((SHx +SHw -2)) "${clrSH}╤"
+	}
+
+	# left
+	for ((y = 1;  y <= $(((SHh -1) /2));  y++)); do
+		PAT $((SHy         +y)) ${SHx} "${clrSH}║"
+		PAT $((SHy +SHh -1 -y)) ${SHx} "${clrSH}║"
+		[[ ! -z $hslp ]]  &&  sleep $1
+	done
+}
+
+#+============================================================================= ========================================
+# Draw main scoreboard
+#
+pfDrawScore() {  # (slp)
+	local x  ch  s
+
+	# shoulder to score
+	PAT $((SHy +SHh -1)) $((SHx      +2)) "${clrSH}╤"
+	PAT $((SHy +SHh -1)) $((SHx +SHw -2)) "${clrSH}╤"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SHy +SHh   )) $((SHx      +2)) "${clrSH}⌡"
+	PAT $((SHy +SHh   )) $((SHx +SHw -2)) "${clrSH}⌡"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy      -1)) $((SCx      +2)) "${clrSCbox}⌠"
+	PAT $((SCy      -1)) $((SCx +SCw -4)) "${clrSCbox}⌠"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT ${SCy}           $((SCx      +2)) "${clrSCbox}┴"
+	PAT ${SCy}           $((SCx +SCw -4)) "${clrSCbox}┴"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	# score top
+	for ((x = 0;  x < $(((SCw -6) /2));  x++)); do
+		PAT ${SCy} $((SCx      +3 +x)) "${clrSCbox}─"
+		PAT ${SCy} $((SCx +SCw -5 -x)) "${clrSCbox}─"
+		[[ ! -z $1 ]]  &&  sleep $1
+	done
+
+	PAT ${SCy} $((SCx +SCw -3)) "${clrSCbox}─"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT ${SCy} $((SCx      +1)) "${clrSCbox}─"
+	PAT ${SCy} $((SCx +SCw -2)) "${clrSCbox}─"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT ${SCy} $((SCx        )) "${clrSCbox}┌"
+	PAT ${SCy} $((SCx +SCw -1)) "${clrSCbox}┐"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	# sides
+	if ((FAST)); then
+		s="\033[$((LVLw -2))C"
+	else
+		printf -v s "%*s" $((LVLw -2)) ""
+	fi
+
+	for ((y = 1;  y <= 7;  y++)); do
+		if [[ $((y & 1)) -eq 1 ]]; then
+			PAT $((SCy +y)) ${SCx} "${clrSCbox}│${s}│"
+		else
+			PAT $((SCy +y)) ${SCx} "${clrSCbox}├${s}┤"
+		fi
+		[[ ! -z $1 ]]  &&  sleep $1
+	done
+	PAT $((SCy +y)) ${SCx} "${clrSCbox}└${s}┘"
+
+	# Score banners
+	s=
+	for ((i = 1;  i < $((SCw -1));  i++)) ; do  s="${s}▄"  ; done
+
+	PAT $((SCy +1)) $((SCx +1)) "${clrSCOREh} ${txtScore}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +2)) $((SCx +1)) "${clrSCOREh} ${clrSCOREv}          ${clrSCOREh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +3)) $((SCx +1)) "${clrScoreMult}${s}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +4)) $((SCx +1)) "${clrMULTh} ${txtMult} ${clrMULTv}    ${clrMULTh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +5)) $((SCx +1)) "${clrMultLast}${s}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +6)) $((SCx +1)) "${clrLASTh} ${txtLast} ${clrLASTv}    ${clrLASTh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +7)) $((SCx +1)) "${clrLastBest}${s}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +8)) $((SCx +1)) "${clrBESTh} ${txtBest} ${clrBESTv}    ${clrBESTh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((SCy +9)) $((SCx +1)) "${clrBestEnd}${s}"
+}
+
+#+============================================================================= ========================================
+# Draw shoulder - intro animation
+#
+pfDrawFromShoulder() {  # (slp, hslp)
+	((CTRLC))  &&  trap "" INT
+	pfDrawShoulder $1 $2
+	pfDrawScore $1
+}
+
+#+============================================================================= ========================================
+# Draw tet basket
+#
+pfDrawBasket() {  # (slp)
+	local x  i  s
+
+	# join shoulder to pit
+	for ((i = 0;  i < 3;  i++)); do
+		x=$((PITx + PITw*2 +2 +i))
+		PAT ${PITy}       ${x} "${clrBSjoin}═"
+		PAT $((PITy +5))  ${x} "${clrBSjoin}═"
+		PAT $((PITy +11)) ${x} "${clrBSjoin}═"
+		[ ! -z $1 ] && sleep $1
+	done
+	PAT $((BSy +BSh -2)) $((BSx -1)) "${clrBSjoin}╤"
+
+	printf -v s "%*s" $((BSw -2)) ""
+	for ((y = $BSy;  y <= $((BSy +BSh -2));  y++)); do
+		PAT ${y} ${BSx} "${clrBS}█${atOFF}${s}${clrBS}█"
+		[ ! -z $1 ] && sleep $1
+	done
+
+	s=
+	for ((i = 0;  i <= $((BSw -1));  i++)) ; do  s="${s}▀"  ; done
+	PAT $((BSy +BSh -1)) ${BSx} "${clrBS}${s}"
+}
+
+#+============================================================================= ========================================
+# Draw lines/level box
+#
+pfDrawLevel() {  # (slp)
+	local s  i  strA  strB  strS
+
+	if [[ "$STYLE" == "CHAL" ]]; then
+		strS="$txtJunk"
+		strA="$txtPieces"
+		strB="$txtSpeed"
+	else
+		strS="$txtLines"
+		strA="$txtLines"
+		strB="$txtLevel"
+	fi
+
+	if [[ "$1" == "start" ]]; then
+		PAT $((LVLy +1)) $((LVLx +1)) "${clrLINESh} ${strS} ${clrLINESv}    ${clrLINESh} "
+		PAT $((LVLy +3)) $((LVLx +1)) "${clrLVLh} ${strB} ${clrLVLv}    ${clrLVLh} "
+		return
+	fi
+
+	if [[ "$1" == "new" ]]; then
+		PAT $((LVLy +1)) $((LVLx +1)) "${clrLINESh} ${strA} ${clrLINESv}    ${clrLINESh} "
+		PAT $((LVLy +3)) $((LVLx +1)) "${clrLVLh} ${strB} ${clrLVLv}    ${clrLVLh} "
+		return
+	fi
+
+	# joinery
+	PAT $((BSy +BSh -2)) $((BSx -1  )) "${clrBSjoin}╤"
+	PAT $((BSy +BSh -2)) $((BSx +BSw)) "${clrBSjoin}╕"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((BSy +BSh -1)) $((BSx -1  )) "${clrSCbox}│"
+	PAT $((BSy +BSh -1)) $((BSx +BSw)) "${clrSCbox}│"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	# sides
+	if ((FAST)); then
+		s="\033[$((LVLw -2))C"
+	else
+		printf -v s "%*s" $((LVLw -2)) ""
+	fi
+
+	PAT $((LVLy   )) ${LVLx} "${clrSCbox}│${s}│"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +1)) ${LVLx} "${clrSCbox}├${s}┤"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +2)) ${LVLx} "${clrSCbox}│${s}│"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +3)) ${LVLx} "${clrSCbox}└${s}┘"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	# titles
+	s=
+	for ((i = 1;  i < $((LVLw -1));  i++)); do  s="${s}▄"  ; done
+
+	PAT $((LVLy)) $((LVLx +1)) "${clrEndLines}${s}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +1)) $((LVLx +1)) "${clrLINESh} ${strA} ${clrLINESv}    ${clrLINESh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +2)) $((LVLx +1)) "${clrLinesLvl}${s}"
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +3)) $((LVLx +1)) "${clrLVLh} ${strB} ${clrLVLv}    ${clrLVLh} "
+	[[ ! -z $1 ]]  &&  sleep $1
+
+	PAT $((LVLy +4)) $((LVLx +1)) "${clrLvlEnd}${s}"
+}
+
+#+============================================================================= ========================================
+# Draw mini-tet stats box
+#
+pfDrawMtets() {  # (slp)
+	local y  s
+
+	PAT $((MTy +MTh -1)) ${MTx} "${clrSCbox}└─┬──────┬─┘"
+	for ((y = 2;  y < $MTh;  y++)); do
+		if [[ $y -eq 3 ]]; then  s="╞==========╡"
+		elif (($y & 1)); then    s="├----------┤"
+		else
+			local order="BIOTZSJL"
+			eval tet=('$'{tet${order:$((y/2 -1)):1}[@]})
+			local mtet="${tet[7]//./ }"
+			s="│${tet[9]}${mtet}${clrSCbox}      │"
+		fi
+		PAT $((MTy +MTh -y)) ${MTx} "${clrSCbox}$s"
+		[[ ! -z $1 ]]  &&  sleep $1
+	done
+	PAT ${MTy} ${MTx} "${clrSCbox}┌──────────┐"
+}
+
+#+============================================================================= ========================================
+# Draw combo stats box
+#
+pfDrawCombo() {  # (slp, hslp)
+	local x  y  ch
+
+	local COMBO=()
+		COMBO+=("▄▄▄█▄▄▄▄▄▄█▄▄▄▄█")
+		COMBO+=("█SS▌xxx▐GG▌xxx▐I")
+		COMBO+=("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█")
+
+	for ((x = 0;  x < ${#COMBO[1]};  x++)); do
+		for ((y = 0;  y < ${#COMBO[@]};  y++)); do
+			ch="${COMBO[$y]:$x:1}"
+			case "$ch" in
+				[█▄▀] ) PAT $((CBy +y)) $((CBx +x)) "${clrCBbox}$ch"  ;;
+				[▌▐]  ) PAT $((CBy +y)) $((CBx +x)) "${clrCBsep}$ch"  ;;
+				S     ) PAT $((CBy +y)) $((CBx +x)) "${clrCBsilv}▓"   ;;
+				G     ) PAT $((CBy +y)) $((CBx +x)) "${clrCBgold}▓"   ;;
+				x     ) PAT $((CBy +y)) $((CBx +x)) "${clrCBv} "      ;;
+				I     ) PAT $((CBy +y)) $((CBx +x)) "${clrCBbox}▌"    ;;
+			esac
+		done
+		[[ ! -z $1 ]]  &&  sleep $2
+	done
+}
+
+#+============================================================================= ========================================
+# Draw tet basket - intro anim
+#
+pfDrawFromBasket() {  # (slp, hslp)
+	((CTRLC))  &&  trap "" INT
+	pfDrawBasket $1
+	pfDrawLevel  $1
+	pfDrawCombo  $1 $2
+	pfDrawMtets  $1
+}
+
+#+=============================================================================
+pfDrawAll() {  # (0:slow/1:fast)
+	local slp=
+	local hslp=
+
+	if ! (($1)); then
+		slp=0.025
+		hslp=0.0125  # $((slp /2))
+	fi
+
+	if [[ -z $slp ]]; then
+		if [[ $1 -ne 2 ]]; then
+			echo -en ${atOFF}
+			CLS
+			csDrawBackdrop
+		fi
+	else
+		csDrawBackdropReveal
+	fi
+
+	pfDrawPit $slp
+
+	pfDrawFromShoulder $slp $hslp &
+	pfDrawFromBasket $slp $hslp &
+	wait
+
+	pfShowScore
+	pfShowMtet
+#	! (($1)) && TETdrawSh
+}
+
+#+=============================================================================
+pfHideGame()
+{
+	local y  x
+
+	# pit
+	for ((y = 0;  y <= PITd;  y++)); do
+		if [ $((y & 1)) -eq 1 ]; then
+			for ((x = 0;  x < $(($PITw*2 -1));  x += 2)); do
+				PAT $((PITy +y)) $((PITx +x +1)) "${GRY} ◘"
+			done
+		else
+			for ((x = 0;  x < $((PITw*2 -1));  x += 2)); do
+				PAT $((PITy +y)) $((PITx +x +1)) "${GRY}◘ "
+			done
+		fi
+	done
+
+	# basket
+	for ((y = 0;  y < $((BSh -1));  y++)); do
+		if [ $((y & 1)) -eq 1 ]; then
+			for ((x = 0;  x < $((BSw -3));  x += 2)); do
+				PAT $((BSy +y)) $((BSx +x +1)) "${GRY}◘ "
+			done
+		else
+			for ((x = 0;  x < $((BSw -3));  x += 2)); do
+				PAT $((BSy +y)) $((BSx +x +1)) "${GRY} ◘"
+			done
+		fi
+	done
+
+	# shoulder
+	for ((y = 1;  y < $((SHh -1));  y++)); do
+		if [ $((y & 1)) -eq 1 ]; then
+			for ((x = 0;  x < $((SHw -3));  x += 2)); do
+				PAT $((SHy +y)) $((SHx +x +1)) "${GRY} ◘"
+			done
+		else
+			for ((x = 0;  x < $((SHw -3));  x += 2)); do
+				PAT $((SHy +y)) $((SHx +x +1)) "${GRY}◘ "
+			done
+		fi
+	done
+}
+
+#+=============================================================================
+pfUnhideGame()
+{
+	tetDrawPit &
+	pfDrawBasket &
+	pfDrawShoulder 0 0 j &
+	wait
+	tetDrawBs
+	tetDrawSh
+}
+
+#+============================================================================= ========================================
+# Update mini-tet stats board
+#
+pfShowMtet() {
+	local i  ch  tet
+
+	local tot=0
+	local y=0
+	for i in L J S Z T O I ; do
+		eval tet=('$'{tet$i[@]})
+		printf -v ch "%3d" ${tet[8]}
+		PAT $((MTy +1 + y*2))  $((MTx +7)) "${tet[4]}${ch}"  # colour (main, not mtet - for text)
+		((tot += ${tet[8]}))
+		((y += 1))
+	done
+
+	printf -v ch "%5d" $tot
+	PAT $((MTy +1 + y*2))  $((MTx +5)) "${clrMTscore}${ch}"
+
+	# silver counter
+	printf -v ch "%3d" $tetSilv
+	PAT $((CBy +1)) $((CBx +4)) "${atPFX}${fgBLK};${bgWHT}${atSFX}${ch}"
+
+	# gold counter
+	printf -v ch "%3d" $tetGold
+	PAT $((CBy +1))  $((CBx +11)) "${atPFX}${fgBLK};${bgWHT}${atSFX}${ch}"
+}
+
+#+=============================================================================
+# Update the scoreboard
+#
+pfShowScore() {
+	local ch
+
+	printf -v ch "%'10d" $score
+	PAT $((SCy +2)) $((SCx +2)) "${clrSCOREv}${ch}"
+
+	printf -v ch "%3d" $scoreMul
+	PAT $((SCy +4)) $((SCx +8)) "${clrMULTv}x${ch}"
+
+	printf -v ch "%4d" $scoreLast
+	PAT $((SCy +6)) $((SCx +8)) "${clrLASTv}${ch}"
+
+	printf -v ch "%4d" $scoreBest
+	PAT $((SCy +8)) $((SCx +8)) "${clrBESTv}${ch}"
+
+	if [[ -z "$scoreDrp"  ||  "$1" == "start" ]]; then
+		printf -v ch "%4d" $scoreLin
+	else
+		printf -v ch "%4d" $scoreDrp
+	fi
+	PAT $((LVLy +1)) $((LVLx +8)) "${clrLINESv}${ch}"
+
+	printf -v ch "%4d" $scoreLvl
+	PAT $((LVLy +3)) $((LVLx +8)) "${clrLVLv}${ch}"
+}
+
+#+=============================================================================
+pfBsHide(){
+	local x
+	for ((x = 2;  x <= HIDE*4 +1;  x++)); do
+		PAT $((BSy +BSh -x))  $((BSx +1))  "${BBLU}░░░░░░░░░░"  # ░ ▒ ▓ █
+	done
+}
+
+#+=============================================================================
+pfBrickout() {
+	local y  x  l
+
+	local clr="${GRY}"
+
+	local pat0="█ ████ ████ ████ ███"
+	local pat1="▄▄▄ ▄▄▄▄ ▄▄▄▄ ▄▄▄▄ ▄"
+	local pat2="▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀"
+
+#	local pat0=" █    █    █    █   " # inverse (for "bright" mortar)
+#	local pat1="▀▀▀█▀▀▀▀█▀▀▀▀█▀▀▀▀█▀"
+#	local pat2="▄▄▄█▄▄▄▄█▄▄▄▄█▄▄▄▄█▄"
+
+	for ((y = 18;  y >= 0;  y--)); do
+		((l = y % 3))
+		case $l in
+			"0" )  PAT $((PITy +y)) $((PITx +1)) "${clr}${pat0::$((PITw *2))}" ;;
+			"1" )  PAT $((PITy +y)) $((PITx +1)) "${clr}${pat1::$((PITw *2))}" ;;
+			"2" )  PAT $((PITy +y)) $((PITx +1)) "${clr}${pat2::$((PITw *2))}" ;;
+		esac
+
+		if [[ $y -le 11 ]]; then
+			case $l in
+				"0" )  PAT $((BSy +y)) $((BSx +1)) "${clr}${pat0::$((BSw -2))}" ;;
+				"1" )  PAT $((BSy +y)) $((BSx +1)) "${clr}${pat1::$((BSw -2))}" ;;
+				"2" )  PAT $((BSy +y)) $((BSx +1)) "${clr}${pat2::$((BSw -2))}" ;;
+			esac
+		fi
+
+		if [[ $y -le 3 ]]; then
+			case $l in
+				"0" )  PAT $((SHy +y +1)) $((SHx +1)) "${clr}${pat0::$((SHw -2))}" ;;
+				"1" )  PAT $((SHy +y +1)) $((SHx +1)) "${clr}${pat1::$((SHw -2))}" ;;
+				"2" )  PAT $((SHy +y +1)) $((SHx +1)) "${clr}${pat2::$((SHw -2))}" ;;
+			esac
+		fi
+		[[ $l -ne 2 ]]  &&  sleep 0.12
+	done
+}
+
+# -MAKE:pf.s
+# +MAKE:main.s - start here
+#!/bin/bash
+
+dbgStart "${NAME}" ; DEBUG=1 ; DBG "START" # reset by parseCLI
+
+ARGS="$@"
+parseCLI $@
+sysSetup
+!((SKIP)) && Intro
+pfInit
+pfDrawAll $FAST
+LEVEL=0
+
+# Run the game
+RUN=1
+while ((RUN)); do
+	tetPlay
+	((RUN))  &&  gameover
+done
+
+quit 0
+# -MAKE:main.s
+: << 'EOF-tris.sh'
+# +MAKE:tris.sh - : makefile
+#!/bin/bash
+
+: << 'EOX'
+. npp_workspace  #: notepad++ project file
+. README         #: readme
+. MAKE.sh        #: build system
+EOX
+
+. BREAK.s        # UNbuild system
+. ID.sh          # machine ID command
+
+. ansi.s         # ansi sequences (colour, etc)
+. prng.s         # PRNG (for piece selection)
+. kbd.s          # keyboard driver
+. time.s         # timer system
+. status.s       # status line
+. sys.s          # system functions
+. debug.s        # debug API & debug monitor
+. cs.s           # cyborg systems fancy shit
+. quit.s         # quit screen
+. cli.s          # cli parser
+. lang.s	     # translation file
+. help.s         # help screens
+. gameover.dat   # gameover sprites
+. gameover.s     # gameover process
+. hiscore.dat    # hiscores - last (for consistency)
+. hiscore.s      # high score system
+. start.s	     # start menu
+. pause.s        # pause screen
+. rig.dat        # rig-game setups
+. rig.s          # rig-game menu & system
+. sound.s        # event sounds
+. g_gfx.s        # game graphics
+. g_logic.s      # game logic
+. pf.s           # playfield maintenance
+. main.s         # start here
+# -MAKE:tris.sh
+EOF-tris.sh
+# +MAKE:hiscore.dat - hiscores - last (for consistency)
+#!/bin/bash
+
+# we'll just wrap this in a heredoc for sanity
+: << 'EOT'
+
+# People craving social approval are encouraged to edit the hi-score table by hand
+
+# 0  : hs_${STYLE}~${LEVEL},             level
+# 1  : ${hs}                             position
+# 2  : ${name[0]}${name[1]}${name[2]},   initials
+# 3  : ${score},                         final score
+# 4  : ${scoreLin},                      lines made
+# 5  : ${scoreMulMax},                   maximum multiplier
+# 6  : ${scoreBest},                     best piece score
+# 7  : ${timeTotal},                     game time (excluding pauses)
+# 8  : ${SEED}                           game seed
+# 9  : ${tetL[8]}                        L-tet count
+# 10 : ${tetJ[8]}                        J-tet count
+# 11 : ${tetS[8]}                        S-tet count
+# 12 : ${tetZ[8]}                        Z-tet count
+# 13 : ${tetT[8]}                        T-tet count
+# 14 : ${tetO[8]}                        O-tet count
+# 15 : ${tetI[8]}                        I-tet count
+# 16 : ${tot}                            total tets
+# 17 : ${tetSilv}                        silver combos
+# 18 : ${tetGold}                        gold combos
+
+hs_NORM~0,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~0,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~0,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~1,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~1,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~1,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~2,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~2,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~2,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~3,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~3,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~3,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~4,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~4,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~4,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~5,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~5,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~5,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~6,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~6,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~6,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~7,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~7,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~7,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~8,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~8,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~8,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~9,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~9,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~9,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~10,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~10,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~10,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~11,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~11,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~11,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~12,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~12,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~12,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~13,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~13,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~13,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~14,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~14,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~14,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~15,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~15,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~15,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~16,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~16,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~16,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~17,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~17,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~17,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~18,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~18,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~18,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~19,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~19,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~19,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~20,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~20,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NORM~20,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+hs_CHAL~0,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~0,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~0,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~1,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~1,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~1,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~2,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~2,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~2,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~3,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~3,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~3,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~4,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~4,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~4,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~5,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~5,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~5,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~6,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~6,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~6,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~7,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~7,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~7,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~8,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~8,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~8,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~9,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~9,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~9,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~10,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~10,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~10,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~11,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~11,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~11,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~12,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~12,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~12,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~13,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~13,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~13,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~14,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~14,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~14,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~15,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~15,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~15,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~16,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~16,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~16,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~17,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~17,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~17,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~18,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~18,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~18,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~19,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~19,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~19,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~20,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~20,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_CHAL~20,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+hs_NVIS~0,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~0,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~0,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~1,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~1,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~1,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~2,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~2,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~2,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~3,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~3,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~3,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~4,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~4,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~4,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~5,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~5,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~5,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~6,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~6,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~6,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~7,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~7,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~7,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~8,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~8,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~8,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~9,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~9,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~9,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~10,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~10,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~10,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~11,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~11,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~11,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~12,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~12,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~12,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~13,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~13,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~13,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~14,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~14,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~14,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~15,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~15,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~15,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~16,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~16,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~16,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~17,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~17,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~17,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~18,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~18,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~18,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~19,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~19,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~19,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~20,1,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~20,2,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hs_NVIS~20,3,∙∙∙,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+EOT
+# -MAKE:hiscore.dat
